@@ -309,8 +309,9 @@ em.thin, .thin {
 #step-collect .seq-band-inner {
   grid-template-columns: 1fr 1.3fr;
   gap: clamp(40px, 6vw, 96px);
-  /* top-align so the icon row lines up with the "01" numeral */
-  align-items: start;
+  /* vertically center both columns so the laptop+hex cluster sits level
+     with the copy block, not anchored to the top */
+  align-items: center;
 }
 @media (max-width: 1100px) {
   #step-collect .seq-band-inner { grid-template-columns: 1fr 1.2fr; }
@@ -364,8 +365,8 @@ em.thin, .thin {
   gap: 10px;
 }
 .collect-flow__icon {
-  width: clamp(56px, 6.4vw, 92px);
-  height: clamp(56px, 6.4vw, 92px);
+  width: clamp(32px, 3.6vw, 52px);
+  height: clamp(32px, 3.6vw, 52px);
   color: var(--accent);
   display: block;
   flex: 0 0 auto;
@@ -376,7 +377,7 @@ em.thin, .thin {
   display: block;
   fill: none;
   stroke: currentColor;
-  stroke-width: 2;
+  stroke-width: 1.5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -384,9 +385,9 @@ em.thin, .thin {
   font-family: 'Oswald', sans-serif;
   font-weight: 500;
   text-transform: uppercase;
-  font-size: clamp(13px, 1.25vw, 18px);
+  font-size: clamp(11px, 1vw, 13px);
   letter-spacing: .14em;
-  color: var(--text);
+  color: var(--dim);
   text-align: center;
   line-height: 1.2;
   white-space: nowrap;
@@ -439,20 +440,40 @@ em.thin, .thin {
   100% { stroke-dashoffset: 0; opacity: 0; }
 }
 
-/* Column 3: laptop + phone devices (right side of the horizontal flow) */
+/* Column 3: devices — bleeds off the right edge of the section,
+   electric-green hexagon backdrop sits behind the laptop as a brand accent */
 .collect-flow__devices {
   position: relative;
   flex: 0 0 auto;
   width: 70%;
   align-self: center;
-  /* leave room for the phone overlay so it doesn't clip the next section */
+  /* bleed off the right: negative margin pushes the visual right edge past
+     the seq-still column. .seq-band's overflow:hidden clips it cleanly. */
+  margin-right: clamp(-140px, -6vw, -28px);
   padding-bottom: clamp(0px, 0.5vw, 8px);
+  /* devices is the positioning context for the hex backdrop + phone */
+  overflow: visible;
+}
+.collect-flow__hex {
+  position: absolute;
+  /* offset behind/around the laptop so corners peek out top-right
+     while the laptop covers the lower-left */
+  top: clamp(-44px, -5.5vw, -16px);
+  left: 22%;
+  width: 92%;
+  aspect-ratio: 1.155 / 1;   /* flat-top regular hexagon */
+  background: var(--accent);
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  z-index: 0;
+  pointer-events: none;
+  display: block;
 }
 .collect-flow__laptop {
   position: relative;
   width: 100%;
   margin: 0 auto;
   background: #0a0a0a;
+  z-index: 1;
   padding: 10px 10px 0;
   border-radius: 10px 10px 4px 4px;
   box-shadow:
@@ -544,7 +565,13 @@ em.thin, .thin {
     width: 100%;
     max-width: 520px;
     align-self: stretch;
-    margin: 0 auto;
+    margin: 0 auto;             /* undo desktop right-edge bleed */
+  }
+  .collect-flow__hex {
+    /* hex still appears at mobile but smaller, tucked behind top of laptop */
+    top: -16px;
+    left: 38%;
+    width: 70%;
   }
   .collect-flow__phone {
     right: 4%;
@@ -1688,8 +1715,10 @@ em.thin, .thin {
               </svg>
             </div>
 
-            <!-- Row 3: devices -->
+            <!-- Column 3: devices — laptop bleeds off the right edge of the
+                 section, electric-green hexagon backdrop behind the cluster -->
             <div class="collect-flow__devices">
+              <span class="collect-flow__hex" aria-hidden="true"></span>
               <div class="collect-flow__laptop">
                 <div class="collect-flow__laptop-screen">
                   <img src="Platform-assets/collect-illustration/device-laptop-library.png" alt="Greenfly Library on desktop" />

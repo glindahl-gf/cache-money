@@ -303,12 +303,14 @@ em.thin, .thin {
 }
 
 /* ===================================================================
-   COLLECT · hub-and-spoke ingest illustration
-   (lives inside the Step-01 .still — replaces the slate placeholder)
+   COLLECT · top-down ingest flow illustration
+   (lives inside the Step-01 .still — line-art icons → flow → product UI)
    =================================================================== */
 #step-collect .seq-band-inner {
   grid-template-columns: 1fr 1.3fr;
   gap: clamp(40px, 6vw, 96px);
+  /* top-align so the icon row lines up with the "01" numeral */
+  align-items: start;
 }
 @media (max-width: 1100px) {
   #step-collect .seq-band-inner { grid-template-columns: 1fr 1.2fr; }
@@ -317,180 +319,242 @@ em.thin, .thin {
   #step-collect .seq-band-inner { grid-template-columns: 1fr; }
 }
 
+/* Free the Collect .still from the global 5:4 aspect-ratio cage so the
+   illustration sets its own height — otherwise top icons and the phone
+   overlay get clipped by .still's overflow:hidden. */
 #step-collect .still {
   border: 0;
   background: transparent;
+  aspect-ratio: auto;
+  overflow: visible;
+  height: auto;
+  display: block;
 }
 #step-collect .still-body {
   background: transparent;
   box-shadow: none;
-}
-
-.ingest {
-  position: absolute; inset: 0;
-  overflow: hidden;
-}
-.ingest-stage {
-  position: absolute;
-  left: 50%; top: 50%;
-  width: 1400px;
-  height: 1120px;
-  transform: translate(-50%, -50%) scale(1);
-  transform-origin: center;
-  will-change: transform;
-}
-
-.ingest svg.web {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
   overflow: visible;
-}
-.ingest .hub        { fill: none; stroke: rgba(255,255,255,.12); stroke-width: 1; }
-.ingest .hub-soft   { fill: none; stroke: rgba(255,255,255,.05); stroke-width: 1; }
-.ingest .spoke      { stroke: rgba(255,255,255,.09); stroke-width: 1; fill: none; }
-.ingest .spoke.thin { stroke: rgba(255,255,255,.06); }
-.ingest .spoke.lit  { stroke: var(--accent); stroke-width: 1; opacity: 0; }
-.ingest .pulse {
-  fill: var(--accent);
-  filter: drop-shadow(0 0 6px var(--accent));
-  opacity: 0;
+  flex: none;
+  display: block;
 }
 
-.ingest .hub-mark {
-  position: absolute;
-  left: 50%; top: 50%;
-  transform: translate(-50%, -50%);
-  width: 244px; height: 244px;
-  border-radius: 50%;
-  display: grid; place-items: center;
-  z-index: 3;
-  pointer-events: none;
-}
-.ingest .hub-mark img {
-  width: 184px;
-  height: auto;
-  opacity: .92;
-  transition: opacity 360ms ease;
-}
-.ingest .hub-mark .ring-bloom {
-  position: absolute; inset: -2px;
-  border-radius: 50%;
-  box-shadow: 0 0 0 0 rgba(182,245,0,.22);
-  opacity: 0;
-  pointer-events: none;
-}
-.ingest.bloomed .hub-mark img { opacity: 1; }
-.ingest.bloomed .hub-mark .ring-bloom {
-  animation: ingest-bloom 1.6s ease-out forwards;
-}
-@keyframes ingest-bloom {
-  0%   { box-shadow: 0 0 0 0 rgba(182,245,0,.22); opacity: 1; }
-  60%  { box-shadow: 0 0 0 28px rgba(182,245,0,0); opacity: .4; }
-  100% { box-shadow: 0 0 0 40px rgba(182,245,0,0); opacity: 0; }
+.collect-flow {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  color: var(--accent);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: clamp(10px, 1.4vw, 24px);
 }
 
-.ingest .node {
-  position: absolute;
-  width: 200px; height: 200px;
-  transform: translate(-50%, -50%);
-  background: #0a0a0a;
-  overflow: hidden;
-  z-index: 2;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.10);
-  transition: box-shadow 320ms ease;
+/* Column 1: vertical stack of [icon][label] rows */
+.collect-flow__sources {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 2.8vw, 48px);
+  flex: 0 0 auto;
+  align-self: center;
 }
-.ingest .node .skeleton {
-  position: absolute; inset: 0;
-  background: #111110;
-  transition: opacity 320ms ease;
+.collect-flow__source {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
-.ingest .node .skeleton::before {
-  content: "";
-  position: absolute; inset: 0;
-  background: repeating-linear-gradient(
-    135deg, transparent 0 8px, rgba(255,255,255,.02) 8px 9px);
+.collect-flow__icon {
+  width: clamp(56px, 6.4vw, 92px);
+  height: clamp(56px, 6.4vw, 92px);
+  color: var(--accent);
+  display: block;
+  flex: 0 0 auto;
 }
-.ingest .node .skeleton::after {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(110deg,
-    transparent 30%, rgba(255,255,255,.045) 50%, transparent 70%);
-  transform: translateX(-100%);
-  animation: ingest-shimmer 2.4s ease-in-out infinite;
+.collect-flow__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
-@keyframes ingest-shimmer {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-.ingest .node .media {
-  position: absolute; inset: 0;
-  opacity: 0;
-  transform: scale(1.06);
-  transition: opacity 380ms ease-out, transform 800ms ease-out;
-}
-.ingest .node .media img {
-  width: 100%; height: 100%; object-fit: cover;
-  filter: grayscale(.15) contrast(1.04) saturate(.95);
-}
-.ingest .node .flash {
-  position: absolute; inset: 0;
-  background: var(--accent);
-  mix-blend-mode: screen;
-  opacity: 0; z-index: 4; pointer-events: none;
-}
-.ingest .node.arrived .skeleton { opacity: 0; }
-.ingest .node.arrived .media    { opacity: 1; transform: scale(1); }
-.ingest .node.firing .flash {
-  animation: ingest-nodeflash 420ms ease-out forwards;
-}
-@keyframes ingest-nodeflash {
-  0%   { opacity: 0; }
-  22%  { opacity: .4; }
-  100% { opacity: 0; }
-}
-
-.ingest .label {
-  position: absolute;
-  color: var(--text);
+.collect-flow__label {
   font-family: 'Oswald', sans-serif;
   font-weight: 500;
   text-transform: uppercase;
-  font-size: 22px;
-  letter-spacing: .04em;
+  font-size: clamp(13px, 1.25vw, 18px);
+  letter-spacing: .14em;
+  color: var(--text);
+  text-align: center;
   line-height: 1.2;
   white-space: nowrap;
-  z-index: 2;
-  transition: color 300ms ease;
 }
-.ingest .label::before {
-  content: "";
-  display: inline-block;
-  width: 8px; height: 8px;
-  background: rgba(255,255,255,.22);
-  margin-right: 10px;
-  transform: translateY(-3px);
-  transition: background 300ms ease;
-}
-.ingest .label.lit::before { background: var(--accent); }
 
-.ingest .chip {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(0,0,0,.55);
-  color: var(--dim);
-  padding: 8px 14px 7px;
-  font-family: var(--mono);
-  font-size: 14px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  z-index: 2;
-  transition: color 280ms ease, border-color 280ms ease, background 280ms ease;
-  white-space: nowrap;
+/* Column 2: horizontal funnel — 3 source curves merge into a single trunk
+   that runs to the laptop's left edge. SVG stretches to match the icon
+   stack height via align-self:stretch + preserveAspectRatio=none. */
+.collect-flow__pipes {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 60px;
+  align-self: stretch;
 }
-.ingest .chip.lit {
-  color: var(--accent);
-  border-color: var(--accent);
+.collect-flow__pipes svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.collect-flow__pipes .pipe {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: .55;
+  vector-effect: non-scaling-stroke;
+}
+.collect-flow__pipes .pulse {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 24 1200;
+  filter: drop-shadow(0 0 4px var(--accent));
+}
+.collect-flow.is-drawn .pulse {
+  animation: collect-pulse 2.4s linear infinite;
+}
+.collect-flow__pipes .pulse.p1 { animation-delay: 0s; }
+.collect-flow__pipes .pulse.p2 { animation-delay: .8s; }
+.collect-flow__pipes .pulse.p3 { animation-delay: 1.6s; }
+@keyframes collect-pulse {
+  0%   { stroke-dashoffset: 1224; opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+/* Column 3: laptop + phone devices (right side of the horizontal flow) */
+.collect-flow__devices {
+  position: relative;
+  flex: 0 0 auto;
+  width: 70%;
+  align-self: center;
+  /* leave room for the phone overlay so it doesn't clip the next section */
+  padding-bottom: clamp(0px, 0.5vw, 8px);
+}
+.collect-flow__laptop {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  background: #0a0a0a;
+  padding: 10px 10px 0;
+  border-radius: 10px 10px 4px 4px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.18),
+    0 0 0 4px rgba(255,255,255,.04),
+    0 30px 80px -20px rgba(0,0,0,.7);
+}
+.collect-flow__laptop-screen {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #000;
+}
+.collect-flow__laptop-screen img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.collect-flow__laptop-base {
+  position: relative;
+  /* extend beyond laptop chassis on both sides */
+  margin: 0 -7% 0;
+  height: 14px;
+  background: linear-gradient(180deg, #2a2a2a 0%, #0a0a0a 100%);
+  border-radius: 0 0 14px 14px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+.collect-flow__laptop-base::after {
+  /* hinge slot */
+  content: "";
+  position: absolute;
+  left: 50%; top: 0;
+  width: 16%; height: 3px;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,.6);
+  border-radius: 0 0 6px 6px;
+}
+.collect-flow__phone {
+  position: absolute;
+  right: 4%;
+  /* lift phone onto the laptop screen — bottom edge sits at ~12% of the
+     laptop height up, which puts the phone overlapping the lower-right
+     quadrant of the screen content (not hanging off the chassis corner). */
+  bottom: 12%;
+  width: 22%;
+  min-width: 104px;
+  border-radius: 24px;
+  background: #000;
+  padding: 6px;
+  box-shadow:
+    0 0 0 2px #1a1a1a,
+    0 0 0 3px rgba(255,255,255,.10),
+    /* stronger drop shadow so the phone reads as "in front of" the screen */
+    0 40px 80px -10px rgba(0,0,0,.85),
+    0 12px 24px -6px rgba(0,0,0,.6);
+  z-index: 2;
+}
+.collect-flow__phone img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 18px;
+}
+@media (max-width: 960px) {
+  /* Flip the whole illustration: icons row across the top, devices below.
+     The funnel hides — the flow is conveyed by stacking order at this width. */
+  .collect-flow {
+    flex-direction: column;
+    gap: clamp(20px, 4vw, 36px);
+    align-items: center;
+  }
+  .collect-flow__sources {
+    flex-direction: row;
+    justify-content: center;
+    gap: clamp(28px, 7vw, 56px);
+    align-self: auto;
+  }
+  .collect-flow__icon {
+    width: clamp(52px, 11vw, 80px);
+    height: clamp(52px, 11vw, 80px);
+  }
+  .collect-flow__label {
+    font-size: clamp(11px, 2.6vw, 14px);
+  }
+  .collect-flow__pipes {
+    display: none;
+  }
+  .collect-flow__devices {
+    width: 100%;
+    max-width: 520px;
+    align-self: stretch;
+    margin: 0 auto;
+  }
+  .collect-flow__phone {
+    right: 4%;
+    width: 26%;
+    min-width: 96px;
+    bottom: 12%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .collect-flow__pipes .pulse { animation: none; opacity: 0; }
 }
 
 /* ===================================================================
@@ -1550,10 +1614,10 @@ em.thin, .thin {
     <div class="seq-copy">
       <span class="seq-numeral" aria-hidden="true">01</span>
       <h2 class="display"><span class="stack">Collect<span class="period">.</span></span></h2>
-      <span class="seq-deck">Every camera, every channel, every shooter — one inbox.</span>
+      <span class="seq-deck">Every source. Every format. One pipeline.</span>
       <span class="seq-rule"></span>
-      <p>The shift begins where the content does: the moment a shutter clicks on a sideline, a backstage handler grabs a still off a wire, a brand partner ships a deliverable. Greenfly pulls all of it into a single, time-stamped pool — sideline, studio, press, talent, fan, wire — without anyone forwarding an email.</p>
-      <p>Sources are <strong>connected once</strong>, then ingest forever: agency drops, FTP feeds, mobile uploaders, signed-in shooters, partner APIs, photo wires, vendor delivery folders.</p>
+      <p>Professional creators in the field — 4K uploads from the sideline in real time. Automated feeds from broadcast partners. DAM integrations. Fan submissions.</p>
+      <p>Content enters Greenfly the moment it's created — whether a photographer uploads from the sideline or an integration pulls from an existing system.</p>
       <div class="deck-meta">
         <span class="pill">Sources · <em>6+</em></span>
         <span class="pill">Latency · <em>&lt; 30s</em></span>
@@ -1565,29 +1629,78 @@ em.thin, .thin {
       <div class="still">
         <div class="still-body">
 
-          <!-- Hub-and-spoke ingest illustration -->
-          <div class="ingest" id="ingest" aria-hidden="true">
-            <div class="ingest-stage" id="ingest-stage">
+          <!-- Horizontal ingest flow illustration (sources → trunk → library) -->
+          <div class="collect-flow" id="collectFlow" aria-hidden="true">
 
-              <svg class="web" viewBox="0 0 1400 1120" aria-hidden="true">
-                <circle class="hub-soft" cx="700" cy="560" r="158"/>
-                <circle class="hub"      cx="700" cy="560" r="126"/>
-                <g id="ingest-spokes"></g>
-                <g id="ingest-chip-spokes"></g>
-                <g id="ingest-lit-spokes"></g>
-                <g id="ingest-pulses"></g>
-              </svg>
-
-              <div class="hub-mark">
-                <div class="ring-bloom"></div>
-                <img src="Platform-assets/collect-illustration/greenfly-logo.svg" alt="" />
+            <!-- Row 1: 3 source icons -->
+            <div class="collect-flow__sources">
+              <div class="collect-flow__source">
+                <span class="collect-flow__icon" data-icon="camera">
+                  <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <path d="M8 20 h10 l4 -6 h20 l4 6 h10 a2 2 0 0 1 2 2 v28 a2 2 0 0 1 -2 2 H8 a2 2 0 0 1 -2 -2 V22 a2 2 0 0 1 2 -2 z"/>
+                    <circle cx="32" cy="36" r="10"/>
+                    <circle cx="32" cy="36" r="4.5"/>
+                    <path d="M48 24 h6"/>
+                  </svg>
+                </span>
+                <span class="collect-flow__label">LCC</span>
               </div>
-
-              <div id="ingest-nodes"></div>
-              <div id="ingest-labels"></div>
-              <div id="ingest-chips"></div>
-
+              <div class="collect-flow__source">
+                <span class="collect-flow__icon" data-icon="plug">
+                  <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <!-- two prongs -->
+                    <path d="M24 6 V18"/>
+                    <path d="M40 6 V18"/>
+                    <!-- plug body -->
+                    <path d="M16 18 H48 V30 A10 10 0 0 1 38 40 H26 A10 10 0 0 1 16 30 Z"/>
+                    <!-- cable -->
+                    <path d="M32 40 V58"/>
+                  </svg>
+                </span>
+                <span class="collect-flow__label">Integrations</span>
+              </div>
+              <div class="collect-flow__source">
+                <span class="collect-flow__icon" data-icon="phone">
+                  <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <rect x="20" y="6" width="24" height="52" rx="4"/>
+                    <path d="M28 12 H36"/>
+                    <circle cx="32" cy="52" r="1.5"/>
+                  </svg>
+                </span>
+                <span class="collect-flow__label">UGC</span>
+              </div>
             </div>
+
+            <!-- Column 2: horizontal funnel — 3 source curves merge into one
+                 trunk that runs to the laptop's left edge -->
+            <div class="collect-flow__pipes">
+              <svg viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
+                <!-- 3 source paths from icon-row y-centers (50 / 150 / 250)
+                     curving to the trunk junction (~130, 150), then straight
+                     to the laptop edge (400, 150). -->
+                <path class="pipe p1" d="M0 50 C 70 50 70 150 130 150 L 400 150"/>
+                <path class="pipe p2" d="M0 150 L 400 150"/>
+                <path class="pipe p3" d="M0 250 C 70 250 70 150 130 150 L 400 150"/>
+                <!-- Pulses follow the same paths -->
+                <path class="pulse p1" d="M0 50 C 70 50 70 150 130 150 L 400 150"/>
+                <path class="pulse p2" d="M0 150 L 400 150"/>
+                <path class="pulse p3" d="M0 250 C 70 250 70 150 130 150 L 400 150"/>
+              </svg>
+            </div>
+
+            <!-- Row 3: devices -->
+            <div class="collect-flow__devices">
+              <div class="collect-flow__laptop">
+                <div class="collect-flow__laptop-screen">
+                  <img src="Platform-assets/collect-illustration/device-laptop-library.png" alt="Greenfly Library on desktop" />
+                </div>
+                <div class="collect-flow__laptop-base" aria-hidden="true"></div>
+              </div>
+              <div class="collect-flow__phone">
+                <img src="Platform-assets/collect-illustration/device-phone-library.png" alt="Greenfly Library on mobile" />
+              </div>
+            </div>
+
           </div>
 
         </div>
@@ -2400,323 +2513,35 @@ const qsa = (s, el = document) => Array.from(el.querySelectorAll(s));
 </script>
 
 <!-- =====================================================================
-     COLLECT · hub-and-spoke ingest illustration
+     COLLECT · top-down ingest flow controller
+     Line-draw on enter, looping pulse along pipes. CSS does the work;
+     this script only toggles .is-drawn based on viewport intersection.
      ===================================================================== -->
 <script>
 (function () {
-  const root  = document.getElementById('ingest');
-  const stage = document.getElementById('ingest-stage');
-  if (!root || !stage) return;
+  const root = document.getElementById('collectFlow');
+  if (!root) return;
 
-  // ── Layout config (1400 × 1120 stage, matching .still's 5:4) ───
-  const STAGE_W = 1400, STAGE_H = 1120;
-  const CX = STAGE_W / 2, CY = STAGE_H / 2;
-  const NODE_R    = 348;       // hub-to-photo center distance (longer spokes)
-  const NODE_SIZE = 200;       // photo tile is 200 × 200
-  const NODE_HALF = NODE_SIZE / 2;
-  const CHIP_R    = 270;       // chips stay where they were (subordinate)
-  const HUB_R     = 126;
-
-  const NODES = [
-    { key:'human',        angle: -90, name:'HUMAN UPLOADS',   img:'Platform-assets/collect-illustration/src-sideline.png' },
-    { key:'automated',    angle:   0, name:'AUTOMATED FEEDS', img:'Platform-assets/collect-illustration/src-broadcast.png' },
-    { key:'integrations', angle:  90, name:'INTEGRATIONS',    img:'Platform-assets/collect-illustration/src-dam.png' },
-    { key:'ugc',          angle: 180, name:'UGC',             img:'Platform-assets/collect-illustration/src-ugc.png' },
-  ];
-
-  const CHIPS = [
-    { angle: -60, label: 'RAW'  },
-    { angle: -30, label: '4K'   },
-    { angle:  30, label: 'MP4'  },
-    { angle:  60, label: 'JPG'  },
-    { angle: 120, label: 'HEIC' },
-    { angle: 150, label: 'TIFF' },
-    { angle: 210, label: 'MOV'  },
-    { angle: 240, label: 'PNG'  },
-  ];
-
-  const rad = d => d * Math.PI / 180;
-
-  NODES.forEach(n => {
-    n.x = CX + Math.cos(rad(n.angle)) * NODE_R;
-    n.y = CY + Math.sin(rad(n.angle)) * NODE_R;
-    const dx = CX - n.x, dy = CY - n.y;
-    const dist = Math.hypot(dx, dy);
-    const ux = dx / dist, uy = dy / dist;
-    n.sx = n.x + ux * (NODE_HALF + 8);
-    n.sy = n.y + uy * (NODE_HALF + 8);
-    n.ex = CX - ux * (HUB_R + 4);
-    n.ey = CY - uy * (HUB_R + 4);
-  });
-
-  CHIPS.forEach(c => {
-    c.x = CX + Math.cos(rad(c.angle)) * CHIP_R;
-    c.y = CY + Math.sin(rad(c.angle)) * CHIP_R;
-    const dx = CX - c.x, dy = CY - c.y;
-    const dist = Math.hypot(dx, dy);
-    const ux = dx / dist, uy = dy / dist;
-    c.sx = c.x + ux * 30;
-    c.sy = c.y + uy * 30;
-    c.ex = CX - ux * (HUB_R + 4);
-    c.ey = CY - uy * (HUB_R + 4);
-  });
-
-  // ── Build DOM/SVG ─────────────────────────────────────────────
-  const NS = 'http://www.w3.org/2000/svg';
-  const spokesG     = document.getElementById('ingest-spokes');
-  const chipSpokesG = document.getElementById('ingest-chip-spokes');
-  const litSpokesG  = document.getElementById('ingest-lit-spokes');
-  const pulsesG     = document.getElementById('ingest-pulses');
-  const nodesEl     = document.getElementById('ingest-nodes');
-  const labelsEl    = document.getElementById('ingest-labels');
-  const chipsEl     = document.getElementById('ingest-chips');
-
-  NODES.forEach((n, i) => {
-    const sp = document.createElementNS(NS, 'line');
-    sp.setAttribute('class', 'spoke');
-    sp.setAttribute('x1', n.sx); sp.setAttribute('y1', n.sy);
-    sp.setAttribute('x2', n.ex); sp.setAttribute('y2', n.ey);
-    spokesG.appendChild(sp);
-
-    const lit = document.createElementNS(NS, 'line');
-    lit.setAttribute('class', 'spoke lit');
-    lit.id = 'ingest-lit-node-' + i;
-    lit.setAttribute('x1', n.sx); lit.setAttribute('y1', n.sy);
-    lit.setAttribute('x2', n.ex); lit.setAttribute('y2', n.ey);
-    litSpokesG.appendChild(lit);
-
-    const pulse = document.createElementNS(NS, 'circle');
-    pulse.setAttribute('class', 'pulse');
-    pulse.setAttribute('r', '4');
-    pulse.id = 'ingest-pulse-node-' + i;
-    pulse.setAttribute('cx', n.sx);
-    pulse.setAttribute('cy', n.sy);
-    pulsesG.appendChild(pulse);
-
-    const node = document.createElement('div');
-    node.className = 'node';
-    node.id = 'ingest-node-' + i;
-    node.style.left = n.x + 'px';
-    node.style.top  = n.y + 'px';
-    node.innerHTML = `
-      <div class="skeleton"></div>
-      <div class="media"><img src="${n.img}" alt=""/></div>
-      <div class="flash"></div>
-    `;
-    nodesEl.appendChild(node);
-
-    const lab = document.createElement('div');
-    lab.className = 'label';
-    lab.id = 'ingest-label-' + i;
-    const ox = Math.cos(rad(n.angle));
-    const oy = Math.sin(rad(n.angle));
-    const labOffset = NODE_HALF + 24;
-    const lx = n.x + ox * labOffset;
-    const ly = n.y + oy * labOffset;
-    let transform = '';
-    if (n.angle === -90)      transform = 'translate(-50%, -100%)';
-    else if (n.angle === 90)  transform = 'translate(-50%, 6px)';
-    else if (ox > 0)          transform = 'translate(0, -50%)';
-    else                      transform = 'translate(-100%, -50%)';
-    lab.style.left = lx + 'px';
-    lab.style.top  = ly + 'px';
-    lab.style.transform = transform;
-    lab.textContent = n.name;
-    labelsEl.appendChild(lab);
-  });
-
-  CHIPS.forEach((c, i) => {
-    const sp = document.createElementNS(NS, 'line');
-    sp.setAttribute('class', 'spoke thin');
-    sp.setAttribute('x1', c.sx); sp.setAttribute('y1', c.sy);
-    sp.setAttribute('x2', c.ex); sp.setAttribute('y2', c.ey);
-    chipSpokesG.appendChild(sp);
-
-    const lit = document.createElementNS(NS, 'line');
-    lit.setAttribute('class', 'spoke lit');
-    lit.id = 'ingest-lit-chip-' + i;
-    lit.setAttribute('x1', c.sx); lit.setAttribute('y1', c.sy);
-    lit.setAttribute('x2', c.ex); lit.setAttribute('y2', c.ey);
-    litSpokesG.appendChild(lit);
-
-    const pulse = document.createElementNS(NS, 'circle');
-    pulse.setAttribute('class', 'pulse');
-    pulse.setAttribute('r', '3');
-    pulse.id = 'ingest-pulse-chip-' + i;
-    pulse.setAttribute('cx', c.sx);
-    pulse.setAttribute('cy', c.sy);
-    pulsesG.appendChild(pulse);
-
-    const chip = document.createElement('div');
-    chip.className = 'chip';
-    chip.id = 'ingest-chip-' + i;
-    chip.style.left = c.x + 'px';
-    chip.style.top  = c.y + 'px';
-    chip.textContent = c.label;
-    chipsEl.appendChild(chip);
-  });
-
-  // ── Animation timeline ────────────────────────────────────────
-  let timers = [];
-  const setT = (fn, ms) => timers.push(setTimeout(fn, ms));
-  const clearAll = () => { timers.forEach(clearTimeout); timers = []; };
-
-  function travelPulse(pulseEl, sx, sy, ex, ey, duration, onArrive) {
-    const start = performance.now();
-    function step(now) {
-      const k = Math.min(1, (now - start) / duration);
-      const e = 1 - Math.pow(1 - k, 2);
-      pulseEl.setAttribute('cx', sx + (ex - sx) * e);
-      pulseEl.setAttribute('cy', sy + (ey - sy) * e);
-      pulseEl.style.opacity = k < 0.1 ? k * 10 : (k > 0.93 ? (1 - k) * 14 : 1);
-      if (k < 1) requestAnimationFrame(step);
-      else onArrive && onArrive();
-    }
-    requestAnimationFrame(step);
-  }
-
-  function bloomHub() {
-    root.classList.add('bloomed');
-    setT(() => root.classList.remove('bloomed'), 900);
-  }
-
-  function firePhoto(i) {
-    const n = NODES[i];
-    const node  = document.getElementById('ingest-node-' + i);
-    const label = document.getElementById('ingest-label-' + i);
-    const lit   = document.getElementById('ingest-lit-node-' + i);
-    const pulse = document.getElementById('ingest-pulse-node-' + i);
-    const PULSE_MS = 720;
-
-    node.classList.add('arrived', 'firing');
-    setT(() => node.classList.remove('firing'), 460);
-
-    lit.animate(
-      [{ opacity: 0 }, { opacity: 1, offset: 0.4 }, { opacity: 0.55 }],
-      { duration: PULSE_MS, fill: 'forwards', easing: 'ease-out' }
-    );
-
-    travelPulse(pulse, n.sx, n.sy, n.ex, n.ey, PULSE_MS, bloomHub);
-    label.classList.add('lit');
-  }
-
-  function fireChip(i) {
-    const c = CHIPS[i];
-    const chip  = document.getElementById('ingest-chip-' + i);
-    const lit   = document.getElementById('ingest-lit-chip-' + i);
-    const pulse = document.getElementById('ingest-pulse-chip-' + i);
-    const PULSE_MS = 560;
-
-    chip.classList.add('lit');
-
-    lit.animate(
-      [{ opacity: 0 }, { opacity: 0.85, offset: 0.5 }, { opacity: 0 }],
-      { duration: PULSE_MS + 300, fill: 'forwards', easing: 'ease-out' }
-    );
-
-    travelPulse(pulse, c.sx, c.sy, c.ex, c.ey, PULSE_MS, () => {
-      setT(() => chip.classList.remove('lit'), 700);
-    });
-  }
-
-  function reset() {
-    clearAll();
-    NODES.forEach((_, i) => {
-      document.getElementById('ingest-node-' + i).classList.remove('arrived', 'firing');
-      document.getElementById('ingest-label-' + i).classList.remove('lit');
-      const lit = document.getElementById('ingest-lit-node-' + i);
-      lit.getAnimations().forEach(a => a.cancel());
-      lit.style.opacity = 0;
-      const p = document.getElementById('ingest-pulse-node-' + i);
-      p.style.opacity = 0;
-      p.setAttribute('cx', NODES[i].sx);
-      p.setAttribute('cy', NODES[i].sy);
-    });
-    CHIPS.forEach((_, i) => {
-      document.getElementById('ingest-chip-' + i).classList.remove('lit');
-      const lit = document.getElementById('ingest-lit-chip-' + i);
-      lit.getAnimations().forEach(a => a.cancel());
-      lit.style.opacity = 0;
-      const p = document.getElementById('ingest-pulse-chip-' + i);
-      p.style.opacity = 0;
-      p.setAttribute('cx', CHIPS[i].sx);
-      p.setAttribute('cy', CHIPS[i].sy);
-    });
-  }
-
-  const PHOTO_ORDER = [0, 2, 1, 3];
-  const PHOTO_STAGGER = 160;
-  const CYCLE = 9000;
-  let running = false;
-
-  function cycle() {
-    if (!running) return;
-    reset();
-
-    PHOTO_ORDER.forEach((i, k) => {
-      setT(() => firePhoto(i), 600 + k * PHOTO_STAGGER);
-    });
-
-    const CHIP_TIMES = [
-      [0, 300], [3, 720], [5, 980],
-      [1, 2200], [6, 2620], [2, 2980], [7, 3400],
-      [4, 4400], [0, 4800], [3, 5300]
-    ];
-    CHIP_TIMES.forEach(([i, t]) => setT(() => fireChip(i % CHIPS.length), t));
-
-    setT(cycle, CYCLE);
-  }
-
-  function start() {
-    if (running) return;
-    running = true;
-    cycle();
-  }
-  function stop() {
-    running = false;
-    clearAll();
-  }
-
-  // ── Responsive scaling (to container, not viewport) ───────────
-  function fit() {
-    const pw = root.clientWidth;
-    const ph = root.clientHeight;
-    if (!pw || !ph) return;
-    const s = Math.min(pw / STAGE_W, ph / STAGE_H);
-    stage.style.transform = `translate(-50%, -50%) scale(${s})`;
-  }
-  fit();
-  window.addEventListener('resize', fit);
-  if ('ResizeObserver' in window) {
-    new ResizeObserver(fit).observe(root);
-  }
-
-  // ── Run only when visible, to save battery / respect reduce-motion ──
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReduced) {
-    // Show final arrived state without animation
-    NODES.forEach((_, i) => {
-      document.getElementById('ingest-node-' + i).classList.add('arrived');
-      document.getElementById('ingest-label-' + i).classList.add('lit');
-    });
+    root.classList.add('is-drawn');
     return;
   }
 
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => e.isIntersecting ? start() : stop());
+      entries.forEach(e => {
+        if (e.isIntersecting) root.classList.add('is-drawn');
+        else                  root.classList.remove('is-drawn');
+      });
     }, { threshold: 0.15 });
     io.observe(root);
   } else {
-    start();
+    root.classList.add('is-drawn');
   }
-
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) stop();
-    else start();
-  });
 })();
 </script>
+
 
 <!-- =====================================================================
      HERO · stepped reveal of the platform image stack (1 → 2 → 3)

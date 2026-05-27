@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Greenfly · Terms of Service</title>
+<meta name="description" content="The terms governing your use of Greenfly's apps, software, website, and the content created or distributed through the platform." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #050607; --bg-2: #0b0d0f; --bg-3: #101214;
+    --accent: #B6F500; --accent-dim: #8bc000;
+    --text: #f4f5f6;
+    --dim: rgba(255,255,255,.64); --dim-2: rgba(255,255,255,.40);
+    --hair: rgba(255,255,255,.10); --hair-strong: rgba(255,255,255,.20);
+    --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --ease: cubic-bezier(.22,.61,.36,1);
+    --ease-out: cubic-bezier(.16,1,.3,1);
+    --max: 1440px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Barlow Condensed', system-ui, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body { overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; }
+
+  .section-light {
+    --bg: #EEEEE8; --bg-2: #E6E6DE; --bg-3: #D9D9CE;
+    --text: #0F0F0F;
+    --dim: rgba(15,15,15,.62); --dim-2: rgba(15,15,15,.42);
+    --hair: rgba(15,15,15,.14); --hair-strong: rgba(15,15,15,.26);
+    --accent: #79982D; --accent-dim: #62801F;
+    background: var(--bg); color: var(--text);
+  }
+  .section-light .btn-primary { color: #fff; }
+  .section-light .btn-primary:hover { background: var(--accent-dim); }
+  .section-light .btn-ghost { border-color: rgba(15,15,15,.24); }
+  .section-light .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    background-color: transparent;
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    border-bottom: 1px solid transparent;
+    transform: translateY(0);
+    transition: transform .38s var(--ease), background-color .35s var(--ease),
+                backdrop-filter .35s var(--ease), -webkit-backdrop-filter .35s var(--ease),
+                border-color .35s var(--ease);
+    will-change: transform;
+  }
+  .nav.nav-hidden { transform: translateY(-110%); }
+  .nav.is-scrolled {
+    background-color: rgba(10,11,13,.62);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-bottom-color: rgba(255,255,255,.06);
+  }
+  .nav.nav-on-light .nav-link    { color: rgba(15,15,15,.72); }
+  .nav.nav-on-light .nav-utility { color: rgba(15,15,15,.55); border-left-color: rgba(15,15,15,.18); }
+  .nav.nav-on-light .nav-cta     { color: #0F0F0F; border-color: rgba(15,15,15,.28); }
+  .nav.nav-on-light .nav-link:hover,
+  .nav.nav-on-light .nav-utility:hover { color: #0F0F0F; }
+  .nav.nav-on-light .nav-cta:hover     { background: var(--accent); color: #000; border-color: var(--accent); }
+  .nav.nav-on-light .nav-logo {
+    background-image: url('../images/brand/Greenfly-fieldgreen.svg');
+    background-size: contain; background-repeat: no-repeat; background-position: left center;
+  }
+  .nav.nav-on-light .nav-logo img { visibility: hidden; }
+  .nav.nav-on-light.is-scrolled {
+    background-color: rgba(238,238,232,.62);
+    border-bottom-color: rgba(15,15,15,.10);
+  }
+  .nav-left, .nav-right { display: flex; align-items: center; gap: 28px; }
+  .nav-right { gap: 24px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-logo { display: inline-flex; align-items: center; line-height: 1; }
+  .nav-logo img { height: 22px; width: auto; display: block; }
+  .nav-link { font-size: 13px; color: var(--dim); transition: color .2s var(--ease); }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--text); }
+  .nav-utility {
+    display: inline-flex; align-items: center;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--dim-2);
+    padding-left: 22px; border-left: 1px solid var(--hair);
+    transition: color .2s var(--ease);
+  }
+  .nav-utility:hover { color: var(--text); }
+  .nav-cta {
+    padding: 9px 16px; border: 1px solid var(--hair-strong);
+    font-size: 13px; font-weight: 500;
+    transition: background .2s var(--ease), color .2s var(--ease);
+  }
+  .nav-cta:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+  .nav-link-wrap { position: relative; }
+  .nav-link-wrap .nav-link { display: inline-flex; align-items: center; gap: 7px; }
+  .nav-link-wrap .nav-link::after {
+    content: ""; display: inline-block;
+    width: 5px; height: 5px;
+    border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
+    transform: rotate(45deg) translateY(-1px);
+    opacity: .55;
+    transition: transform .25s var(--ease), opacity .2s var(--ease);
+  }
+  .nav-link-wrap:hover .nav-link::after,
+  .nav-link-wrap:focus-within .nav-link::after {
+    opacity: 1; transform: rotate(225deg) translateY(1px);
+  }
+  .nav-dropdown {
+    position: absolute; top: calc(100% + 14px); left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    min-width: 200px;
+    background: #0b0d0f;
+    border: 1px solid rgba(255,255,255,.10);
+    padding: 8px 0;
+    opacity: 0; visibility: hidden;
+    transition: opacity .18s var(--ease), transform .18s var(--ease), visibility 0s .18s;
+    z-index: 110;
+  }
+  .nav-dropdown::before { content: ""; position: absolute; top: -14px; left: 0; right: 0; height: 14px; }
+  .nav-link-wrap:hover .nav-dropdown,
+  .nav-link-wrap:focus-within .nav-dropdown {
+    opacity: 1; visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    transition: opacity .18s var(--ease), transform .18s var(--ease);
+  }
+  .nav-dd-item {
+    display: block; padding: 9px 22px; font-size: 13px;
+    color: rgba(255,255,255,.64); white-space: nowrap;
+    transition: color .15s var(--ease);
+  }
+  .nav-dd-item:hover { color: #B6F500; }
+
+  .hero {
+    position: relative; min-height: 56vh;
+    padding: 22vh 5vw 10vh;
+    border-bottom: 1px solid var(--hair);
+    overflow: hidden; isolation: isolate;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(90deg, rgba(15,15,15,.05) 0 1px, transparent 1px 88px);
+    mask-image: linear-gradient(to bottom, transparent 0, black 22%, black 75%, transparent 100%);
+    pointer-events: none; z-index: 0;
+  }
+  .hero::after {
+    content: ""; position: absolute;
+    left: 65%; top: 50%;
+    width: 900px; height: 900px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(121,152,45,.12), rgba(121,152,45,0) 60%);
+    filter: blur(40px);
+    pointer-events: none; z-index: 0;
+  }
+  .hero-inner {
+    position: relative; z-index: 2;
+    max-width: var(--max); margin: 0 auto;
+    display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center;
+    color: var(--accent); gap: 14px;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase;
+  }
+  .hero-eyebrow .dot {
+    width: 7px; height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(121,152,45,.18);
+    animation: pulse-olive 2.6s ease-in-out infinite;
+  }
+  @keyframes pulse-olive {
+    0%, 100% { opacity: 1;   box-shadow: 0 0 0 0 rgba(121,152,45,.5); }
+    50%      { opacity: .55; box-shadow: 0 0 0 6px rgba(121,152,45,0); }
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600; text-transform: uppercase;
+    letter-spacing: -0.012em; line-height: .96;
+    font-size: clamp(48px, 7vw, 120px);
+    max-width: 18ch;
+  }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-deck {
+    max-width: 62ch; color: var(--dim);
+    font-size: clamp(17px, 1.4vw, 20px);
+    line-height: 1.5; margin-top: 6px;
+  }
+  .hero-deck strong { color: var(--text); font-weight: 500; }
+  .hero-meta {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(140px, 1fr));
+    gap: 36px;
+    border-top: 1px solid var(--hair);
+    padding-top: 24px;
+    max-width: 980px;
+  }
+  .hero-meta dt {
+    color: var(--dim-2); margin-bottom: 8px;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase;
+  }
+  .hero-meta dd {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500; font-size: 20px;
+    letter-spacing: -0.005em;
+  }
+  .hero-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--dim);
+    transition: color .2s var(--ease);
+    margin-bottom: -8px;
+  }
+  .hero-back:hover { color: var(--accent); }
+  .hero-back .arrow { transition: transform .2s var(--ease); display: inline-block; }
+  .hero-back:hover .arrow { transform: translateX(-3px); }
+
+  .policy-body {
+    padding: 10vh 5vw 16vh;
+    border-bottom: 1px solid var(--hair);
+    position: relative;
+  }
+  .policy-body-inner {
+    max-width: var(--max); margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(220px, 28%) 1fr;
+    gap: 80px; align-items: start;
+  }
+  .policy-toc {
+    position: sticky; top: 14vh;
+    border-top: 1px solid var(--hair-strong);
+    padding-top: 22px;
+    max-height: calc(100vh - 18vh);
+    overflow-y: auto;
+  }
+  .policy-toc-label {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase;
+    color: var(--dim-2);
+    margin-bottom: 16px;
+  }
+  .policy-toc ol { list-style: none; display: flex; flex-direction: column; counter-reset: toc; }
+  .policy-toc li { counter-increment: toc; border-bottom: 1px solid var(--hair); }
+  .policy-toc a {
+    display: flex; gap: 10px;
+    padding: 12px 0 12px 14px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    color: var(--dim);
+    border-left: 2px solid transparent;
+    transition: color .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+  }
+  .policy-toc a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: .14em; color: var(--dim-2);
+    flex-shrink: 0; padding-top: 1px;
+  }
+  .policy-toc a:hover { color: var(--text); background: rgba(15,15,15,.03); }
+  .policy-toc a.is-active {
+    color: var(--text);
+    border-left-color: var(--accent);
+    font-weight: 500;
+  }
+  .policy-toc a.is-active::before { color: var(--accent); }
+
+  .policy-prose { max-width: 64ch; }
+  .policy-prose > .policy-intro {
+    color: var(--dim);
+    font-size: clamp(17px, 1.3vw, 19px);
+    line-height: 1.55;
+    margin-bottom: 56px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .policy-prose > .policy-intro p + p { margin-top: 16px; }
+  .policy-prose h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: clamp(22px, 2.2vw, 30px);
+    letter-spacing: -0.005em;
+    line-height: 1.05;
+    margin: 56px 0 18px;
+    scroll-margin-top: 14vh;
+    color: var(--text);
+  }
+  .policy-prose h2:first-of-type { margin-top: 0; }
+  .policy-prose h2 .num {
+    display: inline-block;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; color: var(--accent);
+    margin-right: 14px; vertical-align: middle;
+    padding-right: 14px;
+    border-right: 1px solid var(--hair-strong);
+  }
+  .policy-prose h3 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500; text-transform: uppercase;
+    font-size: 17px; letter-spacing: 0;
+    margin: 36px 0 14px; color: var(--text);
+  }
+  .policy-prose p {
+    font-size: 17px; line-height: 1.6;
+    color: var(--dim); margin-bottom: 18px;
+  }
+  .policy-prose ul, .policy-prose ol {
+    margin: 0 0 22px 18px;
+    font-size: 17px; line-height: 1.6;
+    color: var(--dim);
+  }
+  .policy-prose li { margin-bottom: 8px; }
+  .policy-prose li::marker { color: var(--accent); }
+  .policy-prose a {
+    color: var(--accent);
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 1px;
+  }
+  .policy-prose strong { color: var(--text); font-weight: 500; }
+  .policy-prose .addr {
+    display: block;
+    font-family: var(--mono); font-size: 13px;
+    line-height: 1.7; letter-spacing: .02em;
+    color: var(--text);
+    padding: 18px 22px;
+    border: 1px solid var(--hair);
+    background: var(--bg-2);
+    margin: 22px 0;
+    white-space: pre-line;
+  }
+  /* All-caps legal blocks (Warranty, Liability) — small caps treatment so
+     it's readable as long-form, not a block of shouting */
+  .policy-prose .legalese {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--dim);
+    letter-spacing: .01em;
+  }
+  .policy-prose .legalese p { font-size: 14px; line-height: 1.65; }
+  .policy-prose .legalese ol { font-size: 14px; line-height: 1.65; }
+
+  .cta-strip {
+    padding: 14vh 5vw;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-strip::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(900px 500px at 50% 50%, rgba(182,245,0,.10), transparent 60%);
+    pointer-events: none;
+  }
+  .cta-inner { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; }
+  .cta-strip .mono { color: var(--accent); display: inline-block; margin-bottom: 22px; }
+  .cta-strip h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600; text-transform: uppercase;
+    letter-spacing: -0.012em; line-height: .96;
+    font-size: clamp(40px, 6vw, 96px);
+    max-width: 18ch; margin: 0 auto 34px;
+  }
+  .cta-strip h2 em { font-style: normal; color: var(--accent); }
+  .cta-actions { display: inline-flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px; font-weight: 500; letter-spacing: .01em;
+    text-transform: uppercase;
+    transition: transform .2s var(--ease), background .2s var(--ease),
+                color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { transform: translateY(-1px); background: #c8ff1a; }
+  .btn-ghost { border: 1px solid var(--hair-strong); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn .arrow { transition: transform .2s var(--ease); }
+  .btn:hover .arrow { transform: translateX(3px); }
+
+  .footer {
+    position: relative; overflow: hidden;
+    border-top: 1px solid var(--hair);
+    padding: 56px 5vw 44px;
+  }
+  .footer-stage { max-width: var(--max); margin: 0 auto; text-align: center; padding: 24px 0 8px; }
+  .footer-wordmark { display: flex; justify-content: center; padding: 8px 0 24px; }
+  .footer-wordmark img {
+    width: 46%; max-width: 420px;
+    filter: brightness(0) invert(1);
+  }
+  .footer-inner {
+    max-width: var(--max); margin: 0 auto;
+    padding: 48px 0 44px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(140px, auto));
+    justify-content: center; gap: 80px;
+    border-top: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+  }
+  .footer h5 {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 22px;
+    font-weight: 500;
+  }
+  .footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer li a {
+    color: var(--dim); font-size: 14px;
+    transition: color .2s var(--ease);
+    position: relative; display: inline-block;
+  }
+  .footer li a::after {
+    content: ""; position: absolute;
+    left: 0; right: 100%; bottom: -3px;
+    height: 1px; background: var(--accent);
+    transition: right .35s var(--ease-out);
+  }
+  .footer li a:hover { color: var(--text); }
+  .footer li a:hover::after { right: 0; }
+  .footer-legal {
+    max-width: var(--max);
+    margin: 28px auto 0;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 24px;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--dim);
+  }
+  .footer-legal a {
+    color: var(--dim);
+    transition: color .2s var(--ease);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .footer-legal a:hover { color: var(--accent); }
+  .footer-legal a .arrow { transition: transform .2s var(--ease); }
+  .footer-legal a:hover .arrow { transform: translateX(3px); }
+  .footer-status { display: inline-flex; align-items: center; gap: 10px; }
+  .footer-status b { color: var(--text); font-weight: 500; }
+  .footer-status-dot {
+    width: 7px; height: 7px;
+    background: var(--accent);
+    border-radius: 50%; flex-shrink: 0;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1;  box-shadow: 0 0 0 0 rgba(182,245,0,.5); }
+    50%      { opacity: .55; box-shadow: 0 0 0 6px rgba(182,245,0,0); }
+  }
+
+  @media (max-width: 900px) {
+    .policy-body-inner { grid-template-columns: 1fr; gap: 32px; }
+    .policy-toc { position: static; max-height: none; padding-top: 16px; }
+    .policy-toc ol { max-height: 220px; overflow-y: auto; border: 1px solid var(--hair); }
+  }
+  @media (max-width: 720px) {
+    .nav-link, .nav-utility { display: none; }
+    .nav-utility { border-left: 0; padding-left: 0; }
+    .hero-meta { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .footer-inner { grid-template-columns: 1fr; gap: 40px; }
+    .footer-legal { flex-direction: column; gap: 10px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav" id="siteNav">
+  <div class="nav-left">
+    <a href="../homepage.html" class="nav-logo" aria-label="Greenfly">
+      <img src="../images/brand/Greenfly (1).svg" alt="Greenfly">
+    </a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="../platform.html" class="nav-link">Platform</a>
+      <div class="nav-link-wrap">
+        <a href="../solutions.html" class="nav-link">Solutions</a>
+        <div class="nav-dropdown">
+          <a href="../solutions-sports.html" class="nav-dd-item">Sports</a>
+          <a href="../solutions-entertainment.html" class="nav-dd-item">Entertainment</a>
+          <a href="../solutions-brands.html" class="nav-dd-item">Brands</a>
+          <a href="../solutions-live-events.html" class="nav-dd-item">Live Events</a>
+        </div>
+      </div>
+      <a href="../homepage.html#proof" class="nav-link">Stories</a>
+      <a href="../company.html" class="nav-link">Company</a>
+    </div>
+    <a href="#login" class="nav-utility">Login</a>
+    <a href="../get-greenfly.html" class="nav-cta">Get Greenfly</a>
+  </div>
+</nav>
+
+<section class="hero section-light">
+  <div class="hero-inner">
+    <a href="../legal.html" class="hero-back"><span class="arrow">←</span> All policies</a>
+    <span class="hero-eyebrow">
+      <span class="dot"></span>Legal · Document 01 · Terms
+    </span>
+    <h1>Terms of <em>service.</em></h1>
+    <p class="hero-deck">
+      The agreement that governs your use of Greenfly's apps, software, website, and the
+      content you create or distribute through the Service. <strong>By using the Service,
+      you signify your agreement to these terms.</strong>
+    </p>
+    <dl class="hero-meta">
+      <div><dt>Last updated</dt><dd>Jun 19, 2018</dd></div>
+      <div><dt>Effective</dt><dd>On posting</dd></div>
+      <div><dt>Governing law</dt><dd>California</dd></div>
+      <div><dt>Contact</dt><dd>copyright@<wbr>greenfly.com</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="policy-body section-light">
+  <div class="policy-body-inner">
+    <aside class="policy-toc" aria-label="Table of contents">
+      <div class="policy-toc-label">On this page</div>
+      <ol>
+        <li><a href="#acceptance">Your acceptance</a></li>
+        <li><a href="#service">Service</a></li>
+        <li><a href="#accounts">User accounts</a></li>
+        <li><a href="#general-use">General use</a></li>
+        <li><a href="#use-of-content">Your use of content</a></li>
+        <li><a href="#your-content">Your content and conduct</a></li>
+        <li><a href="#termination">Account termination</a></li>
+        <li><a href="#warranty">Warranty disclaimer</a></li>
+        <li><a href="#liability">Limitation of liability</a></li>
+        <li><a href="#indemnity">Indemnity</a></li>
+        <li><a href="#ability-to-accept">Ability to accept</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+        <li><a href="#app-stores">Additional terms for app stores</a></li>
+        <li><a href="#general">General</a></li>
+      </ol>
+    </aside>
+
+    <article class="policy-prose">
+      <h2 id="acceptance"><span class="num">01</span>Your acceptance</h2>
+      <p>By using or visiting the website of Greenfly, Inc. (collectively, "Greenfly" or "we" or "us" or "our") or any Greenfly products, software, data feeds, documentation, and services provided to you on, from, or through the Greenfly mobile applications (the "Apps") or the Greenfly website (collectively the "Service"), you signify your agreement to these terms and conditions (the "Terms of Service" or "Terms"), incorporated herein by reference. We advise you to store and/or print a copy of these Terms and keep them for your reference. <strong>If you do not agree to any of these terms, please do not use the Service.</strong></p>
+      <p>The Apps and all other Greenfly-branded software and applications and associated documentation, including any improvements, modifications, enhancements, fixes, updates, upgrades and future versions thereto ("Updates") and whether made available for free or for a fee (collectively the "Software"), are licensed (not sold) to you by Greenfly, Inc. For purposes of these Terms of Service, the Service includes all aspects of the Greenfly App and Software, including but not limited to all products, software, applications and services offered via the Greenfly website. You do not acquire any ownership interest in the Services under these Terms, or any other rights thereto other than to use the Services in accordance with the license granted, and subject to all terms, conditions and restrictions herein.</p>
+      <p>Subject to your compliance with these Terms, you are granted a limited, non-exclusive, non-sublicensable, non-assignable, free of charge license to download and install the Software on a personal computer, mobile phone or other device; and to use the Software through your individual Greenfly user account ("User Account"), and to use the rest of the Services for your personal use through your individual Greenfly user account. For the avoidance of doubt, (a) IT administrators working on behalf of a company may download and install the Software onto personal computers or other devices used by personnel of such company; and (b) you are permitted to use the Software at a university or other educational institution, or at work. Greenfly reserves all rights not expressly granted to you under these Terms.</p>
+      <p>You may not and you agree not to:</p>
+      <ol type="a">
+        <li>sub-license, sell, assign, rent, lease, export, import, distribute or transfer or otherwise grant rights to any third party in the Services;</li>
+        <li>undertake, cause, permit or authorize the modification, creation of derivative works or improvements, translation, reverse engineering, decompiling, disassembling, decryption, emulation, hacking, discovery or attempted discovery of the source code or protocols of the Services or any part or features thereof (except to the extent permitted by law);</li>
+        <li>remove, obscure or alter any copyright notices or other proprietary notices included in the Services;</li>
+        <li>use the Services or cause the Services (or any part of it) to be used within or to provide commercial products or services to third parties without Greenfly's prior written consent;</li>
+        <li>other than for the purposes of download and installation, use the Services except through your User Account.</li>
+      </ol>
+      <p>Although we will notify you when major changes are made to these Terms of Service, you should periodically review the most up-to-date version at <a href="https://www.greenfly.com/termsofservice">https://www.greenfly.com/termsofservice</a>. Greenfly may, in its sole discretion, modify or revise these Terms of Service and policies at any time, and you agree to be bound by such modifications or revisions.</p>
+
+      <h2 id="service"><span class="num">02</span>Service</h2>
+      <p>These Terms of Service apply to all users of the Service, including users who are also contributors of User Content on the Service. For purposes of these Terms of Service: (a) "Content" means the text, software, scripts, graphics, photos, sounds, music, videos, audiovisual combinations, interactive features, works of authorship of any kind, and information or other materials that are posted, generated, provided, or otherwise made available through the Services; and (b) "User Content" means any Content that Account holders (including you) provide to be made available through the Services. Content includes without limitation User Content.</p>
+      <p>Subject to your compliance with these Terms of Service, Greenfly grants you a personal, noncommercial, nonexclusive, nontransferable, non-sublicensable, revocable license to download, view, display, and use the Content solely in connection with your permitted use of the Services. If you breach any of the terms of these Terms of Services, all licenses granted by Greenfly, including permission to use the Services, will terminate automatically.</p>
+      <p>The Service may contain links to third party websites that are not owned or controlled by Greenfly. Greenfly has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third-party websites. By using the Service, you expressly relieve Greenfly from any and all liability arising from your use of any third-party website. Accordingly, we encourage you to be aware when you leave the Service and to read the terms and conditions and privacy policy of each other website or application that you visit.</p>
+
+      <h2 id="accounts"><span class="num">03</span>User accounts</h2>
+      <p>In order to access the Service, you will have to create a User Account. You may never use another's account without permission. When creating your account, you must provide accurate and complete information. <strong>You are solely responsible for the activity that occurs on your account</strong> (whether or not you know about them), and you must keep your account password secure. You must notify Greenfly immediately of any breach of security or unauthorized use of your account.</p>
+      <p>Although Greenfly will not be liable for your losses caused by any unauthorized use of your account, you may be liable for the losses of Greenfly or others due to such unauthorized use.</p>
+
+      <h2 id="general-use"><span class="num">04</span>General use of the Service — permissions and restrictions</h2>
+      <p>Greenfly hereby grants you permission to access and use the Service as set forth in these Terms of Service, provided that:</p>
+      <ol>
+        <li>You agree not to distribute in any medium any part of the Service or the Content without Greenfly's prior written authorization, unless Greenfly makes available the means for such distribution.</li>
+        <li>You agree not to alter or modify any part of the Service.</li>
+        <li>You agree not to use the Service for any of the following commercial uses unless you obtain Greenfly's prior written approval:
+          <ul>
+            <li>the sale of access to the Service;</li>
+            <li>the sale of advertising, sponsorships, or promotions placed on or within the Service or Content; or</li>
+            <li>the sale of advertising, sponsorships, or promotions on any page of an ad-enabled blog or website containing Content delivered via the Service, unless other material not obtained from Greenfly appears on the same page and is of sufficient value to be the basis for such sales.</li>
+          </ul>
+        </li>
+        <li>Prohibited commercial uses do not include uploading an original video to Greenfly, or any use that Greenfly expressly authorizes in writing.</li>
+        <li>If you use the Service, you agree that it may automatically download and install updates from time to time from Greenfly. These updates are designed to improve, enhance and further develop the Service and may take the form of bug fixes, enhanced functions, new software modules and completely new versions. You agree to receive such updates (and permit Greenfly to deliver these to you) as part of your use of the Service.</li>
+        <li>In your use of the Service, you will comply with all applicable laws.</li>
+        <li>Greenfly reserves the right to discontinue any aspect of the Service at any time and for any reason.</li>
+      </ol>
+
+      <h2 id="use-of-content"><span class="num">05</span>Your use of content</h2>
+      <p>In addition to the general restrictions above, the following restrictions and conditions apply specifically to your use of Content.</p>
+      <ol>
+        <li>The Content on the Service, and the trademarks, service marks and logos ("Marks") on the Service, are owned by or licensed to Greenfly or its licensors, and are subject to copyright and other intellectual property rights under the law.</li>
+        <li>Content is provided to you AS IS. You may access Content for your information and personal use solely as intended through the provided functionality of the Service and as permitted under these Terms of Service. You shall not download any Content unless you see a "download" or similar link displayed by Greenfly on the Service for that Content. You shall not copy, reproduce, distribute, transmit, broadcast, display, sell, license, or otherwise exploit any Content for any other purposes without the prior written consent of Greenfly or the respective licensors of the Content. Greenfly and its licensors reserve all rights not expressly granted in and to the Service and the Content.</li>
+        <li>You agree not to circumvent, disable or otherwise interfere with security-related features of the Service or features that prevent or restrict use or copying of any Content or enforce limitations on use of the Service or the Content therein.</li>
+        <li>You understand that when using the Service, you will be exposed to Content from a variety of sources, and that Greenfly does not monitor, and is not responsible for the accuracy, usefulness, safety, or intellectual property rights of or relating to such Content. You further understand and acknowledge that you may be exposed to Content that is inaccurate, offensive, indecent, or objectionable, and you agree to waive, and hereby do waive, any legal or equitable rights or remedies you have or may have against Greenfly with respect thereto.</li>
+      </ol>
+
+      <h2 id="your-content"><span class="num">06</span>Your content and conduct</h2>
+      <p>As a Greenfly account holder you may submit User Content to the Service, including images and videos. You understand that Greenfly does not guarantee any confidentiality with respect to any User Content you submit.</p>
+      <p>You shall be solely responsible for your own User Content and the consequences of submitting and publishing your Content on the Service. You affirm, represent, and warrant that you own or have the necessary licenses, rights, consents, and permissions to publish User Content you submit. By making any User Content available through Services, you grant to Greenfly a nonexclusive, perpetual, irrevocable, transferable, fully sublicensable through multiple tiers (including to other users of the Service), worldwide, royalty-free license to use, copy, modify, create derivative works based upon, publicly display, publicly perform, and distribute your User Content in connection with operating and providing the Services and Content to you and to other users of the Services.</p>
+      <p>You will not submit any Content to the Service that is (i) false, inaccurate, misleading, defamatory, or libelous; (ii) obscene, hateful, threatening, pornographic, or that contains nudity or graphic or gratuitous violence; (iii) that will infringe, misappropriate, or violate a third party's intellectual property rights, or rights of publicity or privacy, or result in the violation of any applicable law or regulation; or (iv) that contains images of any other person unless you have their consent.</p>
+      <p>By submitting User Content to Greenfly, you hereby irrevocably waive any and all rights of publicity or moral rights you may have in that User Content, including your association with that User Content, your authorship and your appearance, words, or other substance of that content. By submitting User Content to a company (the "Principal") through Greenfly, you hereby permit that User Content submitted to the Principal to be distributed directly to the public by the Principal and by their partners through any channel for the distribution of media content, including, but not limited to, broadcast television, cable television, Internet web sites, social media platforms, and mobile applications. By submitting User Content to Greenfly, you hereby waive all right to share in any proceeds from its subsequent usage or distribution by the Principal or any of their partners.</p>
+      <p>You further agree that User Content you submit to the Service will not contain third party copyrighted material, or material that is subject to other third party proprietary rights, unless you have permission from the rightful owner of the material or you are otherwise legally entitled to post the material and to grant Greenfly all of the license rights granted herein.</p>
+      <p>Greenfly does not monitor any User Content you upload to the Service and does not endorse any User Content submitted to the Service by any user or other licensor, or any opinion, recommendation, or advice expressed therein, and Greenfly expressly disclaims any and all liability in connection with User Content.</p>
+      <h3>DMCA notices</h3>
+      <p>Greenfly does not permit copyright infringing activities and infringement of intellectual property rights on the Service, and Greenfly will remove any User Content if properly notified that such User Content infringes on another's intellectual property rights. In accordance with the Digital Millennium Copyright Act of 1998 (the "DMCA"), Greenfly will respond expeditiously to claims of infringement from intellectual property (including copyright) owners (or their agents) who believe that material appearing on the Service infringes their intellectual property rights.</p>
+      <p>If you believe in good faith that User Content available via the Service infringes your copyright, you (or your agent or exclusive licensee) may send us a notice requesting that we remove the User Content or block access to it. Such notice should include the following information:</p>
+      <ol type="i">
+        <li>an electronic or physical signature of the owner (or person authorized to act on behalf of the owner) of the copyrighted work;</li>
+        <li>a description of the copyrighted work that you claim has been infringed upon (or — if multiple copyrighted works are covered by this notice — you may provide a representative list of the copyrighted works that you claim have been infringed);</li>
+        <li>information reasonably sufficient to permit us to identify and locate the material that you claim is infringing and that is to be removed or access to which is to be disabled;</li>
+        <li>your address, telephone number, and e-mail address;</li>
+        <li>a statement by you that you have a good-faith belief that the disputed use is not authorized by the copyright owner, its agent, or the law (e.g., as a fair use); and</li>
+        <li>a statement by you, made under penalty of perjury, that the above information in your notice is accurate and that you are the copyright owner or authorized to act on the copyright owner's behalf.</li>
+      </ol>
+      <p>If you believe in good faith that someone has wrongly filed a notice of copyright infringement against you, the DMCA permits you to send us a counter-notice. Notices and counter-notices must meet the then-current statutory requirements imposed by the DMCA. Notices and counter-notices must be sent to our designated Copyright Agent at:</p>
+      <span class="addr">Copyright Agent
+c/o Greenfly, Inc.
+100 Wilshire Blvd. Suite 700
+Santa Monica, CA 90401, USA
+phone: (310) 828-1444
+email: copyright@greenfly.com</span>
+      <p>Greenfly reserves the right to remove any and all Content, including User Content, for any reason and without prior notice.</p>
+
+      <h2 id="termination"><span class="num">07</span>Account termination policy</h2>
+      <p>It is Greenfly's policy, in appropriate circumstances and at its discretion, to disable and/or terminate the accounts of users who repeatedly infringe or are repeatedly charged with infringing the copyrights or other intellectual property rights of others.</p>
+      <p>Greenfly reserves the right to decide whether User Content violates these Terms of Service for reasons other than copyright infringement or inclusion of third parties without their consent, such as, but not limited to, pornography, obscenity, or excessive length. Greenfly may at any time, without prior notice and in its sole discretion, remove such User Content and/or terminate a user's account for submitting such material in violation of these Terms of Service.</p>
+
+      <h2 id="warranty"><span class="num">08</span>Warranty disclaimer</h2>
+      <div class="legalese">
+        <p>YOU AGREE THAT YOUR USE OF THE SERVICE AND THE SOFTWARE SHALL BE AT YOUR SOLE RISK. THE SERVICE AND THE SOFTWARE ARE PROVIDED "AS IS" WITH ALL FAULTS AND DEFECTS WITHOUT WARRANTY OF ANY KIND.</p>
+        <p>TO THE FULLEST EXTENT PERMITTED BY LAW, GREENFLY, ITS OFFICERS, DIRECTORS, EMPLOYEES, AND AGENTS DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, IN CONNECTION WITH THE SERVICES AND YOUR USE THEREOF. GREENFLY MAKES NO WARRANTIES OR REPRESENTATIONS ABOUT THE ACCURACY OR COMPLETENESS OF THE SERVICES CONTENT OR THE CONTENT OF ANY SITES LINKED TO FROM THE SERVICES.</p>
+        <p>GREENFLY DOES NOT WARRANT, ENDORSE, GUARANTEE, OR ASSUME RESPONSIBILITY FOR ANY PRODUCT OR SERVICE ADVERTISED OR OFFERED BY A THIRD PARTY THROUGH THE SERVICES OR ANY HYPERLINKED SERVICES OR FEATURED IN ANY BANNER OR OTHER ADVERTISING, AND GREENFLY WILL NOT BE A PARTY TO OR IN ANY WAY BE RESPONSIBLE FOR MONITORING ANY TRANSACTION BETWEEN YOU AND THIRD-PARTY PROVIDERS OF PRODUCTS OR SERVICES. AS WITH THE PURCHASE OF A PRODUCT OR SERVICE THROUGH ANY MEDIUM OR IN ANY ENVIRONMENT, YOU SHOULD USE YOUR BEST JUDGMENT AND EXERCISE CAUTION WHERE APPROPRIATE.</p>
+      </div>
+
+      <h2 id="liability"><span class="num">09</span>Limitation of liability</h2>
+      <div class="legalese">
+        <p>TO THE FULLEST EXTENT PERMITTED BY LAW IN THE APPLICABLE JURISDICTION, IN NO EVENT SHALL GREENFLY, ITS OFFICERS, DIRECTORS, EMPLOYEES, OR AGENTS, BE LIABLE TO YOU FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES WHATSOEVER RESULTING FROM YOUR USE OF THE SERVICE (INCLUDING THE SOFTWARE AND CONTENT), INCLUDING WITHOUT LIMITATION ANY:</p>
+        <ol>
+          <li>ERRORS, MISTAKES, OR INACCURACIES IN THE SERVICES OR CONTENT;</li>
+          <li>PERSONAL INJURY OR PROPERTY DAMAGE, OF ANY NATURE WHATSOEVER, RESULTING FROM YOUR ACCESS TO AND USE OF OUR SERVICES;</li>
+          <li>ANY UNAUTHORIZED ACCESS TO OR USE OF OUR SECURE SERVERS AND/OR ANY AND ALL PERSONAL INFORMATION AND/OR FINANCIAL INFORMATION STORED THEREIN;</li>
+          <li>YOUR COMMUNICATIONS WITH OTHER USERS OF THE SERVICES AND WITH OTHER PERSONS WITH WHOM YOU COMMUNICATED AS A RESULT OF YOUR USE OF THE SERVICES;</li>
+          <li>ANY INTERRUPTION OR CESSATION OF TRANSMISSION TO OR FROM OUR SERVICES;</li>
+          <li>ANY BUGS, VIRUSES, TROJAN HORSES, OR THE LIKE, WHICH MAY BE TRANSMITTED TO OR THROUGH OUR SERVICES BY ANY THIRD PARTY; AND/OR</li>
+          <li>ANY ERRORS OR OMISSIONS IN ANY CONTENT OR FOR ANY LOSS OR DAMAGE OF ANY KIND INCURRED AS A RESULT OF YOUR USE OF ANY CONTENT POSTED, EMAILED, TRANSMITTED, OR OTHERWISE MADE AVAILABLE VIA THE SERVICES, WHETHER BASED ON WARRANTY, CONTRACT, TORT, OR ANY OTHER LEGAL THEORY, AND WHETHER OR NOT THE COMPANY IS ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</li>
+        </ol>
+        <p>YOU SPECIFICALLY ACKNOWLEDGE THAT GREENFLY SHALL NOT BE LIABLE FOR CONTENT OR THE DEFAMATORY, OFFENSIVE, OR ILLEGAL CONDUCT OF ANY THIRD PARTY AND THAT THE RISK OF HARM OR DAMAGE FROM THE FOREGOING RESTS ENTIRELY WITH YOU.</p>
+        <p>TO THE FULLEST EXTENT PERMITTED BY LAW IN THE APPLICABLE JURISDICTION, IN NO EVENT WILL THE TOTAL LIABILITY OF GREENFLY, ITS OFFICERS, DIRECTORS, EMPLOYEES, OR AGENTS ARISING OUT OF OR IN CONNECTION WITH THESE TERMS OF SERVICE OR FROM THE USE OF OR INABILITY TO USE THE SERVICES OR CONTENT EXCEED ONE HUNDRED U.S. DOLLARS (US$100). THE EXCLUSIONS AND LIMITATIONS OF DAMAGES SET FORTH ABOVE ARE FUNDAMENTAL ELEMENTS OF THE BASIS OF THE BARGAIN BETWEEN GREENFLY AND YOU.</p>
+      </div>
+      <p>The Service is controlled and offered by Greenfly from its or its service provider's facilities in the United States of America. Greenfly makes no representations that the Service is appropriate or available for use in other locations. Those who access or use the Service from other jurisdictions do so at their own volition and are responsible for compliance with local law.</p>
+
+      <h2 id="indemnity"><span class="num">10</span>Indemnity</h2>
+      <p>To the extent permitted by applicable law, you agree to defend, indemnify and hold harmless Greenfly, its parent corporation, officers, directors, employees and agents, from and against any and all claims, damages, obligations, losses, liabilities, costs or debt, and expenses (including but not limited to attorney's fees) arising from: (i) your use of and access to the Service; (ii) your violation of any term of these Terms of Service; (iii) your violation of any third party right, including without limitation any copyright, property, or privacy right; or (iv) any claim that your User Content caused damage to a third party. This defense and indemnification obligation will survive these Terms of Service and your use of the Service.</p>
+
+      <h2 id="ability-to-accept"><span class="num">11</span>Ability to accept Terms of Service</h2>
+      <p>You affirm that you are either more than 18 years of age, or an emancipated minor, or possess legal parental or guardian consent, and are fully able and competent to enter into the terms, conditions, obligations, affirmations, representations, and warranties set forth in these Terms of Service, and to abide by and comply with these Terms of Service. In any case, you affirm that you are over the age of 13, as the Service is not intended for children under 13. <strong>If you are under 13 years of age, then please do not use the Service.</strong></p>
+
+      <h2 id="assignment"><span class="num">12</span>Assignment</h2>
+      <p>These Terms of Service, and any rights and licenses granted hereunder, may not be transferred or assigned by you (including by change of control or operation of law), but may be assigned by Greenfly without restriction.</p>
+
+      <h2 id="app-stores"><span class="num">13</span>Additional terms for app stores</h2>
+      <p>The following terms and conditions apply to you only if you are using the App from any app store or distribution platform (like Apple's App Store, Google Play, or Amazon Appstore) (each, an "App Store Provider"). To the extent the other terms and conditions of the Terms of Service are less restrictive than, or otherwise conflict with, the terms and conditions of this paragraph, the more restrictive or conflicting terms and conditions in this paragraph apply, but solely with respect to App from the App Store Provider's app store or distribution platform.</p>
+      <p>You acknowledge and agree that these Terms are solely between you and Greenfly, not App Store Provider, and that App Store Provider has no responsibility for the App or content thereof. Your use of the App must comply with the terms and conditions of the App Store Provider's app store or distribution platform. You acknowledge that App Store Provider has no obligation whatsoever to furnish any maintenance and support services with respect to the App.</p>
+      <p>In the event of any failure of the App to conform to any applicable warranty, you may notify App Store Provider, and App Store Provider may refund the purchase price, if any, for the App to you; to the maximum extent permitted by applicable law, App Store Provider will have no other warranty obligation whatsoever with respect to the App, and any other claims, losses, liabilities, damages, costs or expenses attributable to any failure to conform to any warranty will be solely governed by these Terms of Service.</p>
+      <p>You and Greenfly acknowledge that App Store Provider is not responsible for addressing any claims of you or any third party relating to the App or your possession and/or use of the App, including, but not limited to: (i) product liability claims; (ii) any claim that the App fails to conform to any applicable legal or regulatory requirement; and (iii) claims arising under consumer protection or similar legislation.</p>
+      <p>You and Greenfly acknowledge that, in the event of any third party claim that the App or your possession and use of that App infringes that third party's intellectual property rights, Greenfly, not App Store Provider, will be solely responsible for the investigation, defense, settlement and discharge of any such intellectual property infringement claim to the extent required by these Terms of Service. You must comply with applicable third party terms of agreement when using the App.</p>
+      <p>You and Greenfly acknowledge and agree that App Store Provider, and App Store Provider subsidiaries, are third party beneficiaries of these Terms of Service as they relate to your license of the App, and that, upon your acceptance of the Terms of Service, App Store Provider will have the right (and will be deemed to have accepted the right) to enforce these Terms of Service against you as a third party beneficiary thereof. You must also comply with all applicable third-party terms of service when using the App.</p>
+
+      <h2 id="general"><span class="num">14</span>General</h2>
+      <p>You agree that: (i) the Service shall be deemed solely based in California; and (ii) the Service shall be deemed a passive website that does not give rise to personal jurisdiction over Greenfly, either specific or general, in jurisdictions other than California. These Terms of Service shall be governed by the internal substantive laws of the State of California, without respect to its conflict of laws principles. <strong>Any claim or dispute between you and Greenfly that arises in whole or in part from the Service shall be decided exclusively by a court of competent jurisdiction located in Los Angeles, California.</strong></p>
+      <p>These Terms of Service and any other legal notices published by Greenfly on the Service, shall constitute the entire agreement between you and Greenfly concerning the Service. If any provision of these Terms of Service is deemed invalid by a court of competent jurisdiction, the invalidity of such provision shall not affect the validity of the remaining provisions of these Terms of Service, which shall remain in full force and effect. No waiver of any term of this these Terms of Service shall be deemed a further or continuing waiver of such term or any other term, and Greenfly's failure to assert any right or provision under these Terms of Service shall not constitute a waiver of such right or provision.</p>
+      <p>Greenfly reserves the right to amend these Terms of Service at any time and without notice, and it is your responsibility to review these Terms of Service for any changes, except that if we make any material changes to these Terms of Service, including any change that we propose that will have retroactive effect, we'll notify you of those changes by posting them on the Services or by sending you an email or other notification, and we'll update the "Last Updated" date above to indicate when those changes were made. If you do not agree with the modifications to the Terms of Service, then please do not access or use the Services.</p>
+      <p>If any provision or part-provision of these Terms are or become invalid, illegal or unenforceable, it shall be deemed modified to the minimum extent necessary to make it valid, legal and enforceable. If such modification is not possible, the relevant provision or part-provision shall be deemed deleted. Any modification to or deletion of a provision or part-provision under this clause shall not affect the validity and enforceability of the rest of these Terms. Your use of the Service following any amendment of these Terms of Service will signify your assent to and acceptance of its revised terms.</p>
+      <p>Under California Civil Code Section 1789.3, California users of the Service receive the following specific consumer rights notice: The Complaint Assistance Unit of the Division of Consumer Services of the California Department of Consumer Affairs may be contacted in writing at 1625 North Market Blvd., Suite N 112 Sacramento, CA 95834, or by telephone at (800) 952-5210.</p>
+      <div class="legalese">
+        <p>YOU AND GREENFLY AGREE THAT ANY CAUSE OF ACTION ARISING OUT OF OR RELATED TO THE SERVICES MUST COMMENCE WITHIN ONE (1) YEAR AFTER THE CAUSE OF ACTION ACCRUES. OTHERWISE, SUCH CAUSE OF ACTION IS PERMANENTLY BARRED.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="cta-strip">
+  <div class="cta-inner">
+    <span class="mono">Questions about these terms?</span>
+    <h2>For procurement, legal, or <em>copyright notices.</em></h2>
+    <div class="cta-actions">
+      <a href="mailto:copyright@greenfly.com" class="btn btn-primary">
+        <span>copyright@greenfly.com</span><span class="arrow">→</span>
+      </a>
+      <a href="../legal.html" class="btn btn-ghost">
+        <span>← All policies</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" id="footer">
+  <div class="footer-stage">
+    <div class="footer-wordmark">
+      <img src="../images/brand/Greenfly (1).svg" alt="Greenfly">
+    </div>
+  </div>
+  <div class="footer-inner">
+    <div>
+      <h5>Platform</h5>
+      <ul>
+        <li><a href="../platform.html">Capture</a></li>
+        <li><a href="../platform.html">Identify</a></li>
+        <li><a href="../platform.html">Distribute</a></li>
+        <li><a href="../platform.html">Measure</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="../company.html">About</a></li>
+        <li><a href="../company.html">Customers</a></li>
+        <li><a href="../company.html">Careers</a></li>
+        <li><a href="../get-greenfly.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Resources</h5>
+      <ul>
+        <li><a href="#">Editorial</a></li>
+        <li><a href="#">Playbooks</a></li>
+        <li><a href="#">Webinars</a></li>
+        <li><a href="#">Support</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>© 2026 Greenfly Inc.</span>
+    <span class="footer-status">
+      <span class="footer-status-dot"></span>
+      System · Nominal · <b>99.97%</b>
+    </span>
+    <span><a href="../legal.html">Legal &amp; policies <span class="arrow">→</span></a></span>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const nav = document.getElementById('siteNav');
+  if (!nav) return;
+  const HIDE_AFTER = 80, DELTA = 6;
+  let lastY = window.scrollY || 0, ticking = false;
+  const update = () => {
+    const y = window.scrollY || 0, dy = y - lastY;
+    nav.classList.toggle('is-scrolled', y > 24);
+    if (Math.abs(dy) > DELTA) {
+      if (dy > 0 && y > HIDE_AFTER) nav.classList.add('nav-hidden');
+      else if (dy < 0)              nav.classList.remove('nav-hidden');
+      lastY = y;
+    }
+    ticking = false;
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+  nav.addEventListener('focusin', () => nav.classList.remove('nav-hidden'));
+})();
+
+(() => {
+  const nav = document.getElementById('siteNav');
+  if (!nav) return;
+  const lights = document.querySelectorAll('.section-light');
+  if (!lights.length) return;
+  const NAV_H = 60;
+  const margin = () => `0px 0px -${Math.max(0, window.innerHeight - NAV_H)}px 0px`;
+  const active = new Set();
+  let io;
+  const wire = () => {
+    if (io) io.disconnect();
+    active.clear();
+    io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) active.add(e.target);
+        else active.delete(e.target);
+      });
+      nav.classList.toggle('nav-on-light', active.size > 0);
+    }, { rootMargin: margin(), threshold: 0 });
+    lights.forEach(el => io.observe(el));
+  };
+  wire();
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(wire, 200); });
+})();
+
+(() => {
+  const tocLinks = Array.from(document.querySelectorAll('.policy-toc a[href^="#"]'));
+  if (!tocLinks.length) return;
+  const targets = tocLinks
+    .map(a => document.getElementById(a.getAttribute('href').slice(1)))
+    .filter(Boolean);
+  if (!targets.length) return;
+  const linkFor = (id) => tocLinks.find(a => a.getAttribute('href') === '#' + id);
+  let activeId = null;
+  const setActive = (id) => {
+    if (id === activeId) return;
+    activeId = id;
+    tocLinks.forEach(a => a.classList.remove('is-active'));
+    const link = linkFor(id);
+    if (link) link.classList.add('is-active');
+  };
+  const io = new IntersectionObserver((entries) => {
+    const visible = entries
+      .filter(e => e.isIntersecting)
+      .sort((a, b) => a.target.getBoundingClientRect().top - b.target.getBoundingClientRect().top);
+    if (visible.length) setActive(visible[0].target.id);
+  }, { rootMargin: '-14% 0px -70% 0px', threshold: 0 });
+  targets.forEach(t => io.observe(t));
+  setActive(targets[0].id);
+})();
+</script>
+
+</body>
+</html>

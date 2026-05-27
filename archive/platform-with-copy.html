@@ -1,0 +1,2978 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Greenfly · The Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+<style>
+
+/* ===================================================================
+   TOKENS — dark default, .section-light flips locally
+   =================================================================== */
+:root {
+  --bg:           #050607;
+  --bg-2:         #0b0d0f;
+  --bg-3:         #101214;
+  --text:         #f4f5f6;
+  --dim:          rgba(255,255,255,.64);
+  --dim-2:        rgba(255,255,255,.40);
+  --hair:         rgba(255,255,255,.10);
+  --hair-strong:  rgba(255,255,255,.20);
+  --accent:       #B6F500;
+  --accent-dim:   #8bc000;
+  --mono:         ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --ease:         cubic-bezier(.22,.61,.36,1);
+  --ease-out:     cubic-bezier(.16,1,.3,1);
+  --max:          1440px;
+}
+
+.section-light {
+  --bg:           #EEEEE8;
+  --bg-2:         #E6E6DE;
+  --bg-3:         #D9D9CE;
+  --text:         #0F0F0F;
+  --dim:          rgba(15,15,15,.62);
+  --dim-2:        rgba(15,15,15,.42);
+  --hair:         rgba(15,15,15,.14);
+  --hair-strong:  rgba(15,15,15,.26);
+  --accent:       #79982D;
+  --accent-dim:   #62801F;
+
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ===================================================================
+   RESET / BASE
+   =================================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body { overflow-x: hidden; }
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+::selection { background: var(--accent); color: #000; }
+em, i { font-style: normal; }   /* no italics anywhere */
+
+/* ===================================================================
+   PRIMITIVES
+   =================================================================== */
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 5vw; }
+
+.display {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: -0.014em;
+  line-height: 0.98;
+}
+
+.mono {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.label-lime { color: var(--accent); }
+.label-dim  { color: var(--dim); }
+.label-dim2 { color: var(--dim-2); }
+
+.article {
+  display: block;
+  font-family: 'Oswald', sans-serif;
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+  color: var(--dim);
+  font-size: .22em;
+  margin-bottom: .14em;
+}
+
+em.thin, .thin {
+  color: var(--dim);
+  letter-spacing: -0.01em;
+}
+
+.period { color: var(--accent); }
+
+/* pulsing dot --------------------------------------------------------- */
+.dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(182,245,0,.55);
+  animation: pulse 1.8s cubic-bezier(.4,0,.6,1) infinite;
+}
+.section-light .dot { box-shadow: 0 0 0 0 rgba(121,152,45,.55); }
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(182,245,0,.55); }
+  70%  { box-shadow: 0 0 0 10px rgba(182,245,0,0); }
+  100% { box-shadow: 0 0 0 0 rgba(182,245,0,0); }
+}
+
+/* ===================================================================
+   BUTTONS
+   =================================================================== */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 22px;
+  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  transition: background .28s var(--ease), color .28s var(--ease), border-color .28s var(--ease), transform .28s var(--ease);
+  cursor: pointer;
+}
+.btn .arrow { transition: transform .28s var(--ease); }
+.btn:hover .arrow { transform: translateX(4px); }
+
+.btn-primary { background: var(--accent); color: #000; }
+.btn-primary:hover { background: var(--accent-dim); }
+.section-light .btn-primary { color: #fff; }
+.section-light .btn-primary:hover { background: var(--accent-dim); }
+
+.btn-ghost { border-color: var(--hair-strong); color: var(--text); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.section-light .btn-ghost { border-color: rgba(15,15,15,.24); }
+.section-light .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ===================================================================
+   NAV
+   =================================================================== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 16px 5vw;
+  display: flex; align-items: center; justify-content: space-between;
+  background-color: transparent;
+  border-bottom: 1px solid transparent;
+  transform: translateY(0);
+  transition:
+    transform .38s var(--ease),
+    background-color .35s var(--ease),
+    backdrop-filter .35s var(--ease),
+    -webkit-backdrop-filter .35s var(--ease),
+    border-color .35s var(--ease),
+    color .35s var(--ease);
+  will-change: transform;
+}
+.nav.nav-hidden { transform: translateY(-110%); }
+.nav.is-scrolled {
+  background-color: rgba(10,11,13,.62);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border-bottom-color: rgba(255,255,255,.06);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nav.is-scrolled { background-color: rgba(5,6,7,.92); }
+}
+
+.nav-left, .nav-right { display: flex; align-items: center; gap: 22px; }
+.nav-logo { display: inline-flex; align-items: center; height: 28px; }
+.nav-logo img { height: 22px; }
+
+.nav-links { display: flex; gap: 22px; }
+.nav-link {
+  font-size: 14px;
+  letter-spacing: .03em;
+  color: var(--dim);
+  position: relative;
+  padding: 8px 2px;
+  transition: color .25s var(--ease);
+}
+.nav-link:hover, .nav-link.active { color: var(--text); }
+.nav-link.active::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+  height: 1px; background: var(--accent);
+}
+
+.nav-utility {
+  font-size: 13px;
+  letter-spacing: .03em;
+  color: var(--dim-2);
+  padding-left: 18px;
+  border-left: 1px solid var(--hair);
+}
+.nav-utility:hover { color: var(--text); }
+
+.nav-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; letter-spacing: .04em; text-transform: uppercase;
+  padding: 9px 16px;
+  color: var(--text);
+  border: 1px solid var(--hair-strong);
+  transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+}
+.nav-cta:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+
+.nav.nav-on-light .nav-link    { color: rgba(15,15,15,.72); }
+.nav.nav-on-light .nav-link:hover,
+.nav.nav-on-light .nav-link.active { color: #0F0F0F; }
+.nav.nav-on-light .nav-utility { color: rgba(15,15,15,.55); border-left-color: rgba(15,15,15,.18); }
+.nav.nav-on-light .nav-utility:hover { color: #0F0F0F; }
+.nav.nav-on-light .nav-cta     { color: #0F0F0F; border-color: rgba(15,15,15,.28); }
+.nav.nav-on-light .nav-cta:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.nav.nav-on-light.is-scrolled {
+  background-color: rgba(238,238,232,.68);
+  border-bottom-color: rgba(15,15,15,.10);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nav.nav-on-light.is-scrolled { background-color: rgba(238,238,232,.94); }
+}
+
+.nav.nav-on-light .nav-logo {
+  background-image: url('./Greenfly-fieldgreen.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left center;
+  width: 110px;
+}
+.nav.nav-on-light .nav-logo img { visibility: hidden; }
+
+/* ===================================================================
+   PLACEHOLDER STILL — body + center slate headline only
+   =================================================================== */
+.still {
+  position: relative;
+  border: 1px solid var(--hair);
+  background: var(--bg-2);
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.still-body {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255,255,255,.05) 0%, transparent 62%),
+    repeating-linear-gradient(135deg,
+      var(--bg-2) 0px,
+      var(--bg-2) 14px,
+      var(--bg-3) 14px,
+      var(--bg-3) 28px);
+  box-shadow: inset 0 0 80px rgba(0,0,0,.35);
+}
+.section-light .still-body {
+  background:
+    radial-gradient(circle at 50% 45%, rgba(0,0,0,.04) 0%, transparent 62%),
+    repeating-linear-gradient(135deg,
+      var(--bg-2) 0px,
+      var(--bg-2) 14px,
+      var(--bg-3) 14px,
+      var(--bg-3) 28px);
+  box-shadow: inset 0 0 80px rgba(0,0,0,.10);
+}
+
+.still-slate {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(8,9,10,.86);
+  border: 1px solid rgba(255,255,255,.10);
+  color: #fff;
+  padding: 18px 22px;
+  text-align: center;
+  min-width: 240px;
+  max-width: 78%;
+  z-index: 4;
+}
+.still-slate .slate-headline {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1.1;
+  color: #fff;
+}
+
+/* ===================================================================
+   COLLECT · top-down ingest flow illustration
+   (lives inside the Step-01 .still — line-art icons → flow → product UI)
+   =================================================================== */
+#step-collect .seq-band-inner {
+  grid-template-columns: 1fr 1.3fr;
+  gap: clamp(40px, 6vw, 96px);
+  /* vertically center both columns so the laptop+hex cluster sits level
+     with the copy block, not anchored to the top */
+  align-items: center;
+}
+@media (max-width: 1100px) {
+  #step-collect .seq-band-inner { grid-template-columns: 1fr 1.2fr; }
+}
+@media (max-width: 960px) {
+  #step-collect .seq-band-inner { grid-template-columns: 1fr; }
+}
+
+/* Free the Collect .still from the global 5:4 aspect-ratio cage so the
+   illustration sets its own height — otherwise top icons and the phone
+   overlay get clipped by .still's overflow:hidden. */
+#step-collect .still {
+  border: 0;
+  background: transparent;
+  aspect-ratio: auto;
+  overflow: visible;
+  height: auto;
+  display: block;
+}
+#step-collect .still-body {
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  flex: none;
+  display: block;
+}
+
+.collect-flow {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  color: var(--accent);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: clamp(10px, 1.4vw, 24px);
+}
+
+/* Column 1: vertical stack of [icon][label] rows */
+.collect-flow__sources {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 2.8vw, 48px);
+  flex: 0 0 auto;
+  align-self: center;
+}
+.collect-flow__source {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.collect-flow__icon {
+  width: clamp(32px, 3.6vw, 52px);
+  height: clamp(32px, 3.6vw, 52px);
+  color: var(--accent);
+  display: block;
+  flex: 0 0 auto;
+}
+.collect-flow__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.collect-flow__label {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: clamp(11px, 1vw, 13px);
+  letter-spacing: .14em;
+  color: var(--dim);
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* Column 2: horizontal funnel — 3 source curves merge into a single trunk
+   that runs to the laptop's left edge. SVG stretches to match the icon
+   stack height via align-self:stretch + preserveAspectRatio=none. */
+.collect-flow__pipes {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 60px;
+  align-self: stretch;
+}
+.collect-flow__pipes svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.collect-flow__pipes .pipe {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: .55;
+  vector-effect: non-scaling-stroke;
+}
+.collect-flow__pipes .pulse {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 24 1200;
+  filter: drop-shadow(0 0 4px var(--accent));
+}
+.collect-flow.is-drawn .pulse {
+  animation: collect-pulse 2.4s linear infinite;
+}
+.collect-flow__pipes .pulse.p1 { animation-delay: 0s; }
+.collect-flow__pipes .pulse.p2 { animation-delay: .8s; }
+.collect-flow__pipes .pulse.p3 { animation-delay: 1.6s; }
+@keyframes collect-pulse {
+  0%   { stroke-dashoffset: 1224; opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+/* Column 3: devices — bleeds off the right edge of the section,
+   electric-green hexagon backdrop sits behind the laptop as a brand accent */
+.collect-flow__devices {
+  position: relative;
+  flex: 0 0 auto;
+  width: 70%;
+  align-self: center;
+  /* bleed off the right: negative margin pushes the visual right edge past
+     the seq-still column. .seq-band's overflow:hidden clips it cleanly. */
+  margin-right: clamp(-140px, -6vw, -28px);
+  padding-bottom: clamp(0px, 0.5vw, 8px);
+  /* devices is the positioning context for the hex backdrop + phone */
+  overflow: visible;
+}
+.collect-flow__hex {
+  position: absolute;
+  /* offset behind/around the laptop so corners peek out top-right
+     while the laptop covers the lower-left */
+  top: clamp(-44px, -5.5vw, -16px);
+  left: 22%;
+  width: 92%;
+  aspect-ratio: 1.155 / 1;   /* flat-top regular hexagon */
+  background: var(--accent);
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  z-index: 0;
+  pointer-events: none;
+  display: block;
+}
+.collect-flow__laptop {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  background: #0a0a0a;
+  z-index: 1;
+  padding: 10px 10px 0;
+  border-radius: 10px 10px 4px 4px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.18),
+    0 0 0 4px rgba(255,255,255,.04),
+    0 30px 80px -20px rgba(0,0,0,.7);
+}
+.collect-flow__laptop-screen {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #000;
+}
+.collect-flow__laptop-screen img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.collect-flow__laptop-base {
+  position: relative;
+  /* extend beyond laptop chassis on both sides */
+  margin: 0 -7% 0;
+  height: 14px;
+  background: linear-gradient(180deg, #2a2a2a 0%, #0a0a0a 100%);
+  border-radius: 0 0 14px 14px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+.collect-flow__laptop-base::after {
+  /* hinge slot */
+  content: "";
+  position: absolute;
+  left: 50%; top: 0;
+  width: 16%; height: 3px;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,.6);
+  border-radius: 0 0 6px 6px;
+}
+.collect-flow__phone {
+  position: absolute;
+  right: 4%;
+  /* lift phone onto the laptop screen — bottom edge sits at ~12% of the
+     laptop height up, which puts the phone overlapping the lower-right
+     quadrant of the screen content (not hanging off the chassis corner). */
+  bottom: 12%;
+  width: 22%;
+  min-width: 104px;
+  border-radius: 24px;
+  background: #000;
+  padding: 6px;
+  box-shadow:
+    0 0 0 2px #1a1a1a,
+    0 0 0 3px rgba(255,255,255,.10),
+    /* stronger drop shadow so the phone reads as "in front of" the screen */
+    0 40px 80px -10px rgba(0,0,0,.85),
+    0 12px 24px -6px rgba(0,0,0,.6);
+  z-index: 2;
+}
+.collect-flow__phone img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 18px;
+}
+@media (max-width: 960px) {
+  /* Flip the whole illustration: icons row across the top, devices below.
+     The funnel hides — the flow is conveyed by stacking order at this width. */
+  .collect-flow {
+    flex-direction: column;
+    gap: clamp(20px, 4vw, 36px);
+    align-items: center;
+  }
+  .collect-flow__sources {
+    flex-direction: row;
+    justify-content: center;
+    gap: clamp(28px, 7vw, 56px);
+    align-self: auto;
+  }
+  .collect-flow__icon {
+    width: clamp(52px, 11vw, 80px);
+    height: clamp(52px, 11vw, 80px);
+  }
+  .collect-flow__label {
+    font-size: clamp(11px, 2.6vw, 14px);
+  }
+  .collect-flow__pipes {
+    display: none;
+  }
+  .collect-flow__devices {
+    width: 100%;
+    max-width: 520px;
+    align-self: stretch;
+    margin: 0 auto;             /* undo desktop right-edge bleed */
+  }
+  .collect-flow__hex {
+    /* hex still appears at mobile but smaller, tucked behind top of laptop */
+    top: -16px;
+    left: 38%;
+    width: 70%;
+  }
+  .collect-flow__phone {
+    right: 4%;
+    width: 26%;
+    min-width: 96px;
+    bottom: 12%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .collect-flow__pipes .pulse { animation: none; opacity: 0; }
+}
+
+/* ===================================================================
+   ORGANIZE · mirrored horizontal flow (modal + funnel + 4 IQ icons)
+   Lives in #step-ito which is .seq-band.flip.section-light, so still
+   sits on the LEFT, copy on the RIGHT, and var(--accent) resolves to
+   Field Green (#79982D) via the section-light token override.
+   =================================================================== */
+#step-ito .seq-band-inner {
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: center;
+}
+
+#step-ito .still {
+  border: 0;
+  background: transparent;
+  aspect-ratio: auto;
+  overflow: visible;
+  height: auto;
+  display: block;
+}
+#step-ito .still-body {
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  flex: none;
+  display: block;
+}
+
+.ito-flow {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  color: var(--accent);
+  display: flex;
+  /* row-reverse: icons end up on the RIGHT, modal on the LEFT */
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: clamp(10px, 1.4vw, 24px);
+}
+
+/* Column 1: vertical stack of [icon over label] (sits on the right) */
+.ito-flow__sources {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 2.8vw, 48px);
+  flex: 0 0 auto;
+  align-self: center;
+}
+.ito-flow__source {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.ito-flow__icon {
+  width: clamp(32px, 3.6vw, 52px);
+  height: clamp(32px, 3.6vw, 52px);
+  color: var(--accent);
+  display: block;
+  flex: 0 0 auto;
+}
+.ito-flow__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ito-flow__label {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: clamp(11px, 1vw, 13px);
+  letter-spacing: .14em;
+  color: var(--dim);
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* Column 2: mirrored funnel — paths go right-to-left */
+.ito-flow__pipes {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 60px;
+  align-self: stretch;
+}
+.ito-flow__pipes svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.ito-flow__pipes .pipe {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: .55;
+  vector-effect: non-scaling-stroke;
+}
+.ito-flow__pipes .pulse {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 24 1200;
+  filter: drop-shadow(0 0 4px var(--accent));
+}
+.ito-flow.is-drawn .pulse {
+  animation: collect-pulse 2.4s linear infinite;
+}
+.ito-flow__pipes .pulse.p1 { animation-delay: 0s; }
+.ito-flow__pipes .pulse.p2 { animation-delay: .6s; }
+.ito-flow__pipes .pulse.p3 { animation-delay: 1.2s; }
+.ito-flow__pipes .pulse.p4 { animation-delay: 1.8s; }
+
+/* Column 3 (left side of illustration): modal + hex backdrop, bleeds LEFT */
+.ito-flow__surface {
+  position: relative;
+  flex: 0 0 auto;
+  width: 78%;
+  align-self: center;
+  /* bleed off the LEFT edge of the section (mirror of Collect's right bleed) */
+  margin-left: clamp(-100px, -4vw, -20px);
+  padding-bottom: clamp(0px, 0.5vw, 8px);
+  overflow: visible;
+}
+.ito-flow__hex {
+  position: absolute;
+  /* mirror of Collect's hex placement: peeks out top-LEFT instead of top-right */
+  top: clamp(-44px, -5.5vw, -16px);
+  right: 22%;
+  width: 92%;
+  aspect-ratio: 1.155 / 1;
+  background: var(--accent);
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  z-index: 0;
+  pointer-events: none;
+  display: block;
+}
+.ito-flow__laptop {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  background: #0a0a0a;
+  padding: 10px 10px 0;
+  border-radius: 10px 10px 4px 4px;
+  z-index: 1;
+  /* dark borders for the light section bg (mirror of Collect's white borders on dark) */
+  box-shadow:
+    0 0 0 1px rgba(15,15,15,.20),
+    0 0 0 4px rgba(15,15,15,.04),
+    0 30px 80px -20px rgba(0,0,0,.35);
+}
+.ito-flow__laptop-screen {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #000;
+}
+.ito-flow__laptop-screen img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.ito-flow__laptop-base {
+  position: relative;
+  /* extend beyond laptop chassis on both sides */
+  margin: 0 -7% 0;
+  height: 14px;
+  background: linear-gradient(180deg, #2a2a2a 0%, #0a0a0a 100%);
+  border-radius: 0 0 14px 14px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+.ito-flow__laptop-base::after {
+  /* hinge slot */
+  content: "";
+  position: absolute;
+  left: 50%; top: 0;
+  width: 16%; height: 3px;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,.6);
+  border-radius: 0 0 6px 6px;
+}
+
+@media (max-width: 960px) {
+  /* mirror collapse: 4 icons in a row across the top, modal below */
+  .ito-flow {
+    flex-direction: column;
+    gap: clamp(20px, 4vw, 36px);
+    align-items: center;
+  }
+  .ito-flow__sources {
+    flex-direction: row;
+    justify-content: center;
+    gap: clamp(24px, 6vw, 48px);
+    align-self: auto;
+  }
+  .ito-flow__icon {
+    width: clamp(40px, 9vw, 60px);
+    height: clamp(40px, 9vw, 60px);
+  }
+  .ito-flow__pipes {
+    display: none;
+  }
+  .ito-flow__surface {
+    width: 100%;
+    max-width: 540px;
+    align-self: stretch;
+    margin: 0 auto;
+  }
+  .ito-flow__hex {
+    top: -16px;
+    right: 38%;
+    width: 70%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ito-flow__pipes .pulse { animation: none; opacity: 0; }
+}
+
+/* ===================================================================
+   HERO
+   =================================================================== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  padding-top: 64px;
+  display: flex; flex-direction: column;
+  border-bottom: 1px solid var(--hair);
+}
+
+.hero-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  min-height: 72vh;
+}
+.hero-copy {
+  position: relative;
+  padding: 7vh 5vw 7vh 5vw;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 12px;
+  margin-bottom: 24px;
+}
+.hero-eyebrow .er { width: 36px; height: 1px; background: var(--accent); }
+.hero-eyebrow .mono { color: var(--accent); }
+.hero-eyebrow .ix { color: var(--dim-2); margin-left: 4px; }
+
+.hero h1.display {
+  font-size: clamp(28px, 4vw, 60px);
+  line-height: 1.0;
+  letter-spacing: -.012em;
+  margin-bottom: 22px;
+}
+.hero h1.display .l1,
+.hero h1.display .l2 { display: block; }
+
+.hero-sub {
+  max-width: 520px;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--dim);
+  margin-bottom: 28px;
+}
+.hero-sub strong { color: var(--text); font-weight: 500; }
+
+.hero-ctas { display: flex; gap: 12px; }
+
+.hero-still {
+  position: relative;
+  padding: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+.hero-still .still { aspect-ratio: 16 / 11; }
+.hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Stepped hero reveal: image-1 drives the column's height; 2 & 3 sit absolutely
+   on top of it. We cross-fade between them (one fades out while the next fades
+   in) so total opacity stays ≈ 1 and there's no additive flashing between
+   steps. image-3 is the final, persistent state. */
+.hero-image.hero-step {
+  opacity: 0;
+  transition: opacity 380ms ease-in-out;
+}
+.hero-image.hero-step.is-on { opacity: 1; }
+
+.hero-image.hero-step-1 { position: relative; z-index: 1; }
+.hero-image.hero-step-2,
+.hero-image.hero-step-3 {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: auto;
+}
+.hero-image.hero-step-2 { z-index: 2; }
+.hero-image.hero-step-3 { z-index: 3; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-image.hero-step { transition: none; }
+}
+
+/* ===================================================================
+   ARC PREVIEW
+   =================================================================== */
+.arc-preview {
+  position: relative;
+  padding: 8vh 5vw;
+  text-align: center;
+  overflow: hidden;
+  border-top: 1px solid var(--hair);
+  border-bottom: 1px solid var(--hair);
+}
+.arc-preview .bg-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(0deg, var(--hair) 1px, transparent 1px),
+    linear-gradient(90deg, var(--hair) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 26%, transparent 76%);
+          mask-image: radial-gradient(ellipse at center, #000 26%, transparent 76%);
+  opacity: .5;
+  pointer-events: none;
+}
+.arc-preview .bg-bloom {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(182,245,0,.10) 0%, transparent 56%);
+  pointer-events: none;
+}
+.arc-inner {
+  position: relative; z-index: 1;
+  max-width: var(--max);
+  margin: 0 auto;
+}
+.arc-eyebrow {
+  display: inline-flex; align-items: center; gap: 12px;
+  color: var(--accent);
+  margin-bottom: 22px;
+}
+.arc-title {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: clamp(36px, 5.6vw, 84px);
+  line-height: 1.06;
+  letter-spacing: -.014em;
+  text-align: center;
+  color: var(--text);
+}
+.arc-title .line { display: block; }
+.arc-title .line em { color: var(--dim); }
+.arc-title .line-wheel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .3em;
+  margin-top: .06em;
+}
+.arc-title .line-wheel .robots { display: inline-block; }
+
+.arc-wheel {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  height: 1.4em;
+  line-height: 1;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+          mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+}
+/* invisible sizer keeps the wheel as wide as the widest verb */
+.arc-wheel-sizer {
+  display: block;
+  visibility: hidden;
+  font: inherit;
+  line-height: 1;
+  white-space: nowrap;
+  padding: 0 .04em;
+}
+.arc-wheel-track {
+  position: absolute;
+  left: 0; right: 0;
+  top: 0;
+  display: flex; flex-direction: column;
+  align-items: center;
+  /* initial: center verb 0 — wheel is 1.4em tall, verb is 1em, so .2em down */
+  transform: translateY(.2em);
+  transition: transform .22s var(--ease-out);
+  will-change: transform;
+}
+.arc-verb {
+  display: block;
+  font: inherit;
+  line-height: 1;
+  height: 1em;
+  white-space: nowrap;
+  color: var(--dim-2);
+  opacity: .25;
+  transition: color .35s var(--ease), opacity .35s var(--ease), text-shadow .35s var(--ease);
+}
+.arc-verb.is-near    { opacity: .55; color: var(--dim); }
+.arc-verb.is-active  {
+  opacity: 1;
+  color: var(--text);
+  text-shadow: 0 0 22px rgba(182,245,0,.22);
+}
+.arc-verb.is-active.is-final {
+  color: var(--accent);
+  text-shadow: 0 0 26px rgba(182,245,0,.35);
+}
+
+/* ===================================================================
+   SEQUENCE BAND
+   =================================================================== */
+.seq-band {
+  position: relative;
+  padding: 14vh 5vw;
+  border-top: 1px solid var(--hair);
+  overflow: hidden;
+}
+.seq-band:first-of-type { border-top: 0; }
+
+/* paper-stack — sticky overlap so each verb section rises over the previous
+   like a piece of paper sliding up to cover the one below. Applied only to
+   the .seq-band verb sections (Collect, ITO, Distribute, Activate, Measure,
+   Automate). The IQ Suite between stacks is a regular flow section. */
+.paper-stack { position: relative; }
+.paper-stack > .seq-band {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  border: 0;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 -28px 64px -22px rgba(0,0,0,.55);
+}
+.paper-stack > .seq-band.section-light {
+  box-shadow: 0 -28px 64px -22px rgba(0,0,0,.14);
+}
+.paper-stack > .seq-band:first-of-type { box-shadow: none; }
+.paper-stack > .seq-band > .seq-band-inner { width: 100%; }
+
+@media (max-width: 960px) {
+  .paper-stack > .seq-band {
+    position: relative;
+    min-height: 0;
+    box-shadow: none;
+    display: block;
+  }
+  .paper-stack > .seq-band:not(:first-of-type) { border-top: 1px solid var(--hair); }
+}
+
+.seq-band-inner {
+  position: relative;
+  max-width: var(--max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: center;
+}
+.seq-band.flip .seq-band-inner { grid-template-columns: 1.05fr 1fr; }
+.seq-band.flip .seq-copy  { order: 2; }
+.seq-band.flip .seq-still { order: 1; }
+
+/* drop-cap chapter numeral */
+.seq-numeral {
+  display: block;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  font-size: clamp(72px, 8vw, 132px);
+  line-height: 0.84;
+  letter-spacing: -.022em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--hair-strong);
+          text-stroke: 1px var(--hair-strong);
+  margin-bottom: 22px;
+  transition: -webkit-text-stroke-color .35s var(--ease), text-stroke-color .35s var(--ease), color .35s var(--ease);
+  user-select: none;
+}
+.seq-numeral::after {
+  content: '';
+  display: block;
+  width: 28px; height: 1px;
+  background: var(--accent);
+  margin-top: 14px;
+}
+.seq-band:hover .seq-numeral {
+  -webkit-text-stroke-color: var(--accent);
+          text-stroke-color: var(--accent);
+}
+
+.seq-copy { position: relative; z-index: 1; }
+.seq-copy h2.display {
+  font-size: clamp(48px, 6.8vw, 108px);
+  letter-spacing: -.02em;
+  line-height: 0.94;
+  margin-bottom: 18px;
+}
+.seq-copy h2.display .stack { display: block; }
+.seq-copy h2.display .stack + .stack { color: var(--dim); }
+.seq-copy h2.display .stack + .stack + .stack { color: var(--dim-2); }
+.seq-deck {
+  display: block;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: clamp(16px, 1.4vw, 20px);
+  color: var(--dim);
+  margin-bottom: 14px;
+}
+.seq-rule {
+  display: block; width: 64px; height: 1px;
+  background: var(--accent);
+  margin: 18px 0 22px;
+}
+.seq-copy p {
+  max-width: 520px;
+  color: var(--dim);
+  font-size: 17px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.seq-copy p strong { color: var(--text); font-weight: 500; }
+.seq-copy p em { color: var(--text); }
+
+.deck-meta {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-top: 22px;
+}
+.deck-meta .pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--hair-strong);
+  padding: 7px 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.deck-meta .pill em { color: var(--text); font-weight: 500; }
+
+.seq-still { position: relative; z-index: 1; }
+
+/* scoreboard variant (Measure) ---------------------------------- */
+.scoreboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  flex: 1;
+}
+.score-cell {
+  position: relative;
+  padding: 22px 22px 18px;
+  border-right: 1px solid var(--hair);
+  border-bottom: 1px solid var(--hair);
+  display: flex; flex-direction: column; justify-content: space-between;
+  min-height: 130px;
+}
+.score-cell:nth-child(2) { border-right: 0; }
+.score-cell:nth-child(3),
+.score-cell:nth-child(4) { border-bottom: 0; }
+.score-cell:nth-child(4) { border-right: 0; }
+.score-cell .sc-label { color: var(--dim-2); }
+.score-cell .sc-num {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  font-size: clamp(38px, 4.4vw, 60px);
+  line-height: 1;
+  letter-spacing: -.012em;
+  color: var(--text);
+  margin-top: 6px;
+}
+.score-cell .sc-delta { margin-top: 14px; color: var(--dim); }
+.score-cell.is-accent .sc-num { color: var(--accent); }
+.score-cell.is-accent .sc-delta { color: var(--accent); }
+.score-cell.is-accent::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 2px; background: var(--accent);
+}
+
+/* loop grid (Automate) --------------------------------------- */
+.loop-grid {
+  flex: 1;
+  position: relative;
+  padding: 26px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  align-content: center;
+}
+.loop-grid .lv {
+  border: 1px solid var(--hair-strong);
+  padding: 18px 6px 14px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--dim);
+  position: relative;
+}
+.loop-grid .lv.is-final {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.loop-grid .lv .lv-num {
+  display: block;
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+  letter-spacing: -.01em;
+}
+.loop-grid .lv.is-final .lv-num { color: var(--accent); }
+.loop-grid .loop-arrow {
+  position: absolute;
+  left: 26px; right: 26px; bottom: 24px;
+  height: 1px;
+  background-image: repeating-linear-gradient(90deg, var(--accent) 0 6px, transparent 6px 12px);
+}
+.loop-grid .loop-arrow::after {
+  content: '←';
+  position: absolute; left: -8px; top: -10px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 400;
+  color: var(--accent);
+  font-size: 18px;
+}
+
+/* ===================================================================
+   IQ SUITE
+   =================================================================== */
+.iq-suite {
+  padding: 14vh 5vw;
+  border-top: 1px solid var(--hair);
+}
+.iq-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: end;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--hair);
+  margin-bottom: 56px;
+  max-width: var(--max);
+  margin-left: auto; margin-right: auto;
+}
+.iq-header .eyebrow {
+  display: inline-flex; align-items: center; gap: 12px;
+  margin-bottom: 18px;
+  color: var(--accent);
+}
+.iq-header h3.display {
+  font-size: clamp(32px, 3.8vw, 52px);
+  letter-spacing: -.014em;
+}
+.iq-header p {
+  max-width: 540px;
+  font-size: 17px;
+  color: var(--dim);
+  line-height: 1.5;
+}
+.iq-header p em { color: var(--text); }
+
+.iq-grid {
+  max-width: var(--max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--hair);
+}
+.iq-card {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  border-right: 1px solid var(--hair);
+  border-bottom: 1px solid var(--hair);
+}
+.iq-card:nth-child(2n) { border-right: 0; }
+.iq-card:nth-child(n+3) { border-bottom: 0; }
+.iq-specimen {
+  position: relative;
+  border-right: 1px solid var(--hair);
+  overflow: hidden;
+}
+/* B&W photo fills the specimen; field-green hex outline marks the focal point. */
+.iq-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(1) contrast(1.04);
+  z-index: 1;
+}
+.iq-hex-stroke {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  overflow: visible;
+}
+.iq-hex-stroke path,
+.iq-hex-stroke polygon {
+  fill: none;
+  stroke: var(--accent);            /* field green in section-light */
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.iq-body {
+  padding: 28px 28px 26px;
+  display: flex; flex-direction: column;
+}
+.iq-name {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  font-size: clamp(28px, 2.8vw, 40px);
+  letter-spacing: -.012em;
+  text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.iq-name .iq-suffix { color: var(--accent); }
+.iq-subtitle {
+  display: block;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: clamp(11px, 1vw, 14px);
+  color: var(--dim);
+  margin-bottom: 14px;
+}
+.iq-card p {
+  color: var(--dim);
+  font-size: 16px;
+  line-height: 1.5;
+}
+.iq-card p em { color: var(--text); }
+.iq-meta {
+  margin-top: auto;
+  padding-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  border-top: 1px solid var(--hair);
+}
+.iq-meta .mc-k {
+  display: block;
+  color: var(--dim-2);
+  margin-bottom: 4px;
+}
+.iq-meta .mc-v {
+  display: block;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: -.006em;
+  color: var(--text);
+  text-transform: uppercase;
+}
+
+/* ===================================================================
+   BUNDLES
+   =================================================================== */
+.bundles {
+  padding: 14vh 5vw;
+  border-top: 1px solid var(--hair);
+}
+.bundles-inner { max-width: var(--max); margin: 0 auto; }
+.bundles-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: end;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--hair);
+  margin-bottom: 56px;
+}
+.bundles-header .eyebrow {
+  display: inline-flex; align-items: center; gap: 12px;
+  margin-bottom: 18px;
+  color: var(--accent);
+}
+.bundles-header h3.display {
+  font-size: clamp(32px, 3.8vw, 52px);
+  letter-spacing: -.014em;
+}
+.bundles-header p {
+  max-width: 540px;
+  font-size: 17px;
+  color: var(--dim);
+  line-height: 1.5;
+}
+.bundles-header p em { color: var(--text); }
+
+.foundation {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) 2fr minmax(180px, 1fr);
+  gap: clamp(28px, 4vw, 56px);
+  padding: 44px 44px 44px 48px;
+  border: 1px solid var(--hair);
+  border-left: 2px solid var(--accent);
+  background: var(--bg-2);
+  margin-bottom: 28px;
+}
+.foundation-mark {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  font-size: clamp(64px, 7vw, 104px);
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -.02em;
+  align-self: center;
+}
+.foundation-body h4 {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  font-size: clamp(22px, 1.8vw, 30px);
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.foundation-body p {
+  color: var(--dim);
+  font-size: 16px;
+  line-height: 1.5;
+}
+.foundation-body p em { color: var(--text); }
+.foundation-meta {
+  border-left: 1px solid var(--hair-strong);
+  padding-left: 24px;
+  display: grid;
+  align-content: center;
+  gap: 14px;
+}
+.foundation-meta .fm-row {
+  display: flex; justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+.foundation-meta .fm-row .k { color: var(--dim-2); }
+.foundation-meta .fm-row .v { color: var(--text); font-weight: 500; }
+
+.extensions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 64px;
+}
+.ext-card {
+  position: relative;
+  padding: 32px 28px 28px;
+  border: 1px solid var(--hair);
+  background: var(--bg-2);
+  display: flex; flex-direction: column;
+  transition: border-color .3s var(--ease), transform .3s var(--ease);
+}
+.ext-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.ext-card h4 {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  font-size: clamp(20px, 1.6vw, 28px);
+  text-transform: uppercase;
+  letter-spacing: -.008em;
+  margin-bottom: 14px;
+}
+.ext-card p {
+  color: var(--dim);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.bundles-cta {
+  display: flex; align-items: center; justify-content: center;
+  gap: 24px;
+}
+.bundles-cta .bc-rule { flex: 1; height: 1px; background: var(--hair); max-width: 240px; }
+
+/* ===================================================================
+   CLOSING — homepage style
+   =================================================================== */
+.close {
+  padding: 22vh 5vw 20vh;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--hair);
+}
+.close::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(182,245,0,.06), transparent 60%);
+  pointer-events: none;
+}
+.close-inner {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.close-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+.close-line {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: -0.015em;
+  font-size: clamp(40px, 6.6vw, 104px);
+  line-height: 1;
+  color: var(--dim);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .7s var(--ease-out), transform .7s var(--ease-out), color .5s var(--ease);
+}
+.close-line.reveal { opacity: 1; transform: translateY(0); }
+.close-line.final {
+  color: var(--text);
+  margin-top: 28px;
+}
+.close-line.final .accent { color: var(--accent); }
+
+.close-typing-line { color: var(--dim); }
+.typewriter {
+  display: inline-block;
+  white-space: nowrap;
+}
+.typewriter-word {
+  color: var(--text);
+  font-variant-ligatures: none;
+}
+.typewriter-caret {
+  display: inline-block;
+  width: .055em;
+  height: .82em;
+  margin-left: .06em;
+  vertical-align: -0.06em;
+  background: var(--accent);
+  animation: typewriter-blink 1.05s steps(2, end) infinite;
+}
+@keyframes typewriter-blink {
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .typewriter-caret { animation: none; opacity: .6; }
+}
+.close-ctas {
+  margin-top: 68px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ===================================================================
+   FOOTER — homepage style
+   =================================================================== */
+.footer {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--hair);
+  padding: 56px 5vw 44px;
+  isolation: isolate;
+}
+.footer-hex {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom,
+                              black 0%,
+                              black 18%,
+                              rgba(0,0,0,.44) 44%,
+                              transparent 70%);
+  -webkit-mask-image: linear-gradient(to bottom,
+                                      black 0%,
+                                      black 18%,
+                                      rgba(0,0,0,.44) 44%,
+                                      transparent 70%);
+}
+.footer-hex-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: auto;
+}
+.hex-cell-shape {
+  fill: transparent;
+  stroke: var(--accent);
+  stroke-opacity: .13;
+  stroke-width: 1;
+  transition: stroke-opacity .25s var(--ease), fill .25s var(--ease);
+  cursor: pointer;
+  pointer-events: all;
+}
+.hex-fly {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s var(--ease-out), transform .35s var(--ease-out);
+  transform-origin: center;
+  transform: scale(.75);
+}
+.hex-cell:hover .hex-cell-shape {
+  fill: var(--accent);
+  stroke-opacity: 1;
+}
+.hex-cell:hover .hex-fly {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.footer-stage,
+.footer-wordmark,
+.footer-inner,
+.footer-legal {
+  pointer-events: none;
+}
+.footer-wordmark img,
+.footer-inner a,
+.footer-inner h5,
+.footer-legal a,
+.footer-legal span {
+  pointer-events: auto;
+}
+
+.footer-stage {
+  position: relative;
+  z-index: 2;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 40px 0 48px;
+  text-align: center;
+}
+.footer-wordmark {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+.footer-wordmark img {
+  width: min(52%, 460px);
+  height: auto;
+  filter: brightness(0) invert(1);
+}
+
+.footer-inner {
+  position: relative;
+  z-index: 2;
+  margin: 0 auto;
+  padding: 56px 0 52px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(140px, auto));
+  justify-content: center;
+  gap: 80px;
+  border-bottom: 1px solid var(--hair);
+}
+.footer h5 {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 22px;
+  font-weight: 500;
+}
+.footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer li a {
+  color: var(--dim);
+  font-size: 14px;
+  transition: color .2s var(--ease);
+  position: relative;
+  display: inline-block;
+}
+.footer li a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 100%;
+  bottom: -3px;
+  height: 1px;
+  background: var(--accent);
+  transition: right .35s var(--ease-out);
+}
+.footer li a:hover { color: var(--text); }
+.footer li a:hover::after { right: 0; }
+
+.footer-legal {
+  position: relative;
+  z-index: 2;
+  max-width: var(--max);
+  margin: 28px auto 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.footer-legal a { color: var(--dim); transition: color .2s var(--ease); }
+.footer-legal a:hover { color: var(--accent); }
+.footer-status { display: inline-flex; align-items: center; gap: 10px; }
+.footer-status b { color: var(--text); font-weight: 500; }
+.footer-status-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: footer-status-pulse 2.4s ease-in-out infinite;
+}
+@keyframes footer-status-pulse {
+  0%, 100% { opacity: 1;  box-shadow: 0 0 0 0 rgba(182,245,0,.5); }
+  50%      { opacity: .55; box-shadow: 0 0 0 6px rgba(182,245,0,0); }
+}
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 960px) {
+  .hero-grid,
+  .seq-band-inner,
+  .iq-header,
+  .bundles-header,
+  .iq-card,
+  .foundation,
+  .extensions,
+  .iq-grid {
+    grid-template-columns: 1fr;
+  }
+  .seq-band.flip .seq-copy  { order: 1; }
+  .seq-band.flip .seq-still { order: 2; }
+  .hero-copy { border-right: 0; border-bottom: 1px solid var(--hair); }
+  .iq-card { grid-template-columns: 1fr; }
+  .iq-specimen { aspect-ratio: 16 / 9; border-right: 0; border-bottom: 1px solid var(--hair); }
+  .foundation { padding: 32px; }
+  .foundation-meta { border-left: 0; padding-left: 0; border-top: 1px solid var(--hair-strong); padding-top: 20px; }
+  .seq-numeral { font-size: clamp(56px, 12vw, 96px); }
+  .nav-links { display: none; }
+  .footer-inner { grid-template-columns: repeat(3, auto); gap: 40px; }
+  .footer-wordmark { padding: 28px 0; }
+  .footer-wordmark img { width: 72%; }
+}
+@media (max-width: 720px) {
+  .footer-inner { grid-template-columns: 1fr; }
+  .footer-legal { flex-direction: column; gap: 10px; text-align: center; }
+  .footer-legal span { justify-content: center; }
+  .close { padding: 16vh 5vw 14vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav class="nav" id="siteNav">
+  <div class="nav-left">
+    <a href="./homepage.html" class="nav-logo" aria-label="Greenfly">
+      <img src="./Greenfly (1).svg" alt="Greenfly">
+    </a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="./platform.html" class="nav-link active">Platform</a>
+      <a href="./solutions.html" class="nav-link">Solutions</a>
+      <a href="./homepage.html#proof" class="nav-link">Stories</a>
+      <a href="./company.html" class="nav-link">Company</a>
+    </div>
+    <a href="#login" class="nav-utility">Login</a>
+    <a href="./get-greenfly.html" class="nav-cta">Get Greenfly →</a>
+  </div>
+</nav>
+
+<!-- =====================================================================
+     HERO
+     ===================================================================== -->
+<section class="hero section-light">
+
+  <div class="hero-grid">
+
+    <div class="hero-copy">
+      <div class="hero-eyebrow">
+        <span class="er"></span>
+        <span class="mono">The Platform</span>
+      </div>
+
+      <h1 class="display">
+        <span class="l1">High-Performance</span>
+        <span class="l2">Content Operations Platform.</span>
+      </h1>
+
+      <p class="hero-sub">
+        Capture, identify, tag, organize, distribute, measure — and increasingly <strong>automate</strong> — the short-form content that powers every live event, every channel, every roster. One operating system for leagues, teams, studios, and brands.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="./get-greenfly.html" class="btn btn-primary">Get Greenfly <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+    <div class="hero-still" id="hero-still">
+      <img class="hero-image hero-step hero-step-1" src="./Platform-assets/hero/platform-hero-image-1.png" alt="">
+      <img class="hero-image hero-step hero-step-2" src="./Platform-assets/hero/platform-hero-image-2.png" alt="">
+      <img class="hero-image hero-step hero-step-3" src="./Platform-assets/hero/platform-hero-image-3.png" alt="Own Your Moment — content operations across every channel">
+    </div>
+  </div>
+
+</section>
+
+
+<!-- =====================================================================
+     ARC PREVIEW
+     ===================================================================== -->
+<section class="arc-preview" id="arc-preview">
+  <div class="bg-grid"></div>
+  <div class="bg-bloom"></div>
+
+  <div class="arc-inner">
+    <div class="arc-eyebrow">
+      <span class="dot"></span>
+      <span class="mono">The Robots Arc</span>
+    </div>
+
+    <h2 class="arc-title">
+      <span class="line">Humans <em>Create.</em></span>
+      <span class="line line-wheel">
+        <span class="robots">Robots</span>
+        <span class="arc-wheel" id="arcWheel" aria-hidden="true">
+          <span class="arc-wheel-sizer">Distribute.</span>
+          <span class="arc-wheel-track" id="arcWheelTrack">
+            <span class="arc-verb" data-i="0">Collect.</span>
+            <span class="arc-verb" data-i="1">Identify.</span>
+            <span class="arc-verb" data-i="2">Tag.</span>
+            <span class="arc-verb" data-i="3">Organize.</span>
+            <span class="arc-verb" data-i="4">Distribute.</span>
+            <span class="arc-verb" data-i="5">Measure.</span>
+            <span class="arc-verb is-final" data-i="6">Automate.</span>
+          </span>
+        </span>
+      </span>
+    </h2>
+  </div>
+</section>
+
+
+<!-- =====================================================================
+     STACK A · paper-overlap scroll for verbs 01 → 02
+     ===================================================================== -->
+<div class="paper-stack">
+
+<!-- =====================================================================
+     STEP 01 · COLLECT — dark
+     ===================================================================== -->
+<section class="seq-band" id="step-collect">
+  <div class="seq-band-inner">
+
+    <div class="seq-copy">
+      <span class="seq-numeral" aria-hidden="true">01</span>
+      <h2 class="display"><span class="stack">Collect<span class="period">.</span></span></h2>
+      <span class="seq-deck">Every source. Every format. One pipeline.</span>
+      <span class="seq-rule"></span>
+      <p>Professional creators in the field — 4K uploads from the sideline in real time. Automated feeds from broadcast partners. DAM integrations. Fan submissions.</p>
+      <p>Content enters Greenfly the moment it's created — whether a photographer uploads from the sideline or an integration pulls from an existing system.</p>
+      <div class="deck-meta">
+        <span class="pill">Sources · <em>6+</em></span>
+        <span class="pill">Latency · <em>&lt; 30s</em></span>
+        <span class="pill">Format · <em>Stills / Clips</em></span>
+      </div>
+    </div>
+
+    <div class="seq-still">
+      <div class="still">
+        <div class="still-body">
+
+          <!-- Horizontal ingest flow illustration (sources → trunk → library) -->
+          <div class="collect-flow" id="collectFlow" aria-hidden="true">
+
+            <!-- Row 1: 3 source icons -->
+            <div class="collect-flow__sources">
+              <div class="collect-flow__source">
+                <span class="collect-flow__icon" data-icon="camera">
+                  <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <path d="M8 20 h10 l4 -6 h20 l4 6 h10 a2 2 0 0 1 2 2 v28 a2 2 0 0 1 -2 2 H8 a2 2 0 0 1 -2 -2 V22 a2 2 0 0 1 2 -2 z"/>
+                    <circle cx="32" cy="36" r="10"/>
+                    <circle cx="32" cy="36" r="4.5"/>
+                    <path d="M48 24 h6"/>
+                  </svg>
+                </span>
+                <span class="collect-flow__label">LCC</span>
+              </div>
+              <div class="collect-flow__source">
+                <span class="collect-flow__icon" data-icon="plug">
+                  <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <!-- two prongs -->
+                    <path d="M24 6 V18"/>
+                    <path d="M40 6 V18"/>
+                    <!-- plug body -->
+                    <path d="M16 18 H48 V30 A10 10 0 0 1 38 40 H26 A10 10 0 0 1 16 30 Z"/>
+                    <!-- cable -->
+                    <path d="M32 40 V58"/>
+                  </svg>
+                </span>
+                <span class="collect-flow__label">Integrations</span>
+              </div>
+              <div class="collect-flow__source">
+                <span class="collect-flow__icon" data-icon="phone">
+                  <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <rect x="20" y="6" width="24" height="52" rx="4"/>
+                    <path d="M28 12 H36"/>
+                    <circle cx="32" cy="52" r="1.5"/>
+                  </svg>
+                </span>
+                <span class="collect-flow__label">UGC</span>
+              </div>
+            </div>
+
+            <!-- Column 2: horizontal funnel — 3 source curves merge into one
+                 trunk that runs to the laptop's left edge -->
+            <div class="collect-flow__pipes">
+              <svg viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
+                <!-- 3 source paths from icon-row y-centers (50 / 150 / 250)
+                     curving to the trunk junction (~130, 150), then straight
+                     to the laptop edge (400, 150). -->
+                <path class="pipe p1" d="M0 50 C 70 50 70 150 130 150 L 400 150"/>
+                <path class="pipe p2" d="M0 150 L 400 150"/>
+                <path class="pipe p3" d="M0 250 C 70 250 70 150 130 150 L 400 150"/>
+                <!-- Pulses follow the same paths -->
+                <path class="pulse p1" d="M0 50 C 70 50 70 150 130 150 L 400 150"/>
+                <path class="pulse p2" d="M0 150 L 400 150"/>
+                <path class="pulse p3" d="M0 250 C 70 250 70 150 130 150 L 400 150"/>
+              </svg>
+            </div>
+
+            <!-- Column 3: devices — laptop bleeds off the right edge of the
+                 section, electric-green hexagon backdrop behind the cluster -->
+            <div class="collect-flow__devices">
+              <span class="collect-flow__hex" aria-hidden="true"></span>
+              <div class="collect-flow__laptop">
+                <div class="collect-flow__laptop-screen">
+                  <img src="Platform-assets/collect-illustration/device-laptop-library.png" alt="Greenfly Library on desktop" />
+                </div>
+                <div class="collect-flow__laptop-base" aria-hidden="true"></div>
+              </div>
+              <div class="collect-flow__phone">
+                <img src="Platform-assets/collect-illustration/device-phone-library.png" alt="Greenfly Library on mobile" />
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- =====================================================================
+     STEP 02 · IDENTIFY · TAG · ORGANIZE — light, flipped
+     ===================================================================== -->
+<section class="seq-band flip section-light" id="step-ito">
+  <div class="seq-band-inner">
+
+    <div class="seq-copy">
+      <span class="seq-numeral" aria-hidden="true">02</span>
+      <h2 class="display">
+        <span class="stack">Identify<span class="period">.</span></span>
+        <span class="stack">Tag<span class="period">.</span></span>
+        <span class="stack">Organize<span class="period">.</span></span>
+      </h2>
+      <span class="seq-deck">It sees what your team sees. Faster.</span>
+      <span class="seq-rule"></span>
+      <p>Content enters the system. FaceIQ identifies who's in the frame. SceneIQ classifies the context. RosterIQ reads the jersey. BrandIQ detects every sponsor logo.</p>
+      <p>Routing rules deliver assets to the right gallery based on source, creator, tags, or AI identification — configured logic that runs alongside the AI, not after it. Two kinds of intelligence, one system.</p>
+      <div class="deck-meta">
+        <span class="pill">Models · <em>4 IQs</em></span>
+        <span class="pill">Recall · <em>0.92</em></span>
+        <span class="pill">Latency · <em>&lt; 6s</em></span>
+      </div>
+    </div>
+
+    <div class="seq-still">
+      <div class="still">
+        <div class="still-body">
+
+          <!-- Horizontal ingest flow illustration mirrored for Organize:
+               modal bleeds off the LEFT edge of the section, hex backdrop
+               in field green, 4 IQ source icons funnel RIGHT → LEFT into
+               the media-preview modal. -->
+          <div class="ito-flow" id="itoFlow" aria-hidden="true">
+
+            <!-- Column 1 (right side of illustration): 4 IQ source icons -->
+            <div class="ito-flow__sources">
+              <div class="ito-flow__source">
+                <span class="ito-flow__icon" data-icon="face">
+                  <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <!-- head + shoulders -->
+                    <circle cx="32" cy="24" r="11"/>
+                    <path d="M12 56 C 12 44 22 38 32 38 C 42 38 52 44 52 56"/>
+                  </svg>
+                </span>
+                <span class="ito-flow__label">Face</span>
+              </div>
+              <div class="ito-flow__source">
+                <span class="ito-flow__icon" data-icon="scene">
+                  <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <!-- landscape frame: rectangle + sun + mountain horizon -->
+                    <rect x="8" y="14" width="48" height="36" rx="2"/>
+                    <circle cx="22" cy="26" r="4"/>
+                    <path d="M8 44 L 22 30 L 32 38 L 44 24 L 56 36"/>
+                  </svg>
+                </span>
+                <span class="ito-flow__label">Scene</span>
+              </div>
+              <div class="ito-flow__source">
+                <span class="ito-flow__icon" data-icon="roster">
+                  <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <!-- jersey outline -->
+                    <path d="M22 10 L 14 18 L 18 24 L 22 22 V 56 H 42 V 22 L 46 24 L 50 18 L 42 10 C 40 14 36 16 32 16 C 28 16 24 14 22 10 Z"/>
+                    <!-- number 7 inside -->
+                    <path d="M27 30 H 37 L 32 46"/>
+                  </svg>
+                </span>
+                <span class="ito-flow__label">Roster</span>
+              </div>
+              <div class="ito-flow__source">
+                <span class="ito-flow__icon" data-icon="brand">
+                  <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <!-- tag / price-tag shape with a dot -->
+                    <path d="M30 8 H 50 A 6 6 0 0 1 56 14 V 34 L 32 58 L 6 32 L 30 8 Z"/>
+                    <circle cx="44" cy="20" r="3"/>
+                  </svg>
+                </span>
+                <span class="ito-flow__label">Brand</span>
+              </div>
+            </div>
+
+            <!-- Column 2: mirrored funnel — 4 source curves merge into one
+                 trunk running LEFT to the modal's right edge. -->
+            <div class="ito-flow__pipes">
+              <svg viewBox="0 0 400 320" preserveAspectRatio="none" aria-hidden="true">
+                <!-- 4 source paths from icon-row y-centers (40 / 120 / 200 / 280)
+                     curving to the trunk junction (~270, 160), then straight
+                     LEFT to the modal edge (0, 160). -->
+                <path class="pipe p1" d="M400 40 C 330 40 330 160 270 160 L 0 160"/>
+                <path class="pipe p2" d="M400 120 C 350 120 320 160 270 160 L 0 160"/>
+                <path class="pipe p3" d="M400 200 C 350 200 320 160 270 160 L 0 160"/>
+                <path class="pipe p4" d="M400 280 C 330 280 330 160 270 160 L 0 160"/>
+                <!-- Pulses follow the same paths (also right-to-left) -->
+                <path class="pulse p1" d="M400 40 C 330 40 330 160 270 160 L 0 160"/>
+                <path class="pulse p2" d="M400 120 C 350 120 320 160 270 160 L 0 160"/>
+                <path class="pulse p3" d="M400 200 C 350 200 320 160 270 160 L 0 160"/>
+                <path class="pulse p4" d="M400 280 C 330 280 330 160 270 160 L 0 160"/>
+              </svg>
+            </div>
+
+            <!-- Column 3 (left side of illustration): laptop showing the
+                 media preview modal. Bleeds off the LEFT edge of the
+                 section, field-green hex backdrop offset behind. -->
+            <div class="ito-flow__surface">
+              <span class="ito-flow__hex" aria-hidden="true"></span>
+              <div class="ito-flow__laptop">
+                <div class="ito-flow__laptop-screen">
+                  <img src="Platform-assets/organize-illustration/modal-preview-desktop.png" alt="Greenfly media preview modal on desktop, with tag overlays" />
+                </div>
+                <div class="ito-flow__laptop-base" aria-hidden="true"></div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</div><!-- /paper-stack A -->
+
+
+<!-- =====================================================================
+     IQ SUITE
+     ===================================================================== -->
+<section class="iq-suite section-light" id="iq-suite">
+  <div class="iq-header">
+    <div>
+      <div class="eyebrow">
+        <span class="dot"></span>
+        <span class="mono">The IQ Suite</span>
+      </div>
+      <h3 class="display">Four models <em class="thin">working the shift</em>.</h3>
+    </div>
+    <p>
+      Greenfly's vision and language models run inline against the ingest pool. Each is trained on sports and entertainment footage, tuned to operate at sideline latency, and packaged as a building block of the bundle.
+    </p>
+  </div>
+
+  <div class="iq-grid">
+
+    <article class="iq-card">
+      <div class="iq-specimen iq-specimen--face">
+        <img class="iq-photo" src="Platform-assets/iq-suite/faceiq.png" alt="">
+        <svg class="iq-hex-stroke" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <!-- rounded hex around the hockey player's face (r=15 to match the other cards) -->
+          <path d="M 68.75 30.17 L 63.75 38.83 Q 62.5 40.99 60 40.99 L 50 40.99 Q 47.5 40.99 46.25 38.83 L 41.25 30.17 Q 40 28 41.25 25.83 L 46.25 17.17 Q 47.5 15.01 50 15.01 L 60 15.01 Q 62.5 15.01 63.75 17.17 L 68.75 25.83 Q 70 28 68.75 30.17 Z"/>
+        </svg>
+      </div>
+      <div class="iq-body">
+        <span class="iq-name">Face<span class="iq-suffix">IQ</span></span>
+        <span class="iq-subtitle">Face Recognition</span>
+        <p>Identifies athletes, coaches, and talent by face across image and video. The identity layer that makes personalized Galleries possible.</p>
+        <div class="iq-meta">
+          <div><span class="mc-k mono">Coverage</span><span class="mc-v">12k+ rostered</span></div>
+          <div><span class="mc-k mono">Threshold</span><span class="mc-v">0.92</span></div>
+          <div><span class="mc-k mono">Domain</span><span class="mc-v">Sport · Ent</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="iq-card">
+      <div class="iq-specimen iq-specimen--scene">
+        <img class="iq-photo" src="Platform-assets/iq-suite/sceneiq.png" alt="">
+        <svg class="iq-hex-stroke" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <!-- rounded hex around player #15 hoisted at the top of the celebration -->
+          <path d="M 63.75 24.17 L 58.75 32.83 Q 57.5 34.99 55 34.99 L 45 34.99 Q 42.5 34.99 41.25 32.83 L 36.25 24.17 Q 35 22 36.25 19.83 L 41.25 11.17 Q 42.5 9.01 45 9.01 L 55 9.01 Q 57.5 9.01 58.75 11.17 L 63.75 19.83 Q 65 22 63.75 24.17 Z"/>
+        </svg>
+      </div>
+      <div class="iq-body">
+        <span class="iq-name">Scene<span class="iq-suffix">IQ</span></span>
+        <span class="iq-subtitle">Scene Recognition</span>
+        <p>Distinguishes game action from practice drill, press conference from celebration, red carpet from meet-and-greet. Context-aware routing without manual sorting.</p>
+        <div class="iq-meta">
+          <div><span class="mc-k mono">Scenes</span><span class="mc-v">220 classes</span></div>
+          <div><span class="mc-k mono">F1</span><span class="mc-v">0.89</span></div>
+          <div><span class="mc-k mono">Domain</span><span class="mc-v">Live · Event</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="iq-card">
+      <div class="iq-specimen iq-specimen--roster">
+        <img class="iq-photo" src="Platform-assets/iq-suite/rosteriq.png" alt="">
+        <svg class="iq-hex-stroke" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <!-- rounded hex around the "WILSON 34" jersey (nudged right to center on the name/number) -->
+          <path d="M 63.75 52.17 L 58.75 60.83 Q 57.5 62.99 55 62.99 L 45 62.99 Q 42.5 62.99 41.25 60.83 L 36.25 52.17 Q 35 50 36.25 47.83 L 41.25 39.17 Q 42.5 37.01 45 37.01 L 55 37.01 Q 57.5 37.01 58.75 39.17 L 63.75 47.83 Q 65 50 63.75 52.17 Z"/>
+        </svg>
+      </div>
+      <div class="iq-body">
+        <span class="iq-name">Roster<span class="iq-suffix">IQ</span></span>
+        <span class="iq-subtitle">Jersey Recognition</span>
+        <p>A player photographed from behind is still identifiable by number. Works alongside FaceIQ to confirm identity when faces aren't visible.</p>
+        <div class="iq-meta">
+          <div><span class="mc-k mono">Numbers</span><span class="mc-v">0–99</span></div>
+          <div><span class="mc-k mono">Precision</span><span class="mc-v">0.91</span></div>
+          <div><span class="mc-k mono">Domain</span><span class="mc-v">Sport</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="iq-card">
+      <div class="iq-specimen iq-specimen--brand">
+        <img class="iq-photo" src="Platform-assets/iq-suite/brandiq.png" alt="">
+        <svg class="iq-hex-stroke" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <!-- rounded hex around the APEX logo on the runner's chest (clears the face) -->
+          <path d="M 63.75 60.17 L 58.75 68.83 Q 57.5 70.99 55 70.99 L 45 70.99 Q 42.5 70.99 41.25 68.83 L 36.25 60.17 Q 35 58 36.25 55.83 L 41.25 47.17 Q 42.5 45.01 45 45.01 L 55 45.01 Q 57.5 45.01 58.75 47.17 L 63.75 55.83 Q 65 58 63.75 60.17 Z"/>
+        </svg>
+      </div>
+      <div class="iq-body">
+        <span class="iq-name">Brand<span class="iq-suffix">IQ</span></span>
+        <span class="iq-subtitle">Sponsor &amp; Logo Detection</span>
+        <p>The revenue layer. Detects sponsor logos across image and video, routing content directly to brand partners and documenting every appearance — connecting content distribution to sponsorship proof-of-performance.</p>
+        <div class="iq-meta">
+          <div><span class="mc-k mono">Brands</span><span class="mc-v">1,400+</span></div>
+          <div><span class="mc-k mono">Precision</span><span class="mc-v">0.93</span></div>
+          <div><span class="mc-k mono">Domain</span><span class="mc-v">Sponsor</span></div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+
+<!-- =====================================================================
+     STACK B · paper-overlap scroll for verbs 03 → 06
+     ===================================================================== -->
+<div class="paper-stack">
+
+<!-- =====================================================================
+     STEP 03 · DISTRIBUTE — dark
+     ===================================================================== -->
+<section class="seq-band" id="step-distribute">
+  <div class="seq-band-inner">
+
+    <div class="seq-copy">
+      <span class="seq-numeral" aria-hidden="true">03</span>
+      <h2 class="display"><span class="stack">Distribute<span class="period">.</span></span></h2>
+      <span class="seq-deck">From one ingest, to every channel that needs it.</span>
+      <span class="seq-rule"></span>
+      <p>Identified, tagged assets ship to the channels that should have them — athletes' phones, partner toolkits, retail studios, social schedulers, broadcast graphics, ticketing pages — formatted, captioned, and approved by the rules each channel was given.</p>
+      <p>One ingest. <strong>Hundreds of outbound channels</strong>. No re-uploads. No DM forwarding.</p>
+      <div class="deck-meta">
+        <span class="pill">Channels · <em>120+</em></span>
+        <span class="pill">Variants · <em>auto</em></span>
+        <span class="pill">Approvals · <em>policied</em></span>
+      </div>
+    </div>
+
+    <div class="seq-still">
+      <div class="still">
+        <div class="still-body">
+          <div class="still-slate">
+            <div class="slate-headline">Phone in athlete's hand<br>· toolkit notification arriving live ·</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- =====================================================================
+     STEP 04 · ACTIVATE — light, flipped
+     ===================================================================== -->
+<section class="seq-band flip section-light" id="step-activate">
+  <div class="seq-band-inner">
+
+    <div class="seq-copy">
+      <span class="seq-numeral" aria-hidden="true">04</span>
+      <h2 class="display"><span class="stack">Activate<span class="period">.</span></span></h2>
+      <span class="seq-deck">When the network <em class="thin">lights up</em>.</span>
+      <span class="seq-rule"></span>
+      <p>The moment an asset clears the routing engine, the network lights up: athletes post, partners deploy, sponsors trigger, retail studios update — within minutes of the moment itself. The shift's first big play is on the feed before the second is in the can.</p>
+      <p>Activation isn't a separate workflow. It's what happens when the rest of the arc <strong>arrives upstream</strong> of the people who'd otherwise be waiting.</p>
+      <div class="deck-meta">
+        <span class="pill">Time-to-Post · <em>&lt; 3 min</em></span>
+        <span class="pill">Athletes Live · <em>real-time</em></span>
+        <span class="pill">Sponsor Drops · <em>auto</em></span>
+      </div>
+    </div>
+
+    <div class="seq-still">
+      <div class="still">
+        <div class="still-body">
+          <div class="still-slate">
+            <div class="slate-headline">Stadium concourse at moment of post<br>· phones lighting up, same image, many hands ·</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- =====================================================================
+     STEP 05 · MEASURE — dark, scoreboard
+     ===================================================================== -->
+<section class="seq-band" id="step-measure">
+  <div class="seq-band-inner">
+
+    <div class="seq-copy">
+      <span class="seq-numeral" aria-hidden="true">05</span>
+      <h2 class="display"><span class="stack">Measure<span class="period">.</span></span></h2>
+      <span class="seq-deck">The scoreboard is the system.</span>
+      <span class="seq-rule"></span>
+      <p>Every asset carries its lineage — what it was, who tagged it, where it shipped, what it did. Greenfly closes the loop with a continuous scoreboard: reach, time-to-post, partner delivery, sponsor exposure, athlete participation — read live, not assembled after.</p>
+      <p>The report isn't an export. It's the <strong>current state of the shift</strong>.</p>
+      <div class="deck-meta">
+        <span class="pill">Refresh · <em>live</em></span>
+        <span class="pill">Stakeholders · <em>roles-aware</em></span>
+        <span class="pill">Outputs · <em>API / Board</em></span>
+      </div>
+    </div>
+
+    <div class="seq-still">
+      <div class="still">
+        <div class="scoreboard">
+          <div class="score-cell">
+            <div>
+              <span class="sc-label mono">Time-to-post</span>
+              <div class="sc-num">02:48</div>
+            </div>
+            <span class="sc-delta mono">▼ 41% vs shift avg</span>
+          </div>
+          <div class="score-cell is-accent">
+            <div>
+              <span class="sc-label mono">Athletes live</span>
+              <div class="sc-num">42 / 53</div>
+            </div>
+            <span class="sc-delta mono">▲ 79% participation</span>
+          </div>
+          <div class="score-cell">
+            <div>
+              <span class="sc-label mono">Sponsor exposure</span>
+              <div class="sc-num">2.4M</div>
+            </div>
+            <span class="sc-delta mono">▲ within target band</span>
+          </div>
+          <div class="score-cell">
+            <div>
+              <span class="sc-label mono">Assets · shift</span>
+              <div class="sc-num">04,182</div>
+            </div>
+            <span class="sc-delta mono">▲ 12% vs matchday avg</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- =====================================================================
+     STEP 06 · AUTOMATE — light, flipped
+     ===================================================================== -->
+<section class="seq-band flip section-light" id="step-automate">
+  <div class="seq-band-inner">
+
+    <div class="seq-copy">
+      <span class="seq-numeral" aria-hidden="true">06</span>
+      <h2 class="display"><span class="stack">Automate<span class="period">.</span></span></h2>
+      <span class="seq-deck">Humans create. Robots <em class="thin">automate</em>.</span>
+      <span class="seq-rule"></span>
+      <p>The arc closes. Identify feeds Tag. Tag feeds Organize. Organize feeds Distribute. Distribute drives Activate. Activate writes back into Measure. Measure tunes the next Identify pass — and the loop runs itself, under policy, without operators in the middle.</p>
+      <p>The shift you started by clocking in <strong>continues without you</strong>. You step in to <em class="thin">create</em>; everything between create and the audience is the platform.</p>
+      <div class="deck-meta">
+        <span class="pill">Loops · <em>closed</em></span>
+        <span class="pill">Verbs · <em>7</em></span>
+        <span class="pill">Operators · <em>0 in path</em></span>
+      </div>
+    </div>
+
+    <div class="seq-still">
+      <div class="still">
+        <div class="loop-grid">
+          <div class="lv"><span class="lv-num">01</span>Collect</div>
+          <div class="lv"><span class="lv-num">02</span>Identify</div>
+          <div class="lv"><span class="lv-num">03</span>Tag</div>
+          <div class="lv"><span class="lv-num">04</span>Organize</div>
+          <div class="lv"><span class="lv-num">05</span>Distribute</div>
+          <div class="lv"><span class="lv-num">06</span>Measure</div>
+          <div class="lv is-final"><span class="lv-num">07</span>Automate</div>
+          <div class="loop-arrow"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</div><!-- /paper-stack B -->
+
+
+<!-- =====================================================================
+     BUNDLES — light
+     ===================================================================== -->
+<section class="bundles section-light" id="bundles">
+  <div class="bundles-inner">
+    <div class="bundles-header">
+      <div>
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span class="mono">Bundles</span>
+        </div>
+        <h3 class="display">One foundation. <em class="thin">Extend by need.</em></h3>
+      </div>
+      <p>
+        Greenfly ships as a foundation — the seven-verb arc, the IQ suite, the routing engine — wrapped with extensions for the specific operating shape of your league, studio, or brand. You buy one base; you light up the bands you need.
+      </p>
+    </div>
+
+    <div class="foundation">
+      <span class="foundation-mark">G</span>
+      <div class="foundation-body">
+        <h4>The Greenfly Foundation</h4>
+        <p>The whole arc as one operating system: ingest, IQ, routing, distribution, scoreboard. Every bundle is built on this base — the policy engine, the role model, the audit trail, the API surface. The platform <em class="thin">underneath</em> the platform.</p>
+      </div>
+      <div class="foundation-meta">
+        <div class="fm-row"><span class="k">Verbs</span><span class="v">7 · closed loop</span></div>
+        <div class="fm-row"><span class="k">IQs</span><span class="v">4 inline</span></div>
+        <div class="fm-row"><span class="k">API</span><span class="v">REST · Webhooks</span></div>
+        <div class="fm-row"><span class="k">SLA</span><span class="v">99.95% live</span></div>
+      </div>
+    </div>
+
+    <div class="extensions">
+      <article class="ext-card">
+        <h4>League Bundle</h4>
+        <p>Push league-wide assets into every member-team channel under one delivery policy. Roster sync, partner brackets, championship moments, broadcast-cleared cuts — all routed once and reported back, league-up.</p>
+      </article>
+
+      <article class="ext-card">
+        <h4>Studio Bundle</h4>
+        <p>Built for the windowed release: press, talent reps, partner platforms, retail, and fan channels lit in the order the campaign was scheduled — with talent toolkits that never leak across windows.</p>
+      </article>
+
+      <article class="ext-card">
+        <h4>Brand Bundle</h4>
+        <p>Sponsor logo detection, partner-asset delivery, and exposure reporting wired into the same arc — so the value the partnership produced is visible the same day the content shipped, not the next quarter.</p>
+      </article>
+    </div>
+
+    <div class="bundles-cta">
+      <span class="bc-rule"></span>
+      <a href="./get-greenfly.html" class="btn btn-primary">Talk to Greenfly <span class="arrow">→</span></a>
+      <span class="bc-rule"></span>
+    </div>
+  </div>
+</section>
+
+
+<!-- =====================================================================
+     CLOSING
+     ===================================================================== -->
+<section class="close" id="demo">
+  <div class="close-inner">
+    <div class="close-stack" id="closeStack">
+      <div class="close-line close-typing-line">
+        The <span class="typewriter"><span class="typewriter-word" id="typeWord" aria-live="polite"></span><span class="typewriter-caret" aria-hidden="true"></span></span> that get it.
+      </div>
+      <div class="close-line final">Get <span class="accent">Greenfly.</span></div>
+    </div>
+    <div class="close-ctas" id="closeCtas">
+      <a href="./get-greenfly.html" class="btn btn-primary">Book a demo <span class="arrow">→</span></a>
+      <a href="./get-greenfly.html" class="btn btn-ghost">Talk to sales <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+
+<!-- =====================================================================
+     FOOTER
+     ===================================================================== -->
+<footer class="footer" id="footer">
+  <div class="footer-hex" aria-hidden="true">
+    <svg class="footer-hex-svg" id="footerHexGrid" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <symbol id="fly-silhouette" viewBox="0 0 150 150">
+          <path fill="#000" d="M88.7766 107.612C86.6986 105.332 84.4215 102.853 82.2445 100.275V100.374C80.2655 98.1932 78.5826 95.7142 77.1966 93.1362C76.8006 92.4422 76.1085 92.0452 75.3165 92.0452C74.5245 92.0452 73.8315 92.4422 73.4355 93.1362C71.9515 95.7142 70.3675 98.0942 68.4875 100.374C66.2105 103.051 63.9346 105.53 61.7576 107.612C61.1636 108.207 60.9655 109.099 61.2625 109.892C65.2215 119.014 69.7735 123.575 75.3165 123.575C80.8585 123.575 85.4115 119.014 89.2715 109.892C89.5685 109.099 89.3706 108.207 88.7766 107.612ZM75.4155 119.411V119.51C71.2585 119.51 67.8935 114.354 65.7165 109.595C67.7945 107.513 69.7735 105.332 71.6545 103.051C73.0405 101.465 74.2275 99.8782 75.4155 98.0942C76.5045 99.7792 77.7905 101.465 79.0775 102.952C81.0565 105.332 83.1355 107.513 85.0155 109.496C82.9375 114.255 79.4735 119.411 75.4155 119.411Z"/>
+          <path fill="#000" d="M92.1416 58.3348C91.4486 57.4428 90.1626 57.2438 89.2716 57.9378C85.9066 60.3178 80.7596 66.1678 83.2346 72.6128C80.6606 73.9008 78.6816 76.0828 77.6916 78.8588C76.0096 84.2128 78.4836 90.9548 85.2136 98.9858C99.7626 116.437 109.957 118.32 113.619 118.32C115.103 118.32 116.489 118.023 117.775 117.23V117.031C119.854 115.842 121.141 113.859 121.338 111.578C122.823 102.853 113.223 85.4028 92.1416 58.3348ZM115.697 113.759H115.499C115.004 114.057 114.311 114.156 113.718 114.057C111.342 114.057 102.237 112.768 88.3806 96.2098C82.7396 89.4678 80.3636 83.8158 81.5516 80.0488C82.4426 77.8668 84.3226 76.1818 86.5006 75.4878C87.0936 75.2898 87.6876 74.8928 87.9846 74.2978C88.2816 73.7028 88.1826 73.0088 87.7866 72.4138C85.1146 68.3488 88.1826 64.4818 90.1626 62.3998C115.202 95.1188 117.973 106.621 117.38 110.686L117.479 110.884C117.479 112.074 116.687 113.165 115.697 113.759Z"/>
+          <path fill="#000" d="M73.0402 78.7597C72.0502 75.9837 70.0712 73.7027 67.3992 72.5127C69.6752 66.1677 64.5292 60.3177 61.3612 57.8387C60.4712 57.1447 59.1842 57.3437 58.4912 58.2357C37.6082 85.4027 27.9092 102.853 29.0972 111.479C29.3942 113.76 30.5812 115.743 32.5612 116.932L32.7592 117.131C33.9462 117.825 35.4312 118.221 36.8162 118.221C40.5782 118.221 50.7712 116.338 65.2212 98.8867C72.2482 90.7567 74.8212 84.0147 73.0402 78.7597ZM62.3512 96.4077C48.3962 112.867 39.3902 114.255 36.8162 114.255L37.0142 114.156C36.4212 114.156 35.8272 114.156 35.2332 113.859L35.0352 113.66C34.0452 113.066 33.3522 111.975 33.2542 110.785C32.5612 106.72 35.4312 94.9207 60.4712 62.4987C62.4502 64.4817 65.4192 68.3487 62.8462 72.5127C62.4502 73.1077 62.4502 73.8017 62.6482 74.3967C62.9452 74.9917 63.4402 75.4877 64.1332 75.5867C66.4092 76.2807 68.1912 77.8667 69.0812 80.1477C70.2692 83.9157 67.9932 89.5667 62.3512 96.4077Z"/>
+          <path fill="#000" d="M97.5851 41.6778C96.1991 36.6208 91.5481 33.1508 86.2031 33.3498C85.1151 33.3498 84.0261 33.5478 82.9371 33.8448C82.5411 33.8448 82.1451 34.0438 81.8481 34.2418C81.3541 34.1428 80.9581 33.8448 80.7601 33.4488C80.2651 32.5558 80.5621 31.3658 81.4531 30.8708C82.3431 30.1768 82.5411 28.8878 81.8481 27.9948C81.2551 27.3008 80.3641 27.0038 79.4731 27.3008C76.6031 28.8878 75.6131 32.4568 77.1971 35.3328C77.1971 35.3328 77.1971 35.5308 77.2961 35.5308C77.7911 36.4228 78.5821 37.1168 79.4731 37.7118C78.9781 39.5958 78.8791 41.4798 79.0771 43.3638C79.3741 46.6358 80.4631 49.7088 82.2441 52.3858C80.0671 52.7828 77.8901 52.9808 75.7121 52.9808C73.4361 52.9808 71.1601 52.9808 68.9821 52.5838C70.8631 49.9068 71.9511 46.7348 72.2481 43.4628C72.5451 41.3808 72.2481 39.2978 71.6551 37.4148C72.4461 36.9188 73.1391 36.3238 73.6341 35.5308C74.4261 34.1428 74.6241 32.4568 74.2281 30.9698C73.8321 29.3838 72.8421 28.0948 71.4561 27.3008C70.3681 26.7068 68.9821 27.0038 68.3881 28.0948C67.7951 29.0858 68.0911 30.3748 69.0811 30.9698C69.4771 31.2668 69.7741 31.6638 69.9721 32.0608C70.0711 32.5558 69.9721 33.0518 69.7741 33.4488C69.5761 33.7458 69.2791 34.0438 68.8831 34.1428C68.5861 33.9438 68.1911 33.8448 67.7951 33.8448C66.8051 33.5478 65.8151 33.4488 64.8251 33.4488C59.5801 33.1508 54.8301 36.6208 53.4441 41.7768C53.2461 42.4708 53.2461 43.0658 53.2461 43.7598C53.2461 46.0408 54.0381 48.3208 55.5221 50.1058V50.2048C56.8091 51.7908 58.3921 53.1788 60.2731 53.9728C64.8251 56.3518 69.8731 57.4428 74.9201 57.1448H75.6131C80.4631 57.1448 85.3121 56.2528 89.7661 54.2698C92.0431 53.4768 94.1211 51.9898 95.6061 50.0068C96.9911 48.2218 97.7831 45.9408 97.7831 43.6608C97.7831 42.9668 97.7831 42.3718 97.5851 41.6778ZM67.8931 43.0658C67.3991 47.6268 65.2211 51.0968 64.1331 51.0968C63.5391 50.9978 62.9451 50.7998 62.3511 50.5018C61.4601 50.0068 60.5701 49.3128 59.7781 48.6178C58.3921 47.5278 57.6011 45.8418 57.5021 44.0578C57.5021 43.6608 57.5021 43.2638 57.7001 42.8678C58.4911 39.5958 61.5591 37.3158 64.9241 37.6128L64.8251 37.7118C65.5181 37.7118 66.2111 37.7118 66.9041 38.0088C67.5971 38.2078 68.1911 39.9928 67.8931 43.0658ZM93.4281 44.7518C92.7351 47.3298 90.8551 49.5108 88.3811 50.4028C87.8861 50.7008 87.3911 50.8988 86.8961 50.9978H86.6981C85.6091 50.9978 83.5311 47.5278 82.9371 42.9668C82.6401 39.7938 83.2341 38.1088 83.9271 37.9098C84.6201 37.7118 85.3121 37.7118 86.0051 37.7118C89.2711 37.5138 92.3391 39.5958 93.2301 42.7688C93.2301 43.1648 93.4281 43.5618 93.4281 43.9588V44.7518Z"/>
+        </symbol>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="footer-stage">
+    <div class="footer-wordmark">
+      <img src="./Greenfly (1).svg" alt="Greenfly">
+    </div>
+  </div>
+
+  <div class="footer-inner">
+    <div>
+      <h5>Platform</h5>
+      <ul>
+        <li><a href="#step-collect">Collect</a></li>
+        <li><a href="#step-ito">Identify · Tag · Organize</a></li>
+        <li><a href="#step-distribute">Distribute</a></li>
+        <li><a href="#step-activate">Activate</a></li>
+        <li><a href="#step-measure">Measure</a></li>
+        <li><a href="#step-automate">Automate</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="./company.html">About</a></li>
+        <li><a href="./homepage.html#proof">Customers</a></li>
+        <li><a href="./company.html#careers">Careers</a></li>
+        <li><a href="./get-greenfly.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Resources</h5>
+      <ul>
+        <li><a href="./solutions.html">Solutions</a></li>
+        <li><a href="#iq-suite">IQ Suite</a></li>
+        <li><a href="#bundles">Bundles</a></li>
+        <li><a href="./legal.html">Support</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-legal">
+    <span>© 2026 Greenfly Inc.</span>
+    <span class="footer-status">
+      <span class="footer-status-dot"></span>
+      System · Nominal · <b>99.97%</b>
+    </span>
+    <span><a href="./legal.html">Legal &amp; policies &rarr;</a></span>
+  </div>
+</footer>
+
+
+<!-- =====================================================================
+     JS
+     ===================================================================== -->
+<script>
+const qs  = (s, el = document) => el.querySelector(s);
+const qsa = (s, el = document) => Array.from(el.querySelectorAll(s));
+
+/* NAV ---------------------------------------------------------------- */
+(() => {
+  const nav = qs('#siteNav');
+  if (!nav) return;
+  const lightSections = qsa('.section-light');
+
+  let lastY = window.scrollY || 0;
+  let ticking = false;
+
+  function update() {
+    const y = window.scrollY || 0;
+    nav.classList.toggle('is-scrolled', y > 8);
+
+    if (y > lastY && y > 120) nav.classList.add('nav-hidden');
+    else nav.classList.remove('nav-hidden');
+    lastY = y;
+
+    const probeY = 72;
+    let onLight = false;
+    for (const sec of lightSections) {
+      const r = sec.getBoundingClientRect();
+      if (r.top <= probeY && r.bottom > probeY) { onLight = true; break; }
+    }
+    nav.classList.toggle('nav-on-light', onLight);
+
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+
+/* ARC WHEEL — directional cascade triggered by scroll direction.
+   Scroll-down entry: shuffle Collect → … → Automate.
+   Scroll-up entry:   shuffle Automate → … → Collect.
+   On exit, snap to the verb that matches the travel direction so the
+   next entry plays the full sweep cleanly. ----------------------- */
+(() => {
+  const wheel = qs('#arcWheel');
+  const track = qs('#arcWheelTrack');
+  const section = qs('#arc-preview');
+  if (!wheel || !track || !section) return;
+  const verbs = qsa('.arc-verb', track);
+  if (!verbs.length) return;
+  const N = verbs.length;
+  let currentIdx = 0;
+
+  function centerOn(idx, instant = false) {
+    idx = Math.max(0, Math.min(N - 1, idx));
+    const target = verbs[idx];
+    const wheelHeight = wheel.clientHeight;
+    const verbCenterInTrack = target.offsetTop + target.offsetHeight / 2;
+    const y = wheelHeight / 2 - verbCenterInTrack;
+    if (instant) {
+      const prev = track.style.transition;
+      track.style.transition = 'none';
+      track.style.transform = 'translateY(' + y + 'px)';
+      void track.offsetHeight;
+      track.style.transition = prev;
+    } else {
+      track.style.transform = 'translateY(' + y + 'px)';
+    }
+    verbs.forEach(v => v.classList.remove('is-active','is-near'));
+    target.classList.add('is-active');
+    const before = verbs[idx - 1]; if (before) before.classList.add('is-near');
+    const after  = verbs[idx + 1]; if (after)  after.classList.add('is-near');
+    currentIdx = idx;
+  }
+
+  // cascading step-through from currentIdx → targetIdx, one verb at a time
+  let timers = [];
+  const cancelTimers = () => { timers.forEach(clearTimeout); timers = []; };
+  function cascadeTo(targetIdx) {
+    cancelTimers();
+    if (targetIdx === currentIdx) return;
+    const step = targetIdx > currentIdx ? 1 : -1;
+    const indices = [];
+    for (let i = currentIdx + step;
+         step > 0 ? i <= targetIdx : i >= targetIdx;
+         i += step) {
+      indices.push(i);
+    }
+    // readable cadence: each verb arrives in ~220ms and dwells ~120ms
+    // before the next step fires — total sweep ~2.2s
+    const baseDelay = 130;
+    const stepGap = 340;
+    indices.forEach((idx, k) => {
+      timers.push(setTimeout(() => centerOn(idx), baseDelay + k * stepGap));
+    });
+  }
+
+  // initial center on verb 0
+  function init() { centerOn(0, true); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(init);
+  requestAnimationFrame(init);
+  window.addEventListener('resize', () => centerOn(currentIdx, true));
+
+  // track scroll direction
+  let lastY = window.scrollY;
+  let dir = 'down';
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > lastY) dir = 'down';
+    else if (y < lastY) dir = 'up';
+    lastY = y;
+  }, { passive: true });
+
+  // direction-aware sweep on viewport entry / exit
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        if (dir === 'down') {
+          centerOn(0, true);       // snap to first
+          cascadeTo(N - 1);        // shuffle forward to Automate
+        } else {
+          centerOn(N - 1, true);   // snap to last
+          cascadeTo(0);            // shuffle backward to Collect
+        }
+      } else {
+        cancelTimers();
+        centerOn(dir === 'down' ? N - 1 : 0, true);
+      }
+    });
+  }, { threshold: 0.4 });
+  io.observe(section);
+})();
+
+/* CLOSING TYPEWRITER ------------------------------------------------- */
+(() => {
+  const stack = qs('#closeStack');
+  if (!stack) return;
+  const lines = qsa('.close-line', stack);
+  const wordEl = qs('#typeWord', stack);
+
+  const WORDS = ['leagues', 'teams', 'studios', 'brands'];
+  const TYPE_MS = 85;
+  const DELETE_MS = 45;
+  const HOLD_FULL_MS = 1400;
+  const HOLD_EMPTY_MS = 260;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const revealTimers = [];
+  let typeTimer = null;
+  let wordIdx = 0;
+  let charIdx = 0;
+  let phase = 'typing';
+
+  const stopType = () => {
+    if (typeTimer) { clearTimeout(typeTimer); typeTimer = null; }
+  };
+  const tick = () => {
+    if (!wordEl) return;
+    const word = WORDS[wordIdx];
+    if (phase === 'typing') {
+      charIdx++;
+      wordEl.textContent = word.slice(0, charIdx);
+      if (charIdx >= word.length) {
+        phase = 'holding-full';
+        typeTimer = setTimeout(tick, HOLD_FULL_MS);
+        return;
+      }
+      typeTimer = setTimeout(tick, TYPE_MS);
+    } else if (phase === 'holding-full') {
+      phase = 'deleting';
+      typeTimer = setTimeout(tick, DELETE_MS);
+    } else if (phase === 'deleting') {
+      charIdx--;
+      wordEl.textContent = word.slice(0, Math.max(0, charIdx));
+      if (charIdx <= 0) {
+        wordIdx = (wordIdx + 1) % WORDS.length;
+        phase = 'typing';
+        typeTimer = setTimeout(tick, HOLD_EMPTY_MS);
+        return;
+      }
+      typeTimer = setTimeout(tick, DELETE_MS);
+    }
+  };
+  const startType = () => {
+    if (!wordEl) return;
+    if (reduceMotion) { wordEl.textContent = WORDS[0]; return; }
+    stopType();
+    wordIdx = 0;
+    charIdx = 0;
+    phase = 'typing';
+    wordEl.textContent = '';
+    typeTimer = setTimeout(tick, 320);
+  };
+
+  const reveal = () => {
+    revealTimers.forEach(clearTimeout);
+    revealTimers.length = 0;
+    lines.forEach((line, idx) => {
+      revealTimers.push(setTimeout(() => line.classList.add('reveal'), idx * 220));
+    });
+    revealTimers.push(setTimeout(startType, 260));
+  };
+  const hide = () => {
+    revealTimers.forEach(clearTimeout);
+    revealTimers.length = 0;
+    lines.forEach(line => line.classList.remove('reveal'));
+    stopType();
+  };
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => e.isIntersecting ? reveal() : hide());
+  }, { threshold: 0.35 });
+  io.observe(stack);
+})();
+
+/* FOOTER HEX GRID ---------------------------------------------------- */
+(() => {
+  const svg = qs('#footerHexGrid');
+  if (!svg) return;
+  const host = svg.parentElement;
+  const NS = 'http://www.w3.org/2000/svg';
+  const R = 42;
+
+  function build() {
+    const rect = host.getBoundingClientRect();
+    const w = Math.ceil(rect.width);
+    const h = Math.ceil(rect.height);
+    if (!w || !h) return;
+
+    const hexW = Math.sqrt(3) * R;
+    const vStep = 1.5 * R;
+
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    svg.setAttribute('width', w);
+    svg.setAttribute('height', h);
+
+    qsa('.hex-cell', svg).forEach((n) => n.remove());
+
+    const pts = [
+      `0,${-R}`,
+      `${hexW/2},${-R/2}`,
+      `${hexW/2},${R/2}`,
+      `0,${R}`,
+      `${-hexW/2},${R/2}`,
+      `${-hexW/2},${-R/2}`
+    ].join(' ');
+    const flySize = R * 1.0;
+    const flyOffset = -flySize / 2;
+
+    const frag = document.createDocumentFragment();
+    const cols = Math.ceil(w / hexW) + 2;
+    const rows = Math.ceil(h / vStep) + 2;
+
+    for (let row = -1; row < rows; row++) {
+      const xOffset = row % 2 ? hexW / 2 : 0;
+      for (let col = -1; col < cols; col++) {
+        const cx = col * hexW + xOffset;
+        const cy = row * vStep;
+
+        const g = document.createElementNS(NS, 'g');
+        g.setAttribute('class', 'hex-cell');
+        g.setAttribute('transform', `translate(${cx}, ${cy})`);
+
+        const poly = document.createElementNS(NS, 'polygon');
+        poly.setAttribute('class', 'hex-cell-shape');
+        poly.setAttribute('points', pts);
+        g.appendChild(poly);
+
+        const use = document.createElementNS(NS, 'use');
+        use.setAttribute('class', 'hex-fly');
+        use.setAttribute('href', '#fly-silhouette');
+        use.setAttribute('x', flyOffset);
+        use.setAttribute('y', flyOffset);
+        use.setAttribute('width', flySize);
+        use.setAttribute('height', flySize);
+        g.appendChild(use);
+
+        frag.appendChild(g);
+      }
+    }
+    svg.appendChild(frag);
+  }
+
+  build();
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(build, 140);
+  });
+})();
+
+/* PAPER-STACK SNAP — when scrolling rests inside a paper-stack zone,
+   settle to the nearest paper. Direction-aware 1/5-viewport commit:
+   scroll DOWN past 1/5 of the current paper → commit forward.
+   Scroll UP past 1/5 from the current paper → commit backward.
+   Below the threshold in either direction, spring back to the current
+   paper. Outside paper-stack zones, scrolling stays free. ----------- */
+(() => {
+  const stacks = qsa('.paper-stack');
+  if (!stacks.length) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let settleTimer = null;
+  let lastScrollY = window.scrollY;
+  let scrollDir = 'down';
+  const SETTLE_MS = 140;
+  const COMMIT = 0.2;
+
+  function activeStack() {
+    const vh = window.innerHeight;
+    for (const s of stacks) {
+      const r = s.getBoundingClientRect();
+      if (r.top < vh * 0.5 && r.bottom > vh * 0.5) return s;
+    }
+    return null;
+  }
+
+  function snap() {
+    // disable on mobile — paper-stack itself is disabled below 960px
+    if (window.innerWidth <= 960) return;
+    const stack = activeStack();
+    if (!stack) return;
+    const papers = qsa('.seq-band', stack);
+    if (!papers.length) return;
+    const vh = window.innerHeight;
+    const stackTopDoc = window.scrollY + stack.getBoundingClientRect().top;
+    const raw = (window.scrollY - stackTopDoc) / vh;
+    // only snap while inside the transition range: [first paper, last paper]
+    if (raw < 0 || raw > papers.length - 1) return;
+    const base = Math.floor(raw);
+    const frac = raw - base;
+    // direction-aware commit: 20% threshold in whichever direction the
+    // user was last scrolling. So commit feels equally easy both ways.
+    let idx;
+    if (scrollDir === 'down') {
+      idx = frac >= COMMIT ? base + 1 : base;
+    } else {
+      idx = frac <= (1 - COMMIT) ? base : base + 1;
+    }
+    idx = Math.max(0, Math.min(papers.length - 1, idx));
+    const target = stackTopDoc + idx * vh;
+    if (Math.abs(window.scrollY - target) > 4) {
+      window.scrollTo({ top: target, behavior: 'smooth' });
+    }
+  }
+
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > lastScrollY) scrollDir = 'down';
+    else if (y < lastScrollY) scrollDir = 'up';
+    lastScrollY = y;
+    if (settleTimer) clearTimeout(settleTimer);
+    settleTimer = setTimeout(snap, SETTLE_MS);
+  }, { passive: true });
+})();
+</script>
+
+<!-- =====================================================================
+     Flow-illustration pulse controller — Collect (#collectFlow) and
+     Organize (#itoFlow). CSS does the work; this script toggles
+     .is-drawn on each based on viewport intersection.
+     ===================================================================== -->
+<script>
+(function () {
+  const roots = ['collectFlow', 'itoFlow']
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+  if (!roots.length) return;
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) {
+    roots.forEach(r => r.classList.add('is-drawn'));
+    return;
+  }
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('is-drawn');
+        else                  e.target.classList.remove('is-drawn');
+      });
+    }, { threshold: 0.15 });
+    roots.forEach(r => io.observe(r));
+  } else {
+    roots.forEach(r => r.classList.add('is-drawn'));
+  }
+})();
+</script>
+
+
+<!-- =====================================================================
+     HERO · stepped reveal of the platform image stack (1 → 2 → 3)
+     Cross-fades between steps so total visible opacity stays ≈ 1 — no
+     additive flashing between transitions. image-3 is the final state.
+     ===================================================================== -->
+<script>
+(function () {
+  const steps = Array.from(document.querySelectorAll('.hero-image.hero-step'));
+  if (!steps.length) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    // skip animation — show only the final state
+    steps[steps.length - 1].classList.add('is-on');
+    return;
+  }
+
+  const BASE_DELAY = 140;   // ms before the first image fades in
+  const HOLD       = 220;   // ms each step "rests" at full opacity
+  const FADE       = 380;   // ms cross-fade duration (must match CSS)
+
+  // Wait for every image to finish loading before starting, so the
+  // cross-fade never reveals a partially decoded frame.
+  const waits = steps.map(el =>
+    el.complete && el.naturalWidth > 0
+      ? Promise.resolve()
+      : new Promise(resolve => {
+          el.addEventListener('load',  resolve, { once: true });
+          el.addEventListener('error', resolve, { once: true });
+        })
+  );
+
+  Promise.all(waits).then(() => {
+    // Step 1: fade image-1 in from black.
+    setTimeout(() => steps[0].classList.add('is-on'), BASE_DELAY);
+
+    // Steps 2…N: simultaneously fade the previous OUT and the next IN.
+    // Because both transitions run in lockstep with ease-in-out, the
+    // composite opacity stays close to 1 throughout the swap.
+    for (let i = 1; i < steps.length; i++) {
+      const t = BASE_DELAY + i * (FADE + HOLD);
+      setTimeout(() => {
+        steps[i - 1].classList.remove('is-on');
+        steps[i].classList.add('is-on');
+      }, t);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

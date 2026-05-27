@@ -236,7 +236,7 @@ em.thin, .thin {
 }
 
 .nav.nav-on-light .nav-logo {
-  background-image: url('./Greenfly-fieldgreen.svg');
+  background-image: url('./images/brand/Greenfly-fieldgreen.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left center;
@@ -292,6 +292,52 @@ em.thin, .thin {
   max-width: 78%;
   z-index: 4;
 }
+
+.ito-illustration {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ito-still { border: none; }
+.ito-still .still-body { box-shadow: none; }
+
+/* Distribute section illustration */
+.distribute-illustration {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.distribute-still { border: none; }
+.distribute-still .still-body { background: #000; box-shadow: none; }
+
+/* Activate section illustration */
+.activate-illustration {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.section-light .activate-still { border: 0; outline: 0; }
+.section-light .activate-still .still-body {
+  background: var(--bg);
+  box-shadow: none;
+}
+
+/* Measure section illustration */
+.measure-illustration {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.measure-still { border: none; }
+.measure-still .still-body { background: #000; box-shadow: none; }
 .still-slate .slate-headline {
   font-family: 'Oswald', sans-serif;
   font-weight: 500;
@@ -303,15 +349,12 @@ em.thin, .thin {
 }
 
 /* ===================================================================
-   COLLECT · top-down ingest flow illustration
-   (lives inside the Step-01 .still — line-art icons → flow → product UI)
+   COLLECT · hub-and-spoke ingest illustration
+   (lives inside the Step-01 .still — replaces the slate placeholder)
    =================================================================== */
 #step-collect .seq-band-inner {
   grid-template-columns: 1fr 1.3fr;
   gap: clamp(40px, 6vw, 96px);
-  /* vertically center both columns so the laptop+hex cluster sits level
-     with the copy block, not anchored to the top */
-  align-items: center;
 }
 @media (max-width: 1100px) {
   #step-collect .seq-band-inner { grid-template-columns: 1fr 1.2fr; }
@@ -320,269 +363,163 @@ em.thin, .thin {
   #step-collect .seq-band-inner { grid-template-columns: 1fr; }
 }
 
-/* Free the Collect .still from the global 5:4 aspect-ratio cage so the
-   illustration sets its own height — otherwise top icons and the phone
-   overlay get clipped by .still's overflow:hidden. */
 #step-collect .still {
   border: 0;
   background: transparent;
-  aspect-ratio: auto;
-  overflow: visible;
-  height: auto;
-  display: block;
 }
 #step-collect .still-body {
   background: transparent;
   box-shadow: none;
+}
+
+.ingest {
+  position: absolute; inset: 0;
+  overflow: hidden;
+}
+.ingest-stage {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 1400px;
+  height: 1120px;
+  transform: translate(-50%, -50%) scale(1);
+  transform-origin: center;
+  will-change: transform;
+}
+
+.ingest svg.web {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
   overflow: visible;
-  flex: none;
-  display: block;
+}
+.ingest .hub        { display: none; }
+.ingest .hub-soft   { fill: none; stroke: rgba(255,255,255,.05); stroke-width: 1; }
+.ingest .spoke      { stroke: rgba(255,255,255,.09); stroke-width: 1; fill: none; }
+.ingest .spoke.thin { stroke: rgba(255,255,255,.06); }
+.ingest .spoke.lit  { stroke: var(--accent); stroke-width: 1; opacity: 0; }
+.ingest .pulse {
+  fill: var(--accent);
+  filter: drop-shadow(0 0 6px var(--accent));
+  opacity: 0;
 }
 
-.collect-flow {
-  position: relative;
-  width: 100%;
-  margin: 0 auto;
-  color: var(--accent);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: clamp(10px, 1.4vw, 24px);
+.ingest .hub-mark {
+  position: absolute;
+  left: 50%; top: 62.5%;
+  transform: translate(-50%, -50%);
+  width: 920px; height: 920px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  z-index: 3;
+  pointer-events: none;
+}
+.ingest .hub-mark img {
+  width: 900px;
+  height: auto;
+  opacity: .96;
+  transition: opacity 360ms ease;
+}
+.ingest .hub-mark .ring-bloom {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(182,245,0,.22);
+  opacity: 0;
+  pointer-events: none;
+}
+.ingest.bloomed .hub-mark img { opacity: 1; }
+.ingest.bloomed .hub-mark .ring-bloom {
+  animation: ingest-bloom 1.6s ease-out forwards;
+}
+@keyframes ingest-bloom {
+  0%   { box-shadow: 0 0 0 0 rgba(182,245,0,.22); opacity: 1; }
+  60%  { box-shadow: 0 0 0 28px rgba(182,245,0,0); opacity: .4; }
+  100% { box-shadow: 0 0 0 40px rgba(182,245,0,0); opacity: 0; }
 }
 
-/* Column 1: vertical stack of [icon][label] rows */
-.collect-flow__sources {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(24px, 2.8vw, 48px);
-  flex: 0 0 auto;
-  align-self: center;
+.ingest .node {
+  position: absolute;
+  width: 110px; height: 110px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 2;
+  transition: box-shadow 320ms ease;
 }
-.collect-flow__source {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+.ingest .node .skeleton {
+  position: absolute; inset: 0;
+  background: #111110;
+  border-radius: 50%;
+  transition: opacity 320ms ease;
 }
-.collect-flow__icon {
-  width: clamp(32px, 3.6vw, 52px);
-  height: clamp(32px, 3.6vw, 52px);
-  color: var(--accent);
-  display: block;
-  flex: 0 0 auto;
+.ingest .node .skeleton::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    135deg, transparent 0 8px, rgba(255,255,255,.02) 8px 9px);
 }
-.collect-flow__icon svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.ingest .node .skeleton::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg,
+    transparent 30%, rgba(255,255,255,.045) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: ingest-shimmer 2.4s ease-in-out infinite;
 }
-.collect-flow__label {
+@keyframes ingest-shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.ingest .node .media {
+  position: absolute; inset: 0;
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity 380ms ease-out, transform 800ms ease-out;
+}
+.ingest .node .media img {
+  width: 100%; height: 100%; object-fit: contain;
+}
+.ingest .node .flash {
+  position: absolute; inset: 0;
+  background: var(--accent);
+  mix-blend-mode: screen;
+  opacity: 0; z-index: 4; pointer-events: none;
+}
+.ingest .node.arrived .skeleton { opacity: 0; }
+.ingest .node.arrived .media    { opacity: 1; transform: scale(1); }
+.ingest .node.firing .flash {
+  animation: ingest-nodeflash 420ms ease-out forwards;
+}
+@keyframes ingest-nodeflash {
+  0%   { opacity: 0; }
+  22%  { opacity: .4; }
+  100% { opacity: 0; }
+}
+
+.ingest .label {
+  position: absolute;
+  color: var(--text);
   font-family: 'Oswald', sans-serif;
   font-weight: 500;
   text-transform: uppercase;
-  font-size: clamp(11px, 1vw, 13px);
-  letter-spacing: .14em;
-  color: var(--dim);
-  text-align: center;
+  font-size: 22px;
+  letter-spacing: .04em;
   line-height: 1.2;
   white-space: nowrap;
-}
-
-/* Column 2: horizontal funnel — 3 source curves merge into a single trunk
-   that runs to the laptop's left edge. SVG stretches to match the icon
-   stack height via align-self:stretch + preserveAspectRatio=none. */
-.collect-flow__pipes {
-  position: relative;
-  flex: 1 1 auto;
-  min-width: 60px;
-  align-self: stretch;
-}
-.collect-flow__pipes svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-.collect-flow__pipes .pipe {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  opacity: .55;
-  vector-effect: non-scaling-stroke;
-}
-.collect-flow__pipes .pulse {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 3;
-  stroke-linecap: round;
-  opacity: 0;
-  vector-effect: non-scaling-stroke;
-  stroke-dasharray: 24 1200;
-  filter: drop-shadow(0 0 4px var(--accent));
-}
-.collect-flow.is-drawn .pulse {
-  animation: collect-pulse 2.4s linear infinite;
-}
-.collect-flow__pipes .pulse.p1 { animation-delay: 0s; }
-.collect-flow__pipes .pulse.p2 { animation-delay: .8s; }
-.collect-flow__pipes .pulse.p3 { animation-delay: 1.6s; }
-@keyframes collect-pulse {
-  0%   { stroke-dashoffset: 1224; opacity: 0; }
-  10%  { opacity: 1; }
-  85%  { opacity: 1; }
-  100% { stroke-dashoffset: 0; opacity: 0; }
-}
-
-/* Column 3: devices — bleeds off the right edge of the section,
-   electric-green hexagon backdrop sits behind the laptop as a brand accent */
-.collect-flow__devices {
-  position: relative;
-  flex: 0 0 auto;
-  width: 70%;
-  align-self: center;
-  /* bleed off the right: negative margin pushes the visual right edge past
-     the seq-still column. .seq-band's overflow:hidden clips it cleanly. */
-  margin-right: clamp(-140px, -6vw, -28px);
-  padding-bottom: clamp(0px, 0.5vw, 8px);
-  /* devices is the positioning context for the hex backdrop + phone */
-  overflow: visible;
-}
-.collect-flow__hex {
-  position: absolute;
-  /* offset behind/around the laptop so corners peek out top-right
-     while the laptop covers the lower-left */
-  top: clamp(-44px, -5.5vw, -16px);
-  left: 22%;
-  width: 92%;
-  aspect-ratio: 1.155 / 1;   /* flat-top regular hexagon */
-  background: var(--accent);
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-  z-index: 0;
-  pointer-events: none;
-  display: block;
-}
-.collect-flow__laptop {
-  position: relative;
-  width: 100%;
-  margin: 0 auto;
-  background: #0a0a0a;
-  z-index: 1;
-  padding: 10px 10px 0;
-  border-radius: 10px 10px 4px 4px;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.18),
-    0 0 0 4px rgba(255,255,255,.04),
-    0 30px 80px -20px rgba(0,0,0,.7);
-}
-.collect-flow__laptop-screen {
-  position: relative;
-  border-radius: 4px;
-  overflow: hidden;
-  background: #000;
-}
-.collect-flow__laptop-screen img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-.collect-flow__laptop-base {
-  position: relative;
-  /* extend beyond laptop chassis on both sides */
-  margin: 0 -7% 0;
-  height: 14px;
-  background: linear-gradient(180deg, #2a2a2a 0%, #0a0a0a 100%);
-  border-radius: 0 0 14px 14px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
-}
-.collect-flow__laptop-base::after {
-  /* hinge slot */
-  content: "";
-  position: absolute;
-  left: 50%; top: 0;
-  width: 16%; height: 3px;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,.6);
-  border-radius: 0 0 6px 6px;
-}
-.collect-flow__phone {
-  position: absolute;
-  right: 4%;
-  /* lift phone onto the laptop screen — bottom edge sits at ~12% of the
-     laptop height up, which puts the phone overlapping the lower-right
-     quadrant of the screen content (not hanging off the chassis corner). */
-  bottom: 12%;
-  width: 22%;
-  min-width: 104px;
-  border-radius: 24px;
-  background: #000;
-  padding: 6px;
-  box-shadow:
-    0 0 0 2px #1a1a1a,
-    0 0 0 3px rgba(255,255,255,.10),
-    /* stronger drop shadow so the phone reads as "in front of" the screen */
-    0 40px 80px -10px rgba(0,0,0,.85),
-    0 12px 24px -6px rgba(0,0,0,.6);
   z-index: 2;
+  transition: color 300ms ease;
 }
-.collect-flow__phone img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 18px;
+.ingest .label::before {
+  content: "";
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: rgba(255,255,255,.22);
+  margin-right: 10px;
+  transform: translateY(-3px);
+  transition: background 300ms ease;
 }
-@media (max-width: 960px) {
-  /* Flip the whole illustration: icons row across the top, devices below.
-     The funnel hides — the flow is conveyed by stacking order at this width. */
-  .collect-flow {
-    flex-direction: column;
-    gap: clamp(20px, 4vw, 36px);
-    align-items: center;
-  }
-  .collect-flow__sources {
-    flex-direction: row;
-    justify-content: center;
-    gap: clamp(28px, 7vw, 56px);
-    align-self: auto;
-  }
-  .collect-flow__icon {
-    width: clamp(52px, 11vw, 80px);
-    height: clamp(52px, 11vw, 80px);
-  }
-  .collect-flow__label {
-    font-size: clamp(11px, 2.6vw, 14px);
-  }
-  .collect-flow__pipes {
-    display: none;
-  }
-  .collect-flow__devices {
-    width: 100%;
-    max-width: 520px;
-    align-self: stretch;
-    margin: 0 auto;             /* undo desktop right-edge bleed */
-  }
-  .collect-flow__hex {
-    /* hex still appears at mobile but smaller, tucked behind top of laptop */
-    top: -16px;
-    left: 38%;
-    width: 70%;
-  }
-  .collect-flow__phone {
-    right: 4%;
-    width: 26%;
-    min-width: 96px;
-    bottom: 12%;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .collect-flow__pipes .pulse { animation: none; opacity: 0; }
-}
+.ingest .label.lit::before { background: var(--accent); }
 
 /* ===================================================================
    HERO
@@ -809,10 +746,10 @@ em.thin, .thin {
   border: 0;
   display: flex;
   align-items: center;
-  box-shadow: 0 -28px 64px -22px rgba(0,0,0,.55);
+  box-shadow: 0 -16px 40px -28px rgba(0,0,0,.28);
 }
 .paper-stack > .seq-band.section-light {
-  box-shadow: 0 -28px 64px -22px rgba(0,0,0,.14);
+  box-shadow: 0 -16px 40px -28px rgba(0,0,0,.10);
 }
 .paper-stack > .seq-band:first-of-type { box-shadow: none; }
 .paper-stack > .seq-band > .seq-band-inner { width: 100%; }
@@ -958,54 +895,100 @@ em.thin, .thin {
   width: 2px; background: var(--accent);
 }
 
-/* loop grid (Automate) --------------------------------------- */
-.loop-grid {
-  flex: 1;
+/* loop rosette (Automate) ------------------------------------- */
+.loop-rosette {
   position: relative;
-  padding: 26px;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  align-content: center;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  aspect-ratio: 1 / 1;
 }
-.loop-grid .lv {
-  border: 1px solid var(--hair-strong);
-  padding: 18px 6px 14px;
-  text-align: center;
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--dim);
-  position: relative;
+.rosette-svg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  overflow: visible;
 }
-.loop-grid .lv.is-final {
-  border-color: var(--accent);
-  color: var(--accent);
+
+/* hex tiles — solid beige fill, white outline on all seven */
+.rosette-hex {
+  fill: #E4E4DC;
+  stroke: #FFFFFF;
+  stroke-width: 2;
+  stroke-linejoin: miter;
 }
-.loop-grid .lv .lv-num {
-  display: block;
-  font-family: 'Oswald', sans-serif;
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 4px;
-  letter-spacing: -.01em;
+.rosette-hex--center {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 2;
 }
-.loop-grid .lv.is-final .lv-num { color: var(--accent); }
-.loop-grid .loop-arrow {
+
+/* signal dots — colors set per-circle via inline fill attributes */
+.rosette-signal--static { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .rosette-signal--motion { display: none; }
+  .rosette-signal--static { display: block; }
+}
+
+/* HTML overlay */
+.rosette-overlay {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+
+.rosette-center-content {
   position: absolute;
-  left: 26px; right: 26px; bottom: 24px;
-  height: 1px;
-  background-image: repeating-linear-gradient(90deg, var(--accent) 0 6px, transparent 6px 12px);
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center; justify-content: center;
+  width: 22%;
 }
-.loop-grid .loop-arrow::after {
-  content: '←';
-  position: absolute; left: -8px; top: -10px;
+/* render the logo file as a mask so its color is controlled by CSS,
+   letting us use the section-light olive (#79982D) instead of the
+   file's native lime. */
+.rosette-center-content .rosette-mark {
+  display: block;
+  width: 100%;
+  aspect-ratio: 290 / 58;
+  background-color: #79982D;
+  -webkit-mask: url('./images/platform/automate/greenfly-logo.svg') no-repeat center / contain;
+          mask: url('./images/platform/automate/greenfly-logo.svg') no-repeat center / contain;
+}
+
+/* step label — sage number with verb stack underneath */
+.rosette-step {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 22%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px;
+  text-align: center;
+}
+.rosette-step .rosette-num {
   font-family: 'Oswald', sans-serif;
-  font-weight: 400;
-  color: var(--accent);
-  font-size: 18px;
+  font-weight: 600;
+  font-size: clamp(20px, 2.2vw, 28px);
+  line-height: 1;
+  color: #B4CD6A;
+  letter-spacing: -0.01em;
+}
+.rosette-step .rosette-verb {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  font-size: clamp(10px, 0.95vw, 13px);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  line-height: 1.02;
+  color: #646461;
+}
+.rosette-step .rosette-verb + .rosette-verb { margin-top: 0; }
+
+@media (max-width: 720px) {
+  .loop-rosette { max-width: 100%; }
+  .rosette-step { gap: 8px; }
+  .rosette-step .rosette-num { font-size: 20px; }
+  .rosette-step .rosette-verb { font-size: 10px; }
 }
 
 /* ===================================================================
@@ -1047,41 +1030,37 @@ em.thin, .thin {
   max-width: var(--max);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 0;
   border: 1px solid var(--hair);
 }
 .iq-card {
-  display: grid;
-  grid-template-columns: 220px 1fr;
+  display: flex;
+  flex-direction: column;
   border-right: 1px solid var(--hair);
-  border-bottom: 1px solid var(--hair);
 }
-.iq-card:nth-child(2n) { border-right: 0; }
-.iq-card:nth-child(n+3) { border-bottom: 0; }
+.iq-card:last-child { border-right: 0; }
 .iq-specimen {
   position: relative;
-  border-right: 1px solid var(--hair);
+  aspect-ratio: 4 / 3;
+  border-bottom: 1px solid var(--hair);
   background: var(--bg-2);
   overflow: hidden;
 }
-.iq-specimen::before {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(circle at 50% 45%, rgba(255,255,255,.04) 0%, transparent 60%),
-    repeating-linear-gradient(135deg,
-      var(--bg-2) 0px,
-      var(--bg-2) 10px,
-      var(--bg-3) 10px,
-      var(--bg-3) 20px);
-}
+.iq-specimen::before { display: none; }
 .iq-bbox {
   position: absolute;
   left: 30%; top: 25%;
   width: 40%; height: 50%;
   border: 1px solid var(--accent);
   box-shadow: 0 0 0 4px rgba(182,245,0,.06);
+  z-index: 2;
+}
+.iq-icon {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
   z-index: 2;
 }
 
@@ -1099,6 +1078,14 @@ em.thin, .thin {
   margin-bottom: 16px;
 }
 .iq-name .iq-suffix { color: var(--accent); }
+.iq-kicker {
+  display: block;
+  color: var(--dim-2);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  margin: -8px 0 14px;
+}
 .iq-card p {
   color: var(--dim);
   font-size: 16px;
@@ -1164,25 +1151,15 @@ em.thin, .thin {
 
 .foundation {
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(160px, 1fr) 2fr minmax(180px, 1fr);
-  gap: clamp(28px, 4vw, 56px);
+  display: flex;
+  flex-direction: column;
   padding: 44px 44px 44px 48px;
   border: 1px solid var(--hair);
   border-left: 2px solid var(--accent);
   background: var(--bg-2);
   margin-bottom: 28px;
 }
-.foundation-mark {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 600;
-  font-size: clamp(64px, 7vw, 104px);
-  color: var(--accent);
-  line-height: 1;
-  letter-spacing: -.02em;
-  align-self: center;
-}
-.foundation-body h4 {
+.foundation h4 {
   font-family: 'Oswald', sans-serif;
   font-weight: 600;
   font-size: clamp(22px, 1.8vw, 30px);
@@ -1190,28 +1167,12 @@ em.thin, .thin {
   text-transform: uppercase;
   margin-bottom: 12px;
 }
-.foundation-body p {
+.foundation p {
   color: var(--dim);
   font-size: 16px;
   line-height: 1.5;
 }
-.foundation-body p em { color: var(--text); }
-.foundation-meta {
-  border-left: 1px solid var(--hair-strong);
-  padding-left: 24px;
-  display: grid;
-  align-content: center;
-  gap: 14px;
-}
-.foundation-meta .fm-row {
-  display: flex; justify-content: space-between;
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-}
-.foundation-meta .fm-row .k { color: var(--dim-2); }
-.foundation-meta .fm-row .v { color: var(--text); font-weight: 500; }
+.foundation p em { color: var(--text); }
 
 .extensions {
   display: grid;
@@ -1228,6 +1189,17 @@ em.thin, .thin {
   transition: border-color .3s var(--ease), transform .3s var(--ease);
 }
 .ext-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.ext-tag {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 4px 10px;
+  margin-bottom: 18px;
+  background: var(--accent);
+  color: #0d0d0d;
+  font-size: 10px;
+  letter-spacing: .22em;
+  font-weight: 600;
+}
 .ext-card h4 {
   font-family: 'Oswald', sans-serif;
   font-weight: 600;
@@ -1291,9 +1263,16 @@ em.thin, .thin {
 .close-line.reveal { opacity: 1; transform: translateY(0); }
 .close-line.final {
   color: var(--text);
-  margin-top: 28px;
 }
 .close-line.final .accent { color: var(--accent); }
+
+.close-line.close-tagline {
+  font-size: clamp(16px, 1.8vw, 22px);
+  font-weight: 500;
+  letter-spacing: .04em;
+  color: var(--dim);
+  margin-top: 24px;
+}
 
 .close-typing-line { color: var(--dim); }
 .typewriter {
@@ -1499,7 +1478,6 @@ em.thin, .thin {
   .iq-header,
   .bundles-header,
   .iq-card,
-  .foundation,
   .extensions,
   .iq-grid {
     grid-template-columns: 1fr;
@@ -1510,7 +1488,6 @@ em.thin, .thin {
   .iq-card { grid-template-columns: 1fr; }
   .iq-specimen { aspect-ratio: 16 / 9; border-right: 0; border-bottom: 1px solid var(--hair); }
   .foundation { padding: 32px; }
-  .foundation-meta { border-left: 0; padding-left: 0; border-top: 1px solid var(--hair-strong); padding-top: 20px; }
   .seq-numeral { font-size: clamp(56px, 12vw, 96px); }
   .nav-links { display: none; }
   .footer-inner { grid-template-columns: repeat(3, auto); gap: 40px; }
@@ -1540,7 +1517,7 @@ em.thin, .thin {
 <nav class="nav" id="siteNav">
   <div class="nav-left">
     <a href="./homepage.html" class="nav-logo" aria-label="Greenfly">
-      <img src="./Greenfly (1).svg" alt="Greenfly">
+      <img src="./images/brand/Greenfly (1).svg" alt="Greenfly">
     </a>
   </div>
   <div class="nav-right">
@@ -1569,12 +1546,12 @@ em.thin, .thin {
       </div>
 
       <h1 class="display">
-        <span class="l1">High-Performance</span>
+        <span class="l1">The High-Performance</span>
         <span class="l2">Content Operations Platform.</span>
       </h1>
 
       <p class="hero-sub">
-        Capture, identify, tag, organize, distribute, measure — and increasingly <strong>automate</strong> — the short-form content that powers every live event, every channel, every roster. One operating system for leagues, teams, studios, and brands.
+        Capture, organize, and distribute short-form digital media — activating every athlete, entertainer, partner, and fan channel in real time. One platform for leagues, teams, studios, and brands.
       </p>
 
       <div class="hero-ctas">
@@ -1583,9 +1560,9 @@ em.thin, .thin {
     </div>
 
     <div class="hero-still" id="hero-still">
-      <img class="hero-image hero-step hero-step-1" src="./Platform-assets/hero/platform-hero-image-1.png" alt="">
-      <img class="hero-image hero-step hero-step-2" src="./Platform-assets/hero/platform-hero-image-2.png" alt="">
-      <img class="hero-image hero-step hero-step-3" src="./Platform-assets/hero/platform-hero-image-3.png" alt="Own Your Moment — content operations across every channel">
+      <img class="hero-image hero-step hero-step-1" src="./images/platform/hero/platform-hero-image-1.png" alt="">
+      <img class="hero-image hero-step hero-step-2" src="./images/platform/hero/platform-hero-image-2.png" alt="">
+      <img class="hero-image hero-step hero-step-3" src="./images/platform/hero/platform-hero-image-3.png" alt="Own Your Moment — content operations across every channel">
     </div>
   </div>
 
@@ -1602,23 +1579,23 @@ em.thin, .thin {
   <div class="arc-inner">
     <div class="arc-eyebrow">
       <span class="dot"></span>
-      <span class="mono">The Robots Arc</span>
+      <span class="mono">The Greenfly Arc</span>
     </div>
 
     <h2 class="arc-title">
       <span class="line">Humans <em>Create.</em></span>
       <span class="line line-wheel">
-        <span class="robots">Robots</span>
+        <span class="robots">Greenfly</span>
         <span class="arc-wheel" id="arcWheel" aria-hidden="true">
-          <span class="arc-wheel-sizer">Distribute.</span>
+          <span class="arc-wheel-sizer">Distributes.</span>
           <span class="arc-wheel-track" id="arcWheelTrack">
-            <span class="arc-verb" data-i="0">Collect.</span>
-            <span class="arc-verb" data-i="1">Identify.</span>
-            <span class="arc-verb" data-i="2">Tag.</span>
-            <span class="arc-verb" data-i="3">Organize.</span>
-            <span class="arc-verb" data-i="4">Distribute.</span>
-            <span class="arc-verb" data-i="5">Measure.</span>
-            <span class="arc-verb is-final" data-i="6">Automate.</span>
+            <span class="arc-verb" data-i="0">Collects.</span>
+            <span class="arc-verb" data-i="1">Identifies.</span>
+            <span class="arc-verb" data-i="2">Tags.</span>
+            <span class="arc-verb" data-i="3">Organizes.</span>
+            <span class="arc-verb" data-i="4">Distributes.</span>
+            <span class="arc-verb" data-i="5">Measures.</span>
+            <span class="arc-verb is-final" data-i="6">Automates.</span>
           </span>
         </span>
       </span>
@@ -1643,93 +1620,34 @@ em.thin, .thin {
       <h2 class="display"><span class="stack">Collect<span class="period">.</span></span></h2>
       <span class="seq-deck">Every source. Every format. One pipeline.</span>
       <span class="seq-rule"></span>
-      <p>Professional creators in the field — 4K uploads from the sideline in real time. Automated feeds from broadcast partners. DAM integrations. Fan submissions.</p>
-      <p>Content enters Greenfly the moment it's created — whether a photographer uploads from the sideline or an integration pulls from an existing system.</p>
-      <div class="deck-meta">
-        <span class="pill">Sources · <em>6+</em></span>
-        <span class="pill">Latency · <em>&lt; 30s</em></span>
-        <span class="pill">Format · <em>Stills / Clips</em></span>
-      </div>
+      <p>Professional creators in the field — 4K uploads from the sideline in real time. Automated feeds from broadcast partners. DAM integrations. Fan submissions. Content enters Greenfly the moment it's created — whether a photographer uploads from the sideline or an integration pulls from an existing system.</p>
     </div>
 
     <div class="seq-still">
       <div class="still">
         <div class="still-body">
 
-          <!-- Horizontal ingest flow illustration (sources → trunk → library) -->
-          <div class="collect-flow" id="collectFlow" aria-hidden="true">
+          <!-- Hub-and-spoke ingest illustration -->
+          <div class="ingest" id="ingest" aria-hidden="true">
+            <div class="ingest-stage" id="ingest-stage">
 
-            <!-- Row 1: 3 source icons -->
-            <div class="collect-flow__sources">
-              <div class="collect-flow__source">
-                <span class="collect-flow__icon" data-icon="camera">
-                  <svg viewBox="0 0 64 64" aria-hidden="true">
-                    <path d="M8 20 h10 l4 -6 h20 l4 6 h10 a2 2 0 0 1 2 2 v28 a2 2 0 0 1 -2 2 H8 a2 2 0 0 1 -2 -2 V22 a2 2 0 0 1 2 -2 z"/>
-                    <circle cx="32" cy="36" r="10"/>
-                    <circle cx="32" cy="36" r="4.5"/>
-                    <path d="M48 24 h6"/>
-                  </svg>
-                </span>
-                <span class="collect-flow__label">LCC</span>
-              </div>
-              <div class="collect-flow__source">
-                <span class="collect-flow__icon" data-icon="plug">
-                  <svg viewBox="0 0 64 64" aria-hidden="true">
-                    <!-- two prongs -->
-                    <path d="M24 6 V18"/>
-                    <path d="M40 6 V18"/>
-                    <!-- plug body -->
-                    <path d="M16 18 H48 V30 A10 10 0 0 1 38 40 H26 A10 10 0 0 1 16 30 Z"/>
-                    <!-- cable -->
-                    <path d="M32 40 V58"/>
-                  </svg>
-                </span>
-                <span class="collect-flow__label">Integrations</span>
-              </div>
-              <div class="collect-flow__source">
-                <span class="collect-flow__icon" data-icon="phone">
-                  <svg viewBox="0 0 64 64" aria-hidden="true">
-                    <rect x="20" y="6" width="24" height="52" rx="4"/>
-                    <path d="M28 12 H36"/>
-                    <circle cx="32" cy="52" r="1.5"/>
-                  </svg>
-                </span>
-                <span class="collect-flow__label">UGC</span>
-              </div>
-            </div>
-
-            <!-- Column 2: horizontal funnel — 3 source curves merge into one
-                 trunk that runs to the laptop's left edge -->
-            <div class="collect-flow__pipes">
-              <svg viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
-                <!-- 3 source paths from icon-row y-centers (50 / 150 / 250)
-                     curving to the trunk junction (~130, 150), then straight
-                     to the laptop edge (400, 150). -->
-                <path class="pipe p1" d="M0 50 C 70 50 70 150 130 150 L 400 150"/>
-                <path class="pipe p2" d="M0 150 L 400 150"/>
-                <path class="pipe p3" d="M0 250 C 70 250 70 150 130 150 L 400 150"/>
-                <!-- Pulses follow the same paths -->
-                <path class="pulse p1" d="M0 50 C 70 50 70 150 130 150 L 400 150"/>
-                <path class="pulse p2" d="M0 150 L 400 150"/>
-                <path class="pulse p3" d="M0 250 C 70 250 70 150 130 150 L 400 150"/>
+              <svg class="web" viewBox="0 0 1400 1120" aria-hidden="true">
+                <circle class="hub-soft" cx="700" cy="560" r="158"/>
+                <circle class="hub"      cx="700" cy="560" r="126"/>
+                <g id="ingest-spokes"></g>
+                <g id="ingest-lit-spokes"></g>
+                <g id="ingest-pulses"></g>
               </svg>
-            </div>
 
-            <!-- Column 3: devices — laptop bleeds off the right edge of the
-                 section, electric-green hexagon backdrop behind the cluster -->
-            <div class="collect-flow__devices">
-              <span class="collect-flow__hex" aria-hidden="true"></span>
-              <div class="collect-flow__laptop">
-                <div class="collect-flow__laptop-screen">
-                  <img src="Platform-assets/collect-illustration/device-laptop-library.png" alt="Greenfly Library on desktop" />
-                </div>
-                <div class="collect-flow__laptop-base" aria-hidden="true"></div>
+              <div class="hub-mark">
+                <div class="ring-bloom"></div>
+                <img src="images/platform/collect/gallery-combo.png?v=2" alt="" />
               </div>
-              <div class="collect-flow__phone">
-                <img src="Platform-assets/collect-illustration/device-phone-library.png" alt="Greenfly Library on mobile" />
-              </div>
-            </div>
 
+              <div id="ingest-nodes"></div>
+              <div id="ingest-labels"></div>
+
+            </div>
           </div>
 
         </div>
@@ -1749,27 +1667,19 @@ em.thin, .thin {
     <div class="seq-copy">
       <span class="seq-numeral" aria-hidden="true">02</span>
       <h2 class="display">
-        <span class="stack">Identify<span class="period">.</span></span>
-        <span class="stack">Tag<span class="period">.</span></span>
         <span class="stack">Organize<span class="period">.</span></span>
       </h2>
-      <span class="seq-deck">Every frame, named. Every name, searchable.</span>
+      <span class="seq-deck">Identify, tag, and organize content the way your team does. Faster.</span>
       <span class="seq-rule"></span>
-      <p>Computer vision recognizes the faces, jerseys, logos, scenes, and moments inside every frame the second it lands. A taxonomy of athlete, partner, sponsor, scene, and event metadata gets attached automatically — and the asset slots itself into the right collection.</p>
-      <p>What used to be a librarian's job is now a <strong>continuous service</strong>. The pool is no longer raw — it's <em class="thin">indexed</em>.</p>
-      <div class="deck-meta">
-        <span class="pill">Models · <em>4 IQs</em></span>
-        <span class="pill">Recall · <em>0.92</em></span>
-        <span class="pill">Latency · <em>&lt; 6s</em></span>
-      </div>
+      <p>Content enters the system. RosterIQ identifies players by face and jersey number. BrandIQ detects every sponsor logo. SceneIQ classifies the context. Routing rules deliver assets to the right gallery based on source, creator, or tags — configured logic that runs alongside the AI, not after it.</p>
     </div>
 
     <div class="seq-still">
-      <div class="still">
+      <div class="still ito-still">
         <div class="still-body">
-          <div class="still-slate">
-            <div class="slate-headline">Athlete portrait with bbox overlays<br>· name, number, scene, sponsor visible ·</div>
-          </div>
+          <img class="ito-illustration"
+               src="images/platform/identify-tag-organize/Brand.png"
+               alt="Identify, tag, and organize illustration" />
         </div>
       </div>
     </div>
@@ -1790,72 +1700,42 @@ em.thin, .thin {
         <span class="dot"></span>
         <span class="mono">The IQ Suite</span>
       </div>
-      <h3 class="display">Four models <em class="thin">working the shift</em>.</h3>
+      <h3 class="display">Two kinds of intelligence, <em class="thin">one system.</em></h3>
     </div>
-    <p>
-      Greenfly's vision and language models run inline against the ingest pool. Each is trained on sports and entertainment footage, tuned to operate at sideline latency, and packaged as a building block of the bundle.
-    </p>
   </div>
 
   <div class="iq-grid">
 
     <article class="iq-card">
       <div class="iq-specimen">
-        <span class="iq-bbox"></span>
+        <img class="iq-icon" src="images/platform/identify-tag-organize/rosteriq%20copy.png" alt="" />
       </div>
       <div class="iq-body">
-        <span class="iq-name">Face<span class="iq-suffix">IQ</span></span>
-        <p>Recognizes the rostered athletes, coaches, talent, and on-camera personalities for every league, team, and studio relationship Greenfly carries — and writes the name into the asset record automatically.</p>
-        <div class="iq-meta">
-          <div><span class="mc-k mono">Coverage</span><span class="mc-v">12k+ rostered</span></div>
-          <div><span class="mc-k mono">Threshold</span><span class="mc-v">0.92</span></div>
-          <div><span class="mc-k mono">Domain</span><span class="mc-v">Sport · Ent</span></div>
-        </div>
+        <span class="iq-name">Roster<span class="iq-suffix">IQ</span></span>
+        <span class="iq-kicker mono">Player Recognition</span>
+        <p>Identifies players by face and jersey number across image and video — the core AI differentiator. A player photographed from behind is still identifiable by number; a face in the frame is still identifiable when the jersey isn't visible. The identity layer that makes personalized Galleries possible.</p>
       </div>
     </article>
 
     <article class="iq-card">
       <div class="iq-specimen">
-        <span class="iq-bbox"></span>
+        <img class="iq-icon" src="images/platform/identify-tag-organize/brandiq%20copy.png" alt="" />
       </div>
       <div class="iq-body">
-        <span class="iq-name">Scape<span class="iq-suffix">IQ</span></span>
-        <p>Classifies the <em class="thin">what's happening</em> inside the frame — celebration, podium, tunnel walk, locker room, press conference, on-stage, red carpet. Routes content to the right downstream story without a human reading every caption.</p>
-        <div class="iq-meta">
-          <div><span class="mc-k mono">Scenes</span><span class="mc-v">220 classes</span></div>
-          <div><span class="mc-k mono">F1</span><span class="mc-v">0.89</span></div>
-          <div><span class="mc-k mono">Domain</span><span class="mc-v">Live · Event</span></div>
-        </div>
+        <span class="iq-name">Brand<span class="iq-suffix">IQ</span></span>
+        <span class="iq-kicker mono">Sponsor &amp; Logo Detection</span>
+        <p>The revenue layer. Detects sponsor logos across image and video, routing content directly to brand partners and documenting every appearance — connecting content distribution to sponsorship proof-of-performance.</p>
       </div>
     </article>
 
     <article class="iq-card">
       <div class="iq-specimen">
-        <span class="iq-bbox"></span>
+        <img class="iq-icon" src="images/platform/identify-tag-organize/sceneiq%20copy.png" alt="" />
       </div>
       <div class="iq-body">
-        <span class="iq-name">Mark<span class="iq-suffix">IQ</span></span>
-        <p>Detects partner and sponsor logos in-frame — courtside boards, jersey patches, on-screen graphics, backstage signage — so partnership delivery and sponsor reporting are automatic, not retroactive.</p>
-        <div class="iq-meta">
-          <div><span class="mc-k mono">Brands</span><span class="mc-v">1,400+</span></div>
-          <div><span class="mc-k mono">Precision</span><span class="mc-v">0.93</span></div>
-          <div><span class="mc-k mono">Domain</span><span class="mc-v">Sponsor</span></div>
-        </div>
-      </div>
-    </article>
-
-    <article class="iq-card">
-      <div class="iq-specimen">
-        <span class="iq-bbox"></span>
-      </div>
-      <div class="iq-body">
-        <span class="iq-name">Word<span class="iq-suffix">IQ</span></span>
-        <p>Drafts the caption, the alt-text, the hashtag stack, the social variants — in voice, in the right language, on the right channel template — the second the asset is identified and tagged.</p>
-        <div class="iq-meta">
-          <div><span class="mc-k mono">Languages</span><span class="mc-v">14</span></div>
-          <div><span class="mc-k mono">Tone</span><span class="mc-v">Brand-locked</span></div>
-          <div><span class="mc-k mono">Domain</span><span class="mc-v">Editorial</span></div>
-        </div>
+        <span class="iq-name">Scene<span class="iq-suffix">IQ</span></span>
+        <span class="iq-kicker mono">Scene Recognition</span>
+        <p>Distinguishes game action from practice drill, press conference from celebration, red carpet from meet-and-greet. Context-aware routing without manual sorting.</p>
       </div>
     </article>
 
@@ -1877,23 +1757,17 @@ em.thin, .thin {
     <div class="seq-copy">
       <span class="seq-numeral" aria-hidden="true">03</span>
       <h2 class="display"><span class="stack">Distribute<span class="period">.</span></span></h2>
-      <span class="seq-deck">From one ingest, to every channel that needs it.</span>
+      <span class="seq-deck">The right content. Every relevant stakeholder.</span>
       <span class="seq-rule"></span>
-      <p>Identified, tagged assets ship to the channels that should have them — athletes' phones, partner toolkits, retail studios, social schedulers, broadcast graphics, ticketing pages — formatted, captioned, and approved by the rules each channel was given.</p>
-      <p>One ingest. <strong>Hundreds of outbound channels</strong>. No re-uploads. No DM forwarding.</p>
-      <div class="deck-meta">
-        <span class="pill">Channels · <em>120+</em></span>
-        <span class="pill">Variants · <em>auto</em></span>
-        <span class="pill">Approvals · <em>policied</em></span>
-      </div>
+      <p>Approval workflows clear content for distribution. AI and routing rules work together to deliver every asset to the right person, the right gallery, the right channel — without manual intervention.</p>
     </div>
 
     <div class="seq-still">
-      <div class="still">
+      <div class="still distribute-still">
         <div class="still-body">
-          <div class="still-slate">
-            <div class="slate-headline">Phone in athlete's hand<br>· toolkit notification arriving live ·</div>
-          </div>
+          <img class="distribute-illustration"
+               src="images/platform/distribute/distribute.png"
+               alt="New asset notification arriving on athlete's phone" />
         </div>
       </div>
     </div>
@@ -1911,23 +1785,17 @@ em.thin, .thin {
     <div class="seq-copy">
       <span class="seq-numeral" aria-hidden="true">04</span>
       <h2 class="display"><span class="stack">Activate<span class="period">.</span></span></h2>
-      <span class="seq-deck">When the network <em class="thin">lights up</em>.</span>
+      <span class="seq-deck">Every relevant stakeholder. Simultaneous activation.</span>
       <span class="seq-rule"></span>
-      <p>The moment an asset clears the routing engine, the network lights up: athletes post, partners deploy, sponsors trigger, retail studios update — within minutes of the moment itself. The shift's first big play is on the feed before the second is in the can.</p>
-      <p>Activation isn't a separate workflow. It's what happens when the rest of the arc <strong>arrives upstream</strong> of the people who'd otherwise be waiting.</p>
-      <div class="deck-meta">
-        <span class="pill">Time-to-Post · <em>&lt; 3 min</em></span>
-        <span class="pill">Athletes Live · <em>real-time</em></span>
-        <span class="pill">Sponsor Drops · <em>auto</em></span>
-      </div>
+      <p>Athletes, talent, partners, sponsors, affiliates — every person and property in your orbit has an audience. Most are underserved. Greenfly connects each stakeholder to relevant content automatically — the right assets, the right channels, without manual intervention. <strong>The network you already have starts performing like one.</strong></p>
     </div>
 
     <div class="seq-still">
-      <div class="still">
+      <div class="still activate-still">
         <div class="still-body">
-          <div class="still-slate">
-            <div class="slate-headline">Stadium concourse at moment of post<br>· phones lighting up, same image, many hands ·</div>
-          </div>
+          <img class="activate-illustration"
+               src="images/platform/activate/activate.png"
+               alt="Athlete phone creating and sharing a post across social channels" />
         </div>
       </div>
     </div>
@@ -1945,48 +1813,17 @@ em.thin, .thin {
     <div class="seq-copy">
       <span class="seq-numeral" aria-hidden="true">05</span>
       <h2 class="display"><span class="stack">Measure<span class="period">.</span></span></h2>
-      <span class="seq-deck">The scoreboard is the system.</span>
+      <span class="seq-deck">Arm your team with the receipts they deserve.</span>
       <span class="seq-rule"></span>
-      <p>Every asset carries its lineage — what it was, who tagged it, where it shipped, what it did. Greenfly closes the loop with a continuous scoreboard: reach, time-to-post, partner delivery, sponsor exposure, athlete participation — read live, not assembled after.</p>
-      <p>The report isn't an export. It's the <strong>current state of the shift</strong>.</p>
-      <div class="deck-meta">
-        <span class="pill">Refresh · <em>live</em></span>
-        <span class="pill">Stakeholders · <em>roles-aware</em></span>
-        <span class="pill">Outputs · <em>API / Board</em></span>
-      </div>
+      <p>Track assets from genesis to external channel. Impressions. Engagements. Utilization trends. Measurable earned media value. Proof you can pull up and point to.</p>
     </div>
 
     <div class="seq-still">
-      <div class="still">
-        <div class="scoreboard">
-          <div class="score-cell">
-            <div>
-              <span class="sc-label mono">Time-to-post</span>
-              <div class="sc-num">02:48</div>
-            </div>
-            <span class="sc-delta mono">▼ 41% vs shift avg</span>
-          </div>
-          <div class="score-cell is-accent">
-            <div>
-              <span class="sc-label mono">Athletes live</span>
-              <div class="sc-num">42 / 53</div>
-            </div>
-            <span class="sc-delta mono">▲ 79% participation</span>
-          </div>
-          <div class="score-cell">
-            <div>
-              <span class="sc-label mono">Sponsor exposure</span>
-              <div class="sc-num">2.4M</div>
-            </div>
-            <span class="sc-delta mono">▲ within target band</span>
-          </div>
-          <div class="score-cell">
-            <div>
-              <span class="sc-label mono">Assets · shift</span>
-              <div class="sc-num">04,182</div>
-            </div>
-            <span class="sc-delta mono">▲ 12% vs matchday avg</span>
-          </div>
+      <div class="still measure-still">
+        <div class="still-body">
+          <img class="measure-illustration"
+               src="images/platform/measure/measure.png"
+               alt="Greenfly Measure — live scoreboard of shift performance" />
         </div>
       </div>
     </div>
@@ -2004,30 +1841,14 @@ em.thin, .thin {
     <div class="seq-copy">
       <span class="seq-numeral" aria-hidden="true">06</span>
       <h2 class="display"><span class="stack">Automate<span class="period">.</span></span></h2>
-      <span class="seq-deck">Humans create. Robots <em class="thin">automate</em>.</span>
+      <span class="seq-deck">Humans Create. Greenfly Automates.</span>
       <span class="seq-rule"></span>
-      <p>The arc closes. Identify feeds Tag. Tag feeds Organize. Organize feeds Distribute. Distribute drives Activate. Activate writes back into Measure. Measure tunes the next Identify pass — and the loop runs itself, under policy, without operators in the middle.</p>
-      <p>The shift you started by clocking in <strong>continues without you</strong>. You step in to <em class="thin">create</em>; everything between create and the audience is the platform.</p>
-      <div class="deck-meta">
-        <span class="pill">Loops · <em>closed</em></span>
-        <span class="pill">Verbs · <em>7</em></span>
-        <span class="pill">Operators · <em>0 in path</em></span>
-      </div>
+      <p>The entire arc — collect, identify, tag, organize, distribute, measure — runs without manual intervention. The people who make the content focus on making the content. Everything else is infrastructure.</p>
     </div>
 
     <div class="seq-still">
-      <div class="still">
-        <div class="loop-grid">
-          <div class="lv"><span class="lv-num">01</span>Collect</div>
-          <div class="lv"><span class="lv-num">02</span>Identify</div>
-          <div class="lv"><span class="lv-num">03</span>Tag</div>
-          <div class="lv"><span class="lv-num">04</span>Organize</div>
-          <div class="lv"><span class="lv-num">05</span>Distribute</div>
-          <div class="lv"><span class="lv-num">06</span>Measure</div>
-          <div class="lv is-final"><span class="lv-num">07</span>Automate</div>
-          <div class="loop-arrow"></div>
-        </div>
-      </div>
+      <div class="loop-rosette" id="automateRosette" role="img"
+           aria-label="Greenfly content lifecycle — six steps around a central platform"></div>
     </div>
 
   </div>
@@ -2047,47 +1868,38 @@ em.thin, .thin {
           <span class="dot"></span>
           <span class="mono">Bundles</span>
         </div>
-        <h3 class="display">One foundation. <em class="thin">Extend by need.</em></h3>
       </div>
-      <p>
-        Greenfly ships as a foundation — the seven-verb arc, the IQ suite, the routing engine — wrapped with extensions for the specific operating shape of your league, studio, or brand. You buy one base; you light up the bands you need.
-      </p>
     </div>
 
     <div class="foundation">
-      <span class="foundation-mark">G</span>
-      <div class="foundation-body">
-        <h4>The Greenfly Foundation</h4>
-        <p>The whole arc as one operating system: ingest, IQ, routing, distribution, scoreboard. Every bundle is built on this base — the policy engine, the role model, the audit trail, the API surface. The platform <em class="thin">underneath</em> the platform.</p>
-      </div>
-      <div class="foundation-meta">
-        <div class="fm-row"><span class="k">Verbs</span><span class="v">7 · closed loop</span></div>
-        <div class="fm-row"><span class="k">IQs</span><span class="v">4 inline</span></div>
-        <div class="fm-row"><span class="k">API</span><span class="v">REST · Webhooks</span></div>
-        <div class="fm-row"><span class="k">SLA</span><span class="v">99.95% live</span></div>
-      </div>
+      <span class="ext-tag mono">COR</span>
+      <h4>Core Platform</h4>
+      <p>Your content library, your team, your workflows — centralized. The foundation the entire platform runs on. Every bundle extends it. <em class="thin">This is the base layer.</em></p>
     </div>
 
     <div class="extensions">
       <article class="ext-card">
-        <h4>League Bundle</h4>
-        <p>Push league-wide assets into every member-team channel under one delivery policy. Roster sync, partner brackets, championship moments, broadcast-cleared cuts — all routed once and reported back, league-up.</p>
+        <span class="ext-tag mono">LEC</span>
+        <h4>Live Event Capture</h4>
+        <p>Content moves from the field to the feed in minutes, not hours. Professional creators capture, upload, and organize via mobile in real time — closing the gap between the moment something happens and the moment the audience sees it.</p>
       </article>
 
       <article class="ext-card">
-        <h4>Studio Bundle</h4>
-        <p>Built for the windowed release: press, talent reps, partner platforms, retail, and fan channels lit in the order the campaign was scheduled — with talent toolkits that never leak across windows.</p>
+        <span class="ext-tag mono">ATP</span>
+        <h4>Athlete, Talent &amp; Partner Activation</h4>
+        <p>A passive roster becomes an active content network. AI identifies and routes content to personalized Galleries automatically. Athletes, talent, and partners receive the content that features them and share it on their own channels — both directions, one system.</p>
       </article>
 
       <article class="ext-card">
-        <h4>Brand Bundle</h4>
-        <p>Sponsor logo detection, partner-asset delivery, and exposure reporting wired into the same arc — so the value the partnership produced is visible the same day the content shipped, not the next quarter.</p>
+        <span class="ext-tag mono">ENG</span>
+        <h4>Engage</h4>
+        <p>The fan-facing layer. Live event capture, athlete/talent/partner activation, and Greenfly Engage come together — fans submit UGC through branded microsites with rights cleared on submission, while professional creators distribute high-value assets through Event Galleries. AI Selfie Search lets fans find themselves across thousands of event photos. Each side gets content only the other can produce. Every surface is monetizable.</p>
       </article>
     </div>
 
     <div class="bundles-cta">
       <span class="bc-rule"></span>
-      <a href="./get-greenfly.html" class="btn btn-primary">Talk to Greenfly <span class="arrow">→</span></a>
+      <a href="./get-greenfly.html" class="btn btn-primary">Get Greenfly <span class="arrow">→</span></a>
       <span class="bc-rule"></span>
     </div>
   </div>
@@ -2100,14 +1912,11 @@ em.thin, .thin {
 <section class="close" id="demo">
   <div class="close-inner">
     <div class="close-stack" id="closeStack">
-      <div class="close-line close-typing-line">
-        The <span class="typewriter"><span class="typewriter-word" id="typeWord" aria-live="polite"></span><span class="typewriter-caret" aria-hidden="true"></span></span> that get it.
-      </div>
       <div class="close-line final">Get <span class="accent">Greenfly.</span></div>
+      <div class="close-line close-tagline">High-Performance Content Operations.</div>
     </div>
     <div class="close-ctas" id="closeCtas">
-      <a href="./get-greenfly.html" class="btn btn-primary">Book a demo <span class="arrow">→</span></a>
-      <a href="./get-greenfly.html" class="btn btn-ghost">Talk to sales <span class="arrow">→</span></a>
+      <a href="./get-greenfly.html" class="btn btn-primary">Get Greenfly <span class="arrow">→</span></a>
     </div>
   </div>
 </section>
@@ -2132,7 +1941,7 @@ em.thin, .thin {
 
   <div class="footer-stage">
     <div class="footer-wordmark">
-      <img src="./Greenfly (1).svg" alt="Greenfly">
+      <img src="./images/brand/Greenfly (1).svg" alt="Greenfly">
     </div>
   </div>
 
@@ -2542,35 +2351,224 @@ const qsa = (s, el = document) => Array.from(el.querySelectorAll(s));
 </script>
 
 <!-- =====================================================================
-     COLLECT · top-down ingest flow controller
-     Line-draw on enter, looping pulse along pipes. CSS does the work;
-     this script only toggles .is-drawn based on viewport intersection.
+     COLLECT · hub-and-spoke ingest illustration
      ===================================================================== -->
 <script>
 (function () {
-  const root = document.getElementById('collectFlow');
-  if (!root) return;
+  const root  = document.getElementById('ingest');
+  const stage = document.getElementById('ingest-stage');
+  if (!root || !stage) return;
 
+  // ── Layout config (1400 × 1120 stage, matching .still's 5:4) ───
+  const STAGE_W = 1400, STAGE_H = 1120;
+  const CX = STAGE_W / 2;
+  const CY = 700;              // hub center y — matches the hub-mark's top: 62.5% (= 700/1120)
+  const NODE_SIZE = 110;       // photo tile is 110 × 110
+  const NODE_HALF = NODE_SIZE / 2;
+  const NODE_R    = 480;       // distance from hub center to each upload-method node
+  const HUB_R     = 126;
+
+  // Four upload methods arranged in a wide arc across the top of the laptop
+  const NODES = [
+    { key:'human',        angle: -130, name:'HUMAN UPLOADS',   img:'images/platform/collect/Upload.svg' },
+    { key:'automated',    angle: -105, name:'AUTOMATED FEEDS', img:'images/platform/collect/camera.svg' },
+    { key:'integrations', angle:  -75, name:'INTEGRATIONS',    img:'images/platform/collect/laptop.svg' },
+    { key:'ugc',          angle:  -50, name:'UGC',             img:'images/platform/collect/phone.svg' },
+  ];
+
+  const rad = d => d * Math.PI / 180;
+
+  NODES.forEach(n => {
+    n.x = CX + Math.cos(rad(n.angle)) * NODE_R;
+    n.y = CY + Math.sin(rad(n.angle)) * NODE_R;
+    const dx = CX - n.x, dy = CY - n.y;
+    const dist = Math.hypot(dx, dy);
+    const ux = dx / dist, uy = dy / dist;
+    n.sx = n.x + ux * (NODE_HALF + 8);
+    n.sy = n.y + uy * (NODE_HALF + 8);
+    n.ex = CX - ux * (HUB_R + 4);
+    n.ey = CY - uy * (HUB_R + 4);
+  });
+
+  // ── Build DOM/SVG ─────────────────────────────────────────────
+  const NS = 'http://www.w3.org/2000/svg';
+  const spokesG     = document.getElementById('ingest-spokes');
+  const litSpokesG  = document.getElementById('ingest-lit-spokes');
+  const pulsesG     = document.getElementById('ingest-pulses');
+  const nodesEl     = document.getElementById('ingest-nodes');
+  const labelsEl    = document.getElementById('ingest-labels');
+
+  NODES.forEach((n, i) => {
+    const sp = document.createElementNS(NS, 'line');
+    sp.setAttribute('class', 'spoke');
+    sp.setAttribute('x1', n.sx); sp.setAttribute('y1', n.sy);
+    sp.setAttribute('x2', n.ex); sp.setAttribute('y2', n.ey);
+    spokesG.appendChild(sp);
+
+    const lit = document.createElementNS(NS, 'line');
+    lit.setAttribute('class', 'spoke lit');
+    lit.id = 'ingest-lit-node-' + i;
+    lit.setAttribute('x1', n.sx); lit.setAttribute('y1', n.sy);
+    lit.setAttribute('x2', n.ex); lit.setAttribute('y2', n.ey);
+    litSpokesG.appendChild(lit);
+
+    const pulse = document.createElementNS(NS, 'circle');
+    pulse.setAttribute('class', 'pulse');
+    pulse.setAttribute('r', '4');
+    pulse.id = 'ingest-pulse-node-' + i;
+    pulse.setAttribute('cx', n.sx);
+    pulse.setAttribute('cy', n.sy);
+    pulsesG.appendChild(pulse);
+
+    const node = document.createElement('div');
+    node.className = 'node';
+    node.id = 'ingest-node-' + i;
+    node.style.left = n.x + 'px';
+    node.style.top  = n.y + 'px';
+    node.innerHTML = `
+      <div class="skeleton"></div>
+      <div class="media"><img src="${n.img}" alt=""/></div>
+      <div class="flash"></div>
+    `;
+    nodesEl.appendChild(node);
+
+    // Label sits directly above each node — all nodes live in the top arc
+    const lab = document.createElement('div');
+    lab.className = 'label';
+    lab.id = 'ingest-label-' + i;
+    lab.style.left = n.x + 'px';
+    lab.style.top  = (n.y - (NODE_HALF + 14)) + 'px';
+    lab.style.transform = 'translate(-50%, -100%)';
+    lab.textContent = n.name;
+    labelsEl.appendChild(lab);
+  });
+
+  // ── Animation timeline ────────────────────────────────────────
+  let timers = [];
+  const setT = (fn, ms) => timers.push(setTimeout(fn, ms));
+  const clearAll = () => { timers.forEach(clearTimeout); timers = []; };
+
+  function travelPulse(pulseEl, sx, sy, ex, ey, duration, onArrive) {
+    const start = performance.now();
+    function step(now) {
+      const k = Math.min(1, (now - start) / duration);
+      const e = 1 - Math.pow(1 - k, 2);
+      pulseEl.setAttribute('cx', sx + (ex - sx) * e);
+      pulseEl.setAttribute('cy', sy + (ey - sy) * e);
+      pulseEl.style.opacity = k < 0.1 ? k * 10 : (k > 0.93 ? (1 - k) * 14 : 1);
+      if (k < 1) requestAnimationFrame(step);
+      else onArrive && onArrive();
+    }
+    requestAnimationFrame(step);
+  }
+
+  function bloomHub() {
+    root.classList.add('bloomed');
+    setT(() => root.classList.remove('bloomed'), 900);
+  }
+
+  function firePhoto(i) {
+    const n = NODES[i];
+    const node  = document.getElementById('ingest-node-' + i);
+    const label = document.getElementById('ingest-label-' + i);
+    const lit   = document.getElementById('ingest-lit-node-' + i);
+    const pulse = document.getElementById('ingest-pulse-node-' + i);
+    const PULSE_MS = 720;
+
+    node.classList.add('arrived', 'firing');
+    setT(() => node.classList.remove('firing'), 460);
+
+    lit.animate(
+      [{ opacity: 0 }, { opacity: 1, offset: 0.4 }, { opacity: 0.55 }],
+      { duration: PULSE_MS, fill: 'forwards', easing: 'ease-out' }
+    );
+
+    travelPulse(pulse, n.sx, n.sy, n.ex, n.ey, PULSE_MS, bloomHub);
+    label.classList.add('lit');
+  }
+
+  function reset() {
+    clearAll();
+    NODES.forEach((_, i) => {
+      document.getElementById('ingest-node-' + i).classList.remove('arrived', 'firing');
+      document.getElementById('ingest-label-' + i).classList.remove('lit');
+      const lit = document.getElementById('ingest-lit-node-' + i);
+      lit.getAnimations().forEach(a => a.cancel());
+      lit.style.opacity = 0;
+      const p = document.getElementById('ingest-pulse-node-' + i);
+      p.style.opacity = 0;
+      p.setAttribute('cx', NODES[i].sx);
+      p.setAttribute('cy', NODES[i].sy);
+    });
+  }
+
+  // Left-to-right array loop through the four upload methods
+  const PHOTO_ORDER = [0, 1, 2, 3];
+  const PHOTO_STAGGER = 320;
+  const CYCLE = 4200;
+  let running = false;
+
+  function cycle() {
+    if (!running) return;
+    reset();
+
+    PHOTO_ORDER.forEach((i, k) => {
+      setT(() => firePhoto(i), 400 + k * PHOTO_STAGGER);
+    });
+
+    setT(cycle, CYCLE);
+  }
+
+  function start() {
+    if (running) return;
+    running = true;
+    cycle();
+  }
+  function stop() {
+    running = false;
+    clearAll();
+  }
+
+  // ── Responsive scaling (to container, not viewport) ───────────
+  function fit() {
+    const pw = root.clientWidth;
+    const ph = root.clientHeight;
+    if (!pw || !ph) return;
+    const s = Math.min(pw / STAGE_W, ph / STAGE_H);
+    stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+  }
+  fit();
+  window.addEventListener('resize', fit);
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(fit).observe(root);
+  }
+
+  // ── Run only when visible, to save battery / respect reduce-motion ──
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReduced) {
-    root.classList.add('is-drawn');
+    // Show final arrived state without animation
+    NODES.forEach((_, i) => {
+      document.getElementById('ingest-node-' + i).classList.add('arrived');
+      document.getElementById('ingest-label-' + i).classList.add('lit');
+    });
     return;
   }
 
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) root.classList.add('is-drawn');
-        else                  root.classList.remove('is-drawn');
-      });
+      entries.forEach(e => e.isIntersecting ? start() : stop());
     }, { threshold: 0.15 });
     io.observe(root);
   } else {
-    root.classList.add('is-drawn');
+    start();
   }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else start();
+  });
 })();
 </script>
-
 
 <!-- =====================================================================
      HERO · stepped reveal of the platform image stack (1 → 2 → 3)
@@ -2618,6 +2616,122 @@ const qsa = (s, el = document) => Array.from(el.querySelectorAll(s));
       }, t);
     }
   });
+})();
+
+/* AUTOMATE · honeycomb rosette ------------------------------------- */
+(() => {
+  const root = document.getElementById('automateRosette');
+  if (!root) return;
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const r  = 140;
+  const cx = 500, cy = 500;
+  const h  = r * Math.sqrt(3) / 2;          // 121.2436…
+  const D  = r * Math.sqrt(3);              // 242.487…
+
+  // flat-top hex: vertices at 0°, 60°, 120°, 180°, 240°, 300° from center.
+  // Returns an array of [x, y] pairs (clockwise from the right vertex in SVG y-down).
+  const flatTopHex = (cx, cy, r) => {
+    const h = r * Math.sqrt(3) / 2;
+    return [
+      [cx + r,     cy        ],   // V0  right
+      [cx + r / 2, cy + h    ],   // V1  lower-right
+      [cx - r / 2, cy + h    ],   // V2  lower-left
+      [cx - r,     cy        ],   // V3  left
+      [cx - r / 2, cy - h    ],   // V4  upper-left
+      [cx + r / 2, cy - h    ],   // V5  upper-right
+    ];
+  };
+  const pointsStr = pts => pts.map(p => p.join(',')).join(' ');
+
+  // surrounding hex centers, clockwise from N
+  // angles measured from +x axis with SVG-positive (clockwise) = downward
+  const dirs   = ['N', 'NE', 'SE', 'S', 'SW', 'NW'];
+  const angles = [-90, -30, 30, 90, 150, 210];
+  const centers = angles.map(deg => {
+    const rad = deg * Math.PI / 180;
+    return { x: cx + D * Math.cos(rad), y: cy + D * Math.sin(rad) };
+  });
+
+  const centerVerts = flatTopHex(cx, cy, r);
+
+  /* ----- data ---------------------------------------------------------- */
+  const steps = [
+    { number: '1', verbs: ['Collect'] },
+    { number: '2', verbs: ['Organize'] },
+    { number: '3', verbs: ['Distribute'] },
+    { number: '4', verbs: ['Activate'] },
+    { number: '5', verbs: ['Measure'] },
+    { number: '6', verbs: ['Automate'] },
+  ];
+
+  // Greenfly horizontal mark (fly + wordmark). Rendered via CSS mask so the
+  // color comes from .rosette-mark's background-color (olive), not the file.
+  const centerLogo = `<span class="rosette-mark" role="img" aria-label="Greenfly"></span>`;
+
+  /* ----- build SVG ----------------------------------------------------- */
+  let svg = `<svg class="rosette-svg" viewBox="0 0 1000 1000" aria-hidden="true">`;
+
+  // center hex polygon
+  svg += `<polygon class="rosette-hex rosette-hex--center" points="${pointsStr(centerVerts)}"/>`;
+
+  // six surrounding hex polygons
+  centers.forEach((c, i) => {
+    const pts = pointsStr(flatTopHex(c.x, c.y, r));
+    svg += `<polygon class="rosette-hex rosette-hex--step" data-i="${i}" points="${pts}"/>`;
+  });
+
+  // signal — three olive dots travelling around the center hex perimeter
+  const centerPath = `M ${centerVerts[0][0]} ${centerVerts[0][1]}
+                      L ${centerVerts[1][0]} ${centerVerts[1][1]}
+                      L ${centerVerts[2][0]} ${centerVerts[2][1]}
+                      L ${centerVerts[3][0]} ${centerVerts[3][1]}
+                      L ${centerVerts[4][0]} ${centerVerts[4][1]}
+                      L ${centerVerts[5][0]} ${centerVerts[5][1]} Z`;
+  svg += `
+    <g class="rosette-signal rosette-signal--motion">
+      <circle class="rosette-signal-dot" r="7" fill="#336A29">
+        <animateMotion dur="18s" begin="0s" repeatCount="indefinite" rotate="auto"
+                       path="${centerPath}"/>
+      </circle>
+      <circle class="rosette-signal-dot" r="5.5" fill="#659B3F">
+        <animateMotion dur="18s" begin="-6s" repeatCount="indefinite" rotate="auto"
+                       path="${centerPath}"/>
+      </circle>
+      <circle class="rosette-signal-dot" r="4" fill="#C1D95C">
+        <animateMotion dur="18s" begin="-12s" repeatCount="indefinite" rotate="auto"
+                       path="${centerPath}"/>
+      </circle>
+    </g>
+    <g class="rosette-signal rosette-signal--static" aria-hidden="true">
+      <circle r="7"   fill="#336A29"
+              cx="${centerVerts[0][0]}" cy="${centerVerts[0][1]}"/>
+      <circle r="5.5" fill="#659B3F"
+              cx="${centerVerts[2][0]}" cy="${centerVerts[2][1]}"/>
+      <circle r="4"   fill="#C1D95C"
+              cx="${centerVerts[4][0]}" cy="${centerVerts[4][1]}"/>
+    </g>`;
+
+  svg += `</svg>`;
+
+  /* ----- build HTML overlay (static labels — no interaction) ---------- */
+  let overlay = `<div class="rosette-overlay">`;
+  overlay += `<div class="rosette-center-content" aria-hidden="true">${centerLogo}</div>`;
+  steps.forEach((step, i) => {
+    const c = centers[i];
+    const left = (c.x / 10).toFixed(3);   // % of 1000
+    const top  = (c.y / 10).toFixed(3);
+    const verbHtml = step.verbs.map(v => `<span class="rosette-verb">${v}</span>`).join('');
+    overlay += `
+      <div class="rosette-step" data-i="${i}"
+           style="left:${left}%;top:${top}%">
+        <span class="rosette-num">${step.number}</span>
+        ${verbHtml}
+      </div>`;
+  });
+  overlay += `</div>`;
+
+  root.innerHTML = svg + overlay;
 })();
 </script>
 

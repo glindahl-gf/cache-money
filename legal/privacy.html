@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Greenfly · Privacy Policy</title>
+<meta name="description" content="How Greenfly collects, uses, and shares your information — and the rights and choices available to you." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #050607;
+    --bg-2: #0b0d0f;
+    --bg-3: #101214;
+    --accent: #B6F500;
+    --accent-dim: #8bc000;
+    --text: #f4f5f6;
+    --dim: rgba(255,255,255,.64);
+    --dim-2: rgba(255,255,255,.40);
+    --hair: rgba(255,255,255,.10);
+    --hair-strong: rgba(255,255,255,.20);
+    --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --ease: cubic-bezier(.22,.61,.36,1);
+    --ease-out: cubic-bezier(.16,1,.3,1);
+    --max: 1440px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Barlow Condensed', system-ui, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body { overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+
+  .mono {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase;
+  }
+
+  /* --- section-light theme inversion --- */
+  .section-light {
+    --bg: #EEEEE8; --bg-2: #E6E6DE; --bg-3: #D9D9CE;
+    --text: #0F0F0F;
+    --dim: rgba(15,15,15,.62); --dim-2: rgba(15,15,15,.42);
+    --hair: rgba(15,15,15,.14); --hair-strong: rgba(15,15,15,.26);
+    --accent: #79982D; --accent-dim: #62801F;
+    background: var(--bg); color: var(--text);
+  }
+  .section-light .btn-primary { color: #fff; }
+  .section-light .btn-primary:hover { background: var(--accent-dim); }
+  .section-light .btn-ghost { border-color: rgba(15,15,15,.24); }
+  .section-light .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* --- NAV (shared) --- */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    background-color: transparent;
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    border-bottom: 1px solid transparent;
+    transform: translateY(0);
+    transition: transform .38s var(--ease), background-color .35s var(--ease),
+                backdrop-filter .35s var(--ease), -webkit-backdrop-filter .35s var(--ease),
+                border-color .35s var(--ease);
+    will-change: transform;
+  }
+  .nav.nav-hidden { transform: translateY(-110%); }
+  .nav.is-scrolled {
+    background-color: rgba(10,11,13,.62);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-bottom-color: rgba(255,255,255,.06);
+  }
+  .nav.nav-on-light .nav-link    { color: rgba(15,15,15,.72); }
+  .nav.nav-on-light .nav-utility { color: rgba(15,15,15,.55); border-left-color: rgba(15,15,15,.18); }
+  .nav.nav-on-light .nav-cta     { color: #0F0F0F; border-color: rgba(15,15,15,.28); }
+  .nav.nav-on-light .nav-link:hover,
+  .nav.nav-on-light .nav-utility:hover { color: #0F0F0F; }
+  .nav.nav-on-light .nav-cta:hover     { background: var(--accent); color: #000; border-color: var(--accent); }
+  .nav.nav-on-light .nav-logo {
+    background-image: url('../images/brand/Greenfly-fieldgreen.svg');
+    background-size: contain; background-repeat: no-repeat; background-position: left center;
+  }
+  .nav.nav-on-light .nav-logo img { visibility: hidden; }
+  .nav.nav-on-light.is-scrolled {
+    background-color: rgba(238,238,232,.62);
+    border-bottom-color: rgba(15,15,15,.10);
+  }
+  .nav-left, .nav-right { display: flex; align-items: center; gap: 28px; }
+  .nav-right { gap: 24px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-logo { display: inline-flex; align-items: center; line-height: 1; }
+  .nav-logo img { height: 22px; width: auto; display: block; }
+  .nav-link { font-size: 13px; color: var(--dim); transition: color .2s var(--ease); }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--text); }
+  .nav-utility {
+    display: inline-flex; align-items: center;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--dim-2);
+    padding-left: 22px; border-left: 1px solid var(--hair);
+    transition: color .2s var(--ease);
+  }
+  .nav-utility:hover { color: var(--text); }
+  .nav-cta {
+    padding: 9px 16px; border: 1px solid var(--hair-strong);
+    font-size: 13px; font-weight: 500;
+    transition: background .2s var(--ease), color .2s var(--ease);
+  }
+  .nav-cta:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+  .nav-link-wrap { position: relative; }
+  .nav-link-wrap .nav-link { display: inline-flex; align-items: center; gap: 7px; }
+  .nav-link-wrap .nav-link::after {
+    content: ""; display: inline-block;
+    width: 5px; height: 5px;
+    border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
+    transform: rotate(45deg) translateY(-1px);
+    opacity: .55;
+    transition: transform .25s var(--ease), opacity .2s var(--ease);
+  }
+  .nav-link-wrap:hover .nav-link::after,
+  .nav-link-wrap:focus-within .nav-link::after {
+    opacity: 1; transform: rotate(225deg) translateY(1px);
+  }
+  .nav-dropdown {
+    position: absolute; top: calc(100% + 14px); left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    min-width: 200px;
+    background: #0b0d0f;
+    border: 1px solid rgba(255,255,255,.10);
+    padding: 8px 0;
+    opacity: 0; visibility: hidden;
+    transition: opacity .18s var(--ease), transform .18s var(--ease), visibility 0s .18s;
+    z-index: 110;
+  }
+  .nav-dropdown::before { content: ""; position: absolute; top: -14px; left: 0; right: 0; height: 14px; }
+  .nav-link-wrap:hover .nav-dropdown,
+  .nav-link-wrap:focus-within .nav-dropdown {
+    opacity: 1; visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    transition: opacity .18s var(--ease), transform .18s var(--ease);
+  }
+  .nav-dd-item {
+    display: block; padding: 9px 22px; font-size: 13px;
+    color: rgba(255,255,255,.64); white-space: nowrap;
+    transition: color .15s var(--ease);
+  }
+  .nav-dd-item:hover { color: #B6F500; }
+
+  /* --- HERO (light) --- */
+  .hero {
+    position: relative;
+    min-height: 56vh;
+    padding: 22vh 5vw 10vh;
+    border-bottom: 1px solid var(--hair);
+    overflow: hidden; isolation: isolate;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(90deg, rgba(15,15,15,.05) 0 1px, transparent 1px 88px);
+    mask-image: linear-gradient(to bottom, transparent 0, black 22%, black 75%, transparent 100%);
+    pointer-events: none; z-index: 0;
+  }
+  .hero::after {
+    content: ""; position: absolute;
+    left: 65%; top: 50%;
+    width: 900px; height: 900px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(121,152,45,.12), rgba(121,152,45,0) 60%);
+    filter: blur(40px);
+    pointer-events: none; z-index: 0;
+  }
+  .hero-inner {
+    position: relative; z-index: 2;
+    max-width: var(--max); margin: 0 auto;
+    display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center;
+    color: var(--accent); gap: 14px;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase;
+  }
+  .hero-eyebrow .dot {
+    width: 7px; height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(121,152,45,.18);
+    animation: pulse-olive 2.6s ease-in-out infinite;
+  }
+  @keyframes pulse-olive {
+    0%, 100% { opacity: 1;   box-shadow: 0 0 0 0 rgba(121,152,45,.5); }
+    50%      { opacity: .55; box-shadow: 0 0 0 6px rgba(121,152,45,0); }
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: -0.012em;
+    line-height: .96;
+    font-size: clamp(48px, 7vw, 120px);
+    max-width: 18ch;
+  }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-deck {
+    max-width: 62ch;
+    color: var(--dim);
+    font-size: clamp(17px, 1.4vw, 20px);
+    line-height: 1.5;
+    margin-top: 6px;
+  }
+  .hero-deck strong { color: var(--text); font-weight: 500; }
+  .hero-meta {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(140px, 1fr));
+    gap: 36px;
+    border-top: 1px solid var(--hair);
+    padding-top: 24px;
+    max-width: 980px;
+  }
+  .hero-meta dt {
+    color: var(--dim-2); margin-bottom: 8px;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase;
+  }
+  .hero-meta dd {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500; font-size: 20px;
+    letter-spacing: -0.005em;
+  }
+  .hero-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--dim);
+    transition: color .2s var(--ease);
+    margin-bottom: -8px;
+  }
+  .hero-back:hover { color: var(--accent); }
+  .hero-back .arrow { transition: transform .2s var(--ease); display: inline-block; }
+  .hero-back:hover .arrow { transform: translateX(-3px); }
+
+  /* --- POLICY BODY (light, sticky TOC + prose) --- */
+  .policy-body {
+    padding: 10vh 5vw 16vh;
+    border-bottom: 1px solid var(--hair);
+    position: relative;
+  }
+  .policy-body-inner {
+    max-width: var(--max); margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(220px, 28%) 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .policy-toc {
+    position: sticky;
+    top: 14vh;
+    border-top: 1px solid var(--hair-strong);
+    padding-top: 22px;
+    max-height: calc(100vh - 18vh);
+    overflow-y: auto;
+  }
+  .policy-toc-label {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase;
+    color: var(--dim-2);
+    margin-bottom: 16px;
+  }
+  .policy-toc ol {
+    list-style: none;
+    display: flex; flex-direction: column;
+    counter-reset: toc;
+  }
+  .policy-toc li {
+    counter-increment: toc;
+    border-bottom: 1px solid var(--hair);
+  }
+  .policy-toc a {
+    display: flex; gap: 10px;
+    padding: 12px 0 12px 14px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    color: var(--dim);
+    border-left: 2px solid transparent;
+    transition: color .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+  }
+  .policy-toc a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: .14em;
+    color: var(--dim-2);
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .policy-toc a:hover { color: var(--text); background: rgba(15,15,15,.03); }
+  .policy-toc a.is-active {
+    color: var(--text);
+    border-left-color: var(--accent);
+    font-weight: 500;
+  }
+  .policy-toc a.is-active::before { color: var(--accent); }
+
+  .policy-prose { max-width: 64ch; }
+  .policy-prose > .policy-intro {
+    color: var(--dim);
+    font-size: clamp(17px, 1.3vw, 19px);
+    line-height: 1.55;
+    margin-bottom: 56px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .policy-prose > .policy-intro p + p { margin-top: 16px; }
+  .policy-prose h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: clamp(22px, 2.2vw, 30px);
+    letter-spacing: -0.005em;
+    line-height: 1.05;
+    margin: 56px 0 18px;
+    scroll-margin-top: 14vh;
+    color: var(--text);
+  }
+  .policy-prose h2:first-of-type { margin-top: 0; }
+  .policy-prose h2 .num {
+    display: inline-block;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; color: var(--accent);
+    margin-right: 14px; vertical-align: middle;
+    padding-right: 14px;
+    border-right: 1px solid var(--hair-strong);
+  }
+  .policy-prose h3 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 17px;
+    letter-spacing: 0;
+    margin: 36px 0 14px;
+    color: var(--text);
+  }
+  .policy-prose p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--dim);
+    margin-bottom: 18px;
+  }
+  .policy-prose ul, .policy-prose ol {
+    margin: 0 0 22px 18px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--dim);
+  }
+  .policy-prose li { margin-bottom: 8px; }
+  .policy-prose li::marker { color: var(--accent); }
+  .policy-prose a {
+    color: var(--accent);
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 1px;
+  }
+  .policy-prose strong { color: var(--text); font-weight: 500; }
+  .policy-prose .addr {
+    display: block;
+    font-family: var(--mono); font-size: 13px;
+    line-height: 1.7; letter-spacing: .02em;
+    color: var(--text);
+    padding: 18px 22px;
+    border: 1px solid var(--hair);
+    background: var(--bg-2);
+    margin: 22px 0;
+    white-space: pre-line;
+  }
+
+  /* --- CTA STRIP (dark) --- */
+  .cta-strip {
+    padding: 14vh 5vw;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-strip::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(900px 500px at 50% 50%, rgba(182,245,0,.10), transparent 60%);
+    pointer-events: none;
+  }
+  .cta-inner {
+    position: relative; z-index: 1;
+    max-width: var(--max); margin: 0 auto;
+  }
+  .cta-strip .mono {
+    color: var(--accent);
+    display: inline-block;
+    margin-bottom: 22px;
+  }
+  .cta-strip h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: -0.012em;
+    line-height: .96;
+    font-size: clamp(40px, 6vw, 96px);
+    max-width: 18ch;
+    margin: 0 auto 34px;
+  }
+  .cta-strip h2 em { font-style: normal; color: var(--accent); }
+  .cta-actions {
+    display: inline-flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px; font-weight: 500; letter-spacing: .01em;
+    text-transform: uppercase;
+    transition: transform .2s var(--ease), background .2s var(--ease),
+                color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { transform: translateY(-1px); background: #c8ff1a; }
+  .btn-ghost { border: 1px solid var(--hair-strong); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn .arrow { transition: transform .2s var(--ease); }
+  .btn:hover .arrow { transform: translateX(3px); }
+
+  /* --- FOOTER (shared) --- */
+  .footer {
+    position: relative; overflow: hidden;
+    border-top: 1px solid var(--hair);
+    padding: 56px 5vw 44px;
+  }
+  .footer-stage { max-width: var(--max); margin: 0 auto; text-align: center; padding: 24px 0 8px; }
+  .footer-wordmark { display: flex; justify-content: center; padding: 8px 0 24px; }
+  .footer-wordmark img {
+    width: 46%; max-width: 420px;
+    filter: brightness(0) invert(1);
+  }
+  .footer-inner {
+    max-width: var(--max); margin: 0 auto;
+    padding: 48px 0 44px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(140px, auto));
+    justify-content: center; gap: 80px;
+    border-top: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+  }
+  .footer h5 {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 22px;
+    font-weight: 500;
+  }
+  .footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer li a {
+    color: var(--dim); font-size: 14px;
+    transition: color .2s var(--ease);
+    position: relative; display: inline-block;
+  }
+  .footer li a::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 100%; bottom: -3px;
+    height: 1px; background: var(--accent);
+    transition: right .35s var(--ease-out);
+  }
+  .footer li a:hover { color: var(--text); }
+  .footer li a:hover::after { right: 0; }
+  .footer-legal {
+    max-width: var(--max);
+    margin: 28px auto 0;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 24px;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--dim);
+  }
+  .footer-legal a {
+    color: var(--dim);
+    transition: color .2s var(--ease);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .footer-legal a:hover { color: var(--accent); }
+  .footer-legal a .arrow { transition: transform .2s var(--ease); }
+  .footer-legal a:hover .arrow { transform: translateX(3px); }
+  .footer-status { display: inline-flex; align-items: center; gap: 10px; }
+  .footer-status b { color: var(--text); font-weight: 500; }
+  .footer-status-dot {
+    width: 7px; height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1;  box-shadow: 0 0 0 0 rgba(182,245,0,.5); }
+    50%      { opacity: .55; box-shadow: 0 0 0 6px rgba(182,245,0,0); }
+  }
+
+  /* --- RESPONSIVE --- */
+  @media (max-width: 900px) {
+    .policy-body-inner { grid-template-columns: 1fr; gap: 32px; }
+    .policy-toc {
+      position: static; max-height: none;
+      padding-top: 16px;
+    }
+    .policy-toc ol {
+      max-height: 220px;
+      overflow-y: auto;
+      border: 1px solid var(--hair);
+    }
+  }
+  @media (max-width: 720px) {
+    .nav-link, .nav-utility { display: none; }
+    .nav-utility { border-left: 0; padding-left: 0; }
+    .hero-meta { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .footer-inner { grid-template-columns: 1fr; gap: 40px; }
+    .footer-legal { flex-direction: column; gap: 10px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav class="nav" id="siteNav">
+  <div class="nav-left">
+    <a href="../homepage.html" class="nav-logo" aria-label="Greenfly">
+      <img src="../images/brand/Greenfly (1).svg" alt="Greenfly">
+    </a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="../platform.html" class="nav-link">Platform</a>
+      <div class="nav-link-wrap">
+        <a href="../solutions.html" class="nav-link">Solutions</a>
+        <div class="nav-dropdown">
+          <a href="../solutions-sports.html" class="nav-dd-item">Sports</a>
+          <a href="../solutions-entertainment.html" class="nav-dd-item">Entertainment</a>
+          <a href="../solutions-brands.html" class="nav-dd-item">Brands</a>
+          <a href="../solutions-live-events.html" class="nav-dd-item">Live Events</a>
+        </div>
+      </div>
+      <a href="../homepage.html#proof" class="nav-link">Stories</a>
+      <a href="../company.html" class="nav-link">Company</a>
+    </div>
+    <a href="#login" class="nav-utility">Login</a>
+    <a href="../get-greenfly.html" class="nav-cta">Get Greenfly</a>
+  </div>
+</nav>
+
+<!-- ========== HERO (light) ========== -->
+<section class="hero section-light">
+  <div class="hero-inner">
+    <a href="../legal.html" class="hero-back"><span class="arrow">←</span> All policies</a>
+    <span class="hero-eyebrow">
+      <span class="dot"></span>Legal · Document 02 · Privacy
+    </span>
+    <h1>Privacy <em>policy.</em></h1>
+    <p class="hero-deck">
+      How Greenfly, Inc. collects, uses, and shares information about you when you use our
+      services — and the rights and choices available to you. <strong>By using the Services,
+      you agree to this Privacy Policy.</strong>
+    </p>
+    <dl class="hero-meta">
+      <div><dt>Last updated</dt><dd>Jul 21, 2022</dd></div>
+      <div><dt>Effective</dt><dd>On posting</dd></div>
+      <div><dt>Jurisdiction</dt><dd>U.S. + EEA</dd></div>
+      <div><dt>Contact</dt><dd>privacy@<wbr>greenfly.com</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ========== POLICY BODY (light) ========== -->
+<section class="policy-body section-light">
+  <div class="policy-body-inner">
+    <aside class="policy-toc" aria-label="Table of contents">
+      <div class="policy-toc-label">On this page</div>
+      <ol>
+        <li><a href="#information-we-collect">Information we collect</a></li>
+        <li><a href="#location">Real-time location</a></li>
+        <li><a href="#principal-access">Principal access</a></li>
+        <li><a href="#sharing">How information is shared</a></li>
+        <li><a href="#opt-out">Opt-out and other rights</a></li>
+        <li><a href="#links">Links to other sites</a></li>
+        <li><a href="#retention">Data retention</a></li>
+        <li><a href="#children">Children</a></li>
+        <li><a href="#security">Security</a></li>
+        <li><a href="#changes">Changes to this policy</a></li>
+        <li><a href="#storage">Where we store information</a></li>
+        <li><a href="#contact">Contact us</a></li>
+      </ol>
+    </aside>
+
+    <article class="policy-prose">
+      <div class="policy-intro">
+        <p>Greenfly, Inc. respects your privacy and is committed to protecting it through compliance with this Privacy Policy. This Privacy Policy describes how we collect, use and share information about you as well as your rights and choices about such collection, use and sharing, and applies to this website as well as the services offered by Greenfly, whether via any other website controlled by Greenfly ("+Engage") or Greenfly's mobile application (the "Application") (collectively, the "Services").</p>
+        <p>Please read this Privacy Policy carefully to understand our policies and practices regarding your information and how we will treat it. If you do not agree with our policies and practices, your choice is not to use the Services. By accessing or using the Services, you agree to this Privacy Policy.</p>
+        <p>This Privacy Policy may change from time to time. Your continued use of the Services after we make changes is deemed to be acceptance of those changes, so please check this Privacy Policy periodically for updates. If you have any questions about our privacy practices, please contact us as set forth in the Contact us section below.</p>
+      </div>
+
+      <h2 id="information-we-collect"><span class="num">01</span>What information do we collect and how do we use it?</h2>
+
+      <h3>1.1 User-provided information</h3>
+      <p>We collect certain information you provide when you download, register and/or use the Services.</p>
+      <p>A Greenfly customer (the "Principal") that has established an account with Greenfly may invite you to use the Services to create and share requested content ("Content"). To register to use the Application, you generally provide: (a) your name, email address, and password, along with an invitation code sent to you by the Principal. At your option, you may edit your Greenfly profile to add a profile photo, a brief biography and/or social media usernames. We will also collect: (a) information you provide when you request our help, and (b) Content you generate when using the Services.</p>
+      <p>The Principal may use your personal information to: (a) contact you from time to time; (b) manage your use of the Services; (c) attribute Content to you; and (d) provide you with important information and required notices.</p>
+      <p>Please note that any use of your personal information by the Principal is governed strictly by your relationship with the Principal and the Principal's own privacy policy, if any. Greenfly is not responsible for, and disclaims any liability regarding, the Principal's use of any of your personal information obtained via the Services or otherwise. <strong>You make your personal information available to the Principal at your own risk.</strong></p>
+
+      <h3>1.2 Automatically collected information</h3>
+      <p>The Application may collect certain information automatically, including, but not limited to, the type of mobile device you use, your mobile device's unique device ID, the IP address of your mobile device or even perhaps a cookie we use (see "cookies" below) that may contain information that could be deemed identifiable; your mobile operating system, the type of mobile Internet browsers you use, and information about the way you use the Services.</p>
+      <p>The Services may also use a technology known as "cookies". A cookie is a piece of information that a web application server sends to your computer or mobile device (specifically, to your browser file) when you access a website. Then when you come back to the website, one of the Greenfly servers will detect whether you have one of the Greenfly cookies on your computer. The Greenfly cookies help provide additional functionality to the web-based portal and help us analyze website usage more accurately. For instance, the Greenfly website may set a cookie on your browser that keeps you from needing to remember and then enter a password more than once during a visit to the website.</p>
+
+      <h2 id="location"><span class="num">02</span>Does the Application collect precise real-time location information of the device?</h2>
+      <p>The Application does not collect precise information about the location of your mobile device.</p>
+
+      <h2 id="principal-access"><span class="num">03</span>Does the Principal see and/or have access to information obtained by the Services?</h2>
+      <p>The Principal will see and have access to the Content. The Principal may also make the Content available to certain third parties, including its distributors of Content, such as cable broadcasters, websites, radio stations, broadcast television stations, mobile app providers, and other Content distribution partners and platforms.</p>
+      <p>The Principal also has access to the names, email addresses and optional personal profile information of individuals using the Services on the Principal's behalf. The Principal will be able to contact its registered users of the Services, by push notification on their mobile devices, and via email generated by the Services. The Principal will not have access to non-public contact information beyond information on how to contact individuals through the Application. By way of example, the Principal will not have access to mobile phone numbers. Additionally, anonymized data is periodically transmitted to external services to help with improving the Services. Your information will only be shared with third parties in the ways that are described in this Privacy Policy.</p>
+
+      <h2 id="sharing"><span class="num">04</span>How is your information shared?</h2>
+      <p>Greenfly may disclose your personal information as follows:</p>
+
+      <h3>To the government or law enforcement</h3>
+      <p>We may share your personal information to comply with requests by law enforcement or governmental authorities or where Greenfly is subject to any other legal obligation to disclose the information sought.</p>
+
+      <h3>To agents, partners or contractors</h3>
+      <p>We may share your personal information with our agents, contractors or partners in connection with services that these individuals or entities perform for us. These agents, contractors or partners are restricted from using your personal information in any way other than to provide services to us. We may, for example, provide your information to our agents, contractors or partners for hosting databases, for data processing services or so that they can mail you information that you requested.</p>
+
+      <h3>To a purchaser, assignee or transferee of our business</h3>
+      <p>We may provide your personal information to a third party in connection with, or during negotiations of, any proposed or actual merger, purchase, sale or any other type of acquisition or business combination of all or any portion of our assets, or transfer of all or a portion of our business to another business.</p>
+
+      <h3>To the general public</h3>
+      <p>In addition to the above, Content is created with the understanding that it will be shared by the Principal with the public via television or cable broadcast, posting on another Internet website, or via any other means (see the Greenfly Terms of Service). The user who generated the Content may be identifiable and often identified when the Content is distributed.</p>
+
+      <h2 id="opt-out"><span class="num">05</span>What are my opt-out and other rights?</h2>
+      <p>You can stop all collection of information by the Services easily by uninstalling the Application. You may use the standard uninstall processes as may be available as part of your mobile device or via the mobile application marketplace or network. You can also request to opt-out via email at <a href="mailto:privacy@greenfly.com">privacy@greenfly.com</a>.</p>
+      <p>If you use the Services in the European Economic Area ("EEA"), you may have additional rights as follows:</p>
+      <p>You have the right to access, correct or delete information we hold about you, including any information held on the Services. To the extent permitted by applicable law, any requests to exercise such rights may be subject to a small fee to meet the costs in providing you with details of the information we hold about you. Should you wish to access the information held about you on the Services, please contact Greenfly at:</p>
+      <span class="addr">Greenfly Privacy Compliance
+100 Wilshire Blvd. Suite 700
+Santa Monica, CA 90401, USA
+privacy@greenfly.com</span>
+      <p>If you have a complaint or dispute regarding this Privacy Policy or our processing of your personal data, and you are not satisfied by our response, you have the right to lodge a complaint with your supervisory authority.</p>
+      <p>You have rights in relation to the personal data we hold about you. Some of these only apply in certain circumstances. We have described these situations below, as well as how you can exercise your rights. To exercise any of your rights, please contact us at <a href="mailto:privacy@greenfly.com">privacy@greenfly.com</a>.</p>
+      <ul>
+        <li><strong>Access.</strong> You have the right to ask us to access the personal data we hold about you and be provided with certain information about how we use your personal data and who we share it with.</li>
+        <li><strong>Correction.</strong> You also have the right to ask us to correct your personal data where it is inaccurate or incomplete.</li>
+        <li><strong>Portability.</strong> Where you have provided your personal data to us under contract, you have the right to ask us to share (port) this data to another data controller in a structured, commonly used, and machine-readable format.</li>
+        <li><strong>Erasure.</strong> In certain circumstances, you have the right to ask us to delete the personal data we hold about you.</li>
+        <li><strong>Restriction.</strong> In certain circumstances, you have the right to ask us to restrict (stop any active) processing of your personal data, save for storage.</li>
+        <li><strong>Objection.</strong> In certain circumstances, you have the right to restrict or object to our processing of your personal information (e.g. where you request correction or erasure, you also have a right to restrict processing of your applicable data while your request is considered). You can object to our processing of your personal data based on our legitimate interests and we will no longer process your personal data unless we can demonstrate an overriding legitimate ground.</li>
+      </ul>
+      <p>In addition, you have the right to complain to the Information Commissioner's Office or other applicable data protection supervisory authority.</p>
+      <p>Please note that these rights are limited, for example, where fulfilling your request would adversely affect other individuals or company trade secrets or intellectual property, where there are overriding public interest reasons or where we are required by law to retain your personal data.</p>
+
+      <h2 id="links"><span class="num">06</span>Links to other sites</h2>
+      <p>The Greenfly website may, from time to time, contain links to and from the websites of our partner networks, advertisers and affiliates. If you follow a link to any of these websites, please note that these websites have their own privacy policies and we do not accept any responsibility or liability for these policies. Please check these policies before you submit any personal data to these websites.</p>
+
+      <h2 id="retention"><span class="num">07</span>Data retention policy</h2>
+      <p>We will retain your personal information on the Services for as long as you use the Services and for a reasonable time thereafter. When the Principal's account with Greenfly is terminated or cancelled, we will retain automatically collected information on the Services for up to six (6) months and thereafter may store it in an aggregated and anonymized format.</p>
+
+      <h2 id="children"><span class="num">08</span>Children</h2>
+      <p>The Services are not directed at children under the age of 13, and Greenfly does not solicit data from or market to children under the age of 13. If a parent or guardian becomes aware that his or her child has provided us with information without their consent, he or she should contact Greenfly at <a href="mailto:privacy@greenfly.com">privacy@greenfly.com</a>.</p>
+      <p>If you use the Services in the EEA and you are between 13 and 16 years old on the day you sign up, you may have to get your parents' or guardian's consent.</p>
+
+      <h2 id="security"><span class="num">09</span>Security</h2>
+      <p>Greenfly is concerned about safeguarding the confidentiality of your information provided or obtained via the Services. The Services are designed with physical, electronic, and procedural safeguards to protect information which is processed and maintained by us. For example, we limit access to your information to authorized employees and contractors who need to know your information in order to operate, develop or improve the Services. Please be aware that, while we endeavor to provide reasonable security for information we process and maintain, no security system can prevent all potential security breaches.</p>
+
+      <h2 id="changes"><span class="num">10</span>Changes to this Privacy Policy</h2>
+      <p>This Privacy Policy may be updated from time to time for any reason. We will notify you of any material changes to the Privacy Policy by posting the new Privacy Policy at <a href="https://www.greenfly.com/privacypolicy">https://www.greenfly.com/privacypolicy</a> and informing you via email or text message, and updating the "Last Updated" date above to indicate when those changes were made. You are advised to consult this Privacy Policy regularly for any changes, as continued use is deemed approval of all changes. If you do not agree with the modifications to the Privacy Policy, then please do not access or use the Services.</p>
+
+      <h2 id="storage"><span class="num">11</span>Where we store your information</h2>
+      <p>Greenfly is a U.S. company. The information that the Services collect from you will be transferred to, and stored at, and processed in the United States, where the laws regarding processing of personal information may be less stringent than the laws in your country. By providing your information, you consent to such transfer and processing.</p>
+
+      <h2 id="contact"><span class="num">12</span>Contact us</h2>
+      <p>If you have any questions or comments regarding this Privacy Policy or our privacy practices, please contact us via email at <a href="mailto:privacy@greenfly.com">privacy@greenfly.com</a>.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ========== CTA STRIP (dark) ========== -->
+<section class="cta-strip">
+  <div class="cta-inner">
+    <span class="mono">Questions about this policy?</span>
+    <h2>We'll route you to the <em>right team.</em></h2>
+    <div class="cta-actions">
+      <a href="mailto:privacy@greenfly.com" class="btn btn-primary">
+        <span>privacy@greenfly.com</span><span class="arrow">→</span>
+      </a>
+      <a href="../legal.html" class="btn btn-ghost">
+        <span>← All policies</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer" id="footer">
+  <div class="footer-stage">
+    <div class="footer-wordmark">
+      <img src="../images/brand/Greenfly (1).svg" alt="Greenfly">
+    </div>
+  </div>
+
+  <div class="footer-inner">
+    <div>
+      <h5>Platform</h5>
+      <ul>
+        <li><a href="../platform.html">Capture</a></li>
+        <li><a href="../platform.html">Identify</a></li>
+        <li><a href="../platform.html">Distribute</a></li>
+        <li><a href="../platform.html">Measure</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="../company.html">About</a></li>
+        <li><a href="../company.html">Customers</a></li>
+        <li><a href="../company.html">Careers</a></li>
+        <li><a href="../get-greenfly.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Resources</h5>
+      <ul>
+        <li><a href="#">Editorial</a></li>
+        <li><a href="#">Playbooks</a></li>
+        <li><a href="#">Webinars</a></li>
+        <li><a href="#">Support</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-legal">
+    <span>© 2026 Greenfly Inc.</span>
+    <span class="footer-status">
+      <span class="footer-status-dot"></span>
+      System · Nominal · <b>99.97%</b>
+    </span>
+    <span><a href="../legal.html">Legal &amp; policies <span class="arrow">→</span></a></span>
+  </div>
+</footer>
+
+<script>
+/* Nav: hide on scroll-down, reveal on scroll-up; densify past hero. */
+(() => {
+  const nav = document.getElementById('siteNav');
+  if (!nav) return;
+  const HIDE_AFTER = 80;
+  const DELTA = 6;
+  let lastY = window.scrollY || 0;
+  let ticking = false;
+  const update = () => {
+    const y = window.scrollY || 0;
+    const dy = y - lastY;
+    nav.classList.toggle('is-scrolled', y > 24);
+    if (Math.abs(dy) > DELTA) {
+      if (dy > 0 && y > HIDE_AFTER) nav.classList.add('nav-hidden');
+      else if (dy < 0)              nav.classList.remove('nav-hidden');
+      lastY = y;
+    }
+    ticking = false;
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+  nav.addEventListener('focusin', () => nav.classList.remove('nav-hidden'));
+})();
+
+/* Adaptive nav theme on light section. */
+(() => {
+  const nav = document.getElementById('siteNav');
+  if (!nav) return;
+  const lights = document.querySelectorAll('.section-light');
+  if (!lights.length) return;
+  const NAV_H = 60;
+  const margin = () => `0px 0px -${Math.max(0, window.innerHeight - NAV_H)}px 0px`;
+  const active = new Set();
+  let io;
+  const wire = () => {
+    if (io) io.disconnect();
+    active.clear();
+    io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) active.add(e.target);
+        else active.delete(e.target);
+      });
+      nav.classList.toggle('nav-on-light', active.size > 0);
+    }, { rootMargin: margin(), threshold: 0 });
+    lights.forEach(el => io.observe(el));
+  };
+  wire();
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(wire, 200); });
+})();
+
+/* Active TOC item: highlight whichever h2 is currently in view. */
+(() => {
+  const tocLinks = Array.from(document.querySelectorAll('.policy-toc a[href^="#"]'));
+  if (!tocLinks.length) return;
+  const targets = tocLinks
+    .map(a => document.getElementById(a.getAttribute('href').slice(1)))
+    .filter(Boolean);
+  if (!targets.length) return;
+  const linkFor = (id) => tocLinks.find(a => a.getAttribute('href') === '#' + id);
+  let activeId = null;
+  const setActive = (id) => {
+    if (id === activeId) return;
+    activeId = id;
+    tocLinks.forEach(a => a.classList.remove('is-active'));
+    const link = linkFor(id);
+    if (link) link.classList.add('is-active');
+  };
+  const io = new IntersectionObserver((entries) => {
+    const visible = entries
+      .filter(e => e.isIntersecting)
+      .sort((a, b) => a.target.getBoundingClientRect().top - b.target.getBoundingClientRect().top);
+    if (visible.length) setActive(visible[0].target.id);
+  }, { rootMargin: '-14% 0px -70% 0px', threshold: 0 });
+  targets.forEach(t => io.observe(t));
+  // Set initial active to first h2 if nothing in view yet
+  setActive(targets[0].id);
+})();
+</script>
+
+</body>
+</html>

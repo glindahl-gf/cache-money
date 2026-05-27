@@ -1,0 +1,1114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Greenfly · Legal &amp; Policies</title>
+<meta name="description" content="The four documents that govern how Greenfly operates — terms of service, privacy policy, data protection policy, and biometric policy." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #050607;
+    --bg-2: #0b0d0f;
+    --bg-3: #101214;
+    --accent: #B6F500;
+    --accent-dim: #8bc000;
+    --text: #f4f5f6;
+    --dim: rgba(255,255,255,.64);
+    --dim-2: rgba(255,255,255,.40);
+    --hair: rgba(255,255,255,.10);
+    --hair-strong: rgba(255,255,255,.20);
+    --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --ease: cubic-bezier(.22,.61,.36,1);
+    --ease-out: cubic-bezier(.16,1,.3,1);
+    --max: 1440px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Barlow Condensed', system-ui, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body { overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; }
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+
+  .section-light {
+    --bg: #EEEEE8; --bg-2: #E6E6DE; --bg-3: #D9D9CE;
+    --text: #0F0F0F;
+    --dim: rgba(15,15,15,.62); --dim-2: rgba(15,15,15,.42);
+    --hair: rgba(15,15,15,.14); --hair-strong: rgba(15,15,15,.26);
+    --accent: #79982D; --accent-dim: #62801F;
+    background: var(--bg); color: var(--text);
+  }
+
+  /* --- NAV (shared) --- */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    background-color: transparent;
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    border-bottom: 1px solid transparent;
+    transform: translateY(0);
+    transition: transform .38s var(--ease), background-color .35s var(--ease),
+                backdrop-filter .35s var(--ease), -webkit-backdrop-filter .35s var(--ease),
+                border-color .35s var(--ease);
+    will-change: transform;
+  }
+  .nav.nav-hidden { transform: translateY(-110%); }
+  .nav.is-scrolled {
+    background-color: rgba(10,11,13,.62);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-bottom-color: rgba(255,255,255,.06);
+  }
+  .nav.nav-on-light .nav-link    { color: rgba(15,15,15,.72); }
+  .nav.nav-on-light .nav-utility { color: rgba(15,15,15,.55); border-left-color: rgba(15,15,15,.18); }
+  .nav.nav-on-light .nav-cta     { color: #0F0F0F; border-color: rgba(15,15,15,.28); }
+  .nav.nav-on-light .nav-link:hover,
+  .nav.nav-on-light .nav-utility:hover { color: #0F0F0F; }
+  .nav.nav-on-light .nav-cta:hover     { background: var(--accent); color: #000; border-color: var(--accent); }
+  .nav.nav-on-light .nav-logo {
+    background-image: url('./images/brand/Greenfly-fieldgreen.svg');
+    background-size: contain; background-repeat: no-repeat; background-position: left center;
+  }
+  .nav.nav-on-light .nav-logo img { visibility: hidden; }
+  .nav.nav-on-light.is-scrolled {
+    background-color: rgba(238,238,232,.62);
+    border-bottom-color: rgba(15,15,15,.10);
+  }
+  .nav-left, .nav-right { display: flex; align-items: center; gap: 28px; }
+  .nav-right { gap: 24px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-logo { display: inline-flex; align-items: center; line-height: 1; }
+  .nav-logo img { height: 22px; width: auto; display: block; }
+  .nav-link { font-size: 13px; color: var(--dim); transition: color .2s var(--ease); }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--text); }
+  .nav-utility {
+    display: inline-flex; align-items: center;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--dim-2);
+    padding-left: 22px; border-left: 1px solid var(--hair);
+    transition: color .2s var(--ease);
+  }
+  .nav-utility:hover { color: var(--text); }
+  .nav-cta {
+    padding: 9px 16px; border: 1px solid var(--hair-strong);
+    font-size: 13px; font-weight: 500;
+    transition: background .2s var(--ease), color .2s var(--ease);
+  }
+  .nav-cta:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+  .nav-link-wrap { position: relative; }
+  .nav-link-wrap .nav-link { display: inline-flex; align-items: center; gap: 7px; }
+  .nav-link-wrap .nav-link::after {
+    content: ""; display: inline-block;
+    width: 5px; height: 5px;
+    border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
+    transform: rotate(45deg) translateY(-1px);
+    opacity: .55;
+    transition: transform .25s var(--ease), opacity .2s var(--ease);
+  }
+  .nav-link-wrap:hover .nav-link::after,
+  .nav-link-wrap:focus-within .nav-link::after {
+    opacity: 1; transform: rotate(225deg) translateY(1px);
+  }
+  .nav-dropdown {
+    position: absolute; top: calc(100% + 14px); left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    min-width: 200px;
+    background: #0b0d0f;
+    border: 1px solid rgba(255,255,255,.10);
+    padding: 8px 0;
+    opacity: 0; visibility: hidden;
+    transition: opacity .18s var(--ease), transform .18s var(--ease), visibility 0s .18s;
+    z-index: 110;
+  }
+  .nav-dropdown::before { content: ""; position: absolute; top: -14px; left: 0; right: 0; height: 14px; }
+  .nav-link-wrap:hover .nav-dropdown,
+  .nav-link-wrap:focus-within .nav-dropdown {
+    opacity: 1; visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    transition: opacity .18s var(--ease), transform .18s var(--ease);
+  }
+  .nav-dd-item {
+    display: block; padding: 9px 22px; font-size: 13px;
+    color: rgba(255,255,255,.64); white-space: nowrap;
+    transition: color .15s var(--ease);
+  }
+  .nav-dd-item:hover { color: #B6F500; }
+
+  /* --- LEGAL PAGE BODY (light) --- */
+  .legal-page {
+    padding: 18vh 5vw 14vh;
+    border-bottom: 1px solid var(--hair);
+    position: relative;
+  }
+  .legal-page-inner {
+    max-width: var(--max); margin: 0 auto;
+  }
+
+  /* 2-column grid — sticky TOC + stacked docs */
+  .legal-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 26%) 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  /* Sticky TOC */
+  .legal-toc {
+    position: sticky;
+    top: 14vh;
+    max-height: calc(100vh - 18vh);
+    overflow-y: auto;
+    padding-top: 4px;
+  }
+  .legal-toc-label {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase;
+    color: var(--dim-2);
+    margin-bottom: 18px;
+  }
+  .legal-toc ol {
+    list-style: none;
+    display: flex; flex-direction: column;
+    counter-reset: toc;
+  }
+  .legal-toc li {
+    counter-increment: toc;
+    border-bottom: 1px solid var(--hair);
+  }
+  .legal-toc li:first-child { border-top: 1px solid var(--hair); }
+  .legal-toc a {
+    display: flex; gap: 14px; align-items: baseline;
+    padding: 16px 14px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    color: var(--dim);
+    border-left: 2px solid transparent;
+    transition: color .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+  }
+  .legal-toc a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: .14em;
+    color: var(--dim-2);
+    flex-shrink: 0;
+  }
+  .legal-toc a:hover { color: var(--text); background: rgba(15,15,15,.03); }
+  .legal-toc a.is-active {
+    color: var(--text);
+    border-left-color: var(--accent);
+    font-weight: 500;
+  }
+  .legal-toc a.is-active::before { color: var(--accent); }
+
+  /* Stacked docs */
+  .legal-docs { min-width: 0; }
+
+  .legal-doc {
+    padding-top: 48px;
+    padding-bottom: 56px;
+    border-bottom: 1px solid var(--hair-strong);
+  }
+  .legal-doc:first-child { padding-top: 0; }
+  .legal-doc:last-child { border-bottom: 0; padding-bottom: 0; }
+
+  .legal-doc-head {
+    position: relative;
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .legal-doc-num {
+    position: absolute;
+    top: 0; right: 0;
+    width: 56px; height: 64px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 12px;
+    letter-spacing: .15em; color: var(--accent);
+  }
+  .legal-doc-num svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+  }
+  .legal-doc-head .mono {
+    display: block;
+    color: var(--dim-2);
+    margin-bottom: 14px;
+  }
+  .legal-doc-head h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: .98;
+    font-size: clamp(36px, 4.6vw, 64px);
+    max-width: 14ch;
+    margin-bottom: 18px;
+    color: var(--text);
+  }
+  .legal-doc-head h2 em { font-style: normal; color: var(--accent); }
+  .legal-doc-meta {
+    display: flex; flex-wrap: wrap; gap: 28px;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--dim);
+  }
+  .legal-doc-meta span > b {
+    color: var(--text); font-weight: 500;
+    margin-left: 6px;
+  }
+  .legal-doc-meta a {
+    color: var(--dim);
+    border-bottom: 1px solid currentColor;
+    transition: color .2s var(--ease);
+  }
+  .legal-doc-meta a:hover { color: var(--accent); }
+
+  /* Doc body — long-form prose */
+  .legal-doc-body { max-width: 64ch; }
+  .legal-doc-body > .doc-intro {
+    color: var(--dim);
+    font-size: clamp(16px, 1.2vw, 18px);
+    line-height: 1.55;
+    margin-bottom: 36px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .legal-doc-body > .doc-intro p + p { margin-top: 14px; }
+
+  .legal-doc-body h3 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500; text-transform: uppercase;
+    font-size: clamp(20px, 1.9vw, 26px);
+    letter-spacing: -0.005em; line-height: 1.1;
+    margin: 44px 0 16px;
+    scroll-margin-top: 14vh;
+    color: var(--text);
+  }
+  .legal-doc-body h3:first-of-type { margin-top: 0; }
+  .legal-doc-body h3 .num {
+    display: inline-block;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; color: var(--accent);
+    margin-right: 14px; vertical-align: middle;
+    padding-right: 14px;
+    border-right: 1px solid var(--hair-strong);
+  }
+  .legal-doc-body h4 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500; text-transform: uppercase;
+    font-size: 16px; letter-spacing: 0;
+    margin: 28px 0 12px;
+    color: var(--text);
+  }
+  .legal-doc-body h4 .num {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: .22em; color: var(--accent);
+    margin-right: 12px; padding-right: 12px;
+    border-right: 1px solid var(--hair-strong);
+  }
+  .legal-doc-body p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--dim);
+    margin-bottom: 16px;
+  }
+  .legal-doc-body ul, .legal-doc-body ol {
+    margin: 0 0 22px 18px;
+    font-size: 16px; line-height: 1.6;
+    color: var(--dim);
+  }
+  .legal-doc-body li { margin-bottom: 8px; }
+  .legal-doc-body li::marker { color: var(--accent); }
+  .legal-doc-body a {
+    color: var(--accent);
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 1px;
+  }
+  .legal-doc-body strong { color: var(--text); font-weight: 500; }
+  .legal-doc-body .addr {
+    display: block;
+    font-family: var(--mono); font-size: 13px;
+    line-height: 1.7; letter-spacing: .02em;
+    color: var(--text);
+    padding: 16px 22px;
+    border: 1px solid var(--hair);
+    background: var(--bg-2);
+    margin: 18px 0;
+    white-space: pre-line;
+  }
+  .legal-doc-body .legalese {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--dim);
+    letter-spacing: .01em;
+  }
+  .legal-doc-body .legalese p,
+  .legal-doc-body .legalese ol { font-size: 13px; line-height: 1.65; }
+  .legal-doc-body table {
+    width: 100%; border-collapse: collapse;
+    margin: 16px 0 22px;
+    font-size: 13px;
+  }
+  .legal-doc-body th, .legal-doc-body td {
+    border: 1px solid var(--hair);
+    padding: 10px 14px;
+    text-align: left;
+    color: var(--dim);
+    vertical-align: top;
+  }
+  .legal-doc-body th {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--text);
+    background: var(--bg-2);
+    font-weight: 500;
+  }
+  .legal-doc-body td strong { color: var(--text); }
+  .legal-doc-body .table-label {
+    display: block;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase;
+    color: var(--accent);
+    margin: 28px 0 10px;
+  }
+
+  /* --- FOOTER (shared) --- */
+  .footer {
+    position: relative; overflow: hidden;
+    border-top: 1px solid var(--hair);
+    padding: 56px 5vw 44px;
+  }
+  .footer-stage { max-width: var(--max); margin: 0 auto; text-align: center; padding: 24px 0 8px; }
+  .footer-wordmark { display: flex; justify-content: center; padding: 8px 0 24px; }
+  .footer-wordmark img {
+    width: 46%; max-width: 420px;
+    filter: brightness(0) invert(1);
+  }
+  .footer-inner {
+    max-width: var(--max); margin: 0 auto;
+    padding: 48px 0 44px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(140px, auto));
+    justify-content: center; gap: 80px;
+    border-top: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+  }
+  .footer h5 {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 22px;
+    font-weight: 500;
+  }
+  .footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer li a {
+    color: var(--dim); font-size: 14px;
+    transition: color .2s var(--ease);
+    position: relative; display: inline-block;
+  }
+  .footer li a::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 100%; bottom: -3px;
+    height: 1px; background: var(--accent);
+    transition: right .35s var(--ease-out);
+  }
+  .footer li a:hover { color: var(--text); }
+  .footer li a:hover::after { right: 0; }
+  .footer-legal {
+    max-width: var(--max);
+    margin: 28px auto 0;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 24px;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--dim);
+  }
+  .footer-legal a {
+    color: var(--dim);
+    transition: color .2s var(--ease);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .footer-legal a:hover { color: var(--accent); }
+  .footer-status { display: inline-flex; align-items: center; gap: 10px; }
+  .footer-status b { color: var(--text); font-weight: 500; }
+  .footer-status-dot {
+    width: 7px; height: 7px;
+    background: var(--accent);
+    border-radius: 50%; flex-shrink: 0;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1;  box-shadow: 0 0 0 0 rgba(182,245,0,.5); }
+    50%      { opacity: .55; box-shadow: 0 0 0 6px rgba(182,245,0,0); }
+  }
+
+  /* --- RESPONSIVE --- */
+  @media (max-width: 1000px) {
+    .legal-grid { grid-template-columns: 1fr; gap: 36px; }
+    .legal-toc {
+      position: static; max-height: none;
+    }
+    .legal-toc ol {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border: 1px solid var(--hair);
+    }
+    .legal-toc li { border-bottom: 1px solid var(--hair); }
+    .legal-toc li:first-child { border-top: 0; }
+    .legal-toc li:nth-child(odd) { border-right: 1px solid var(--hair); }
+    .legal-toc li:nth-last-child(-n+2) { border-bottom: 0; }
+  }
+  @media (max-width: 720px) {
+    .nav-link, .nav-utility { display: none; }
+    .nav-utility { border-left: 0; padding-left: 0; }
+    .legal-page { padding-top: 14vh; }
+    .legal-doc-num { width: 44px; height: 50px; }
+    .legal-toc ol { grid-template-columns: 1fr; }
+    .legal-toc li:nth-child(odd) { border-right: 0; }
+    .legal-toc li:nth-last-child(-n+2) { border-bottom: 1px solid var(--hair); }
+    .legal-toc li:last-child { border-bottom: 0; }
+    .footer-inner { grid-template-columns: 1fr; gap: 40px; }
+    .footer-legal { flex-direction: column; gap: 10px; text-align: center; }
+    .legal-doc-body table { font-size: 12px; }
+    .legal-doc-body th, .legal-doc-body td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav class="nav" id="siteNav">
+  <div class="nav-left">
+    <a href="./homepage.html" class="nav-logo" aria-label="Greenfly">
+      <img src="./images/brand/Greenfly (1).svg" alt="Greenfly">
+    </a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="./platform.html" class="nav-link">Platform</a>
+      <div class="nav-link-wrap">
+        <a href="./solutions.html" class="nav-link">Solutions</a>
+        <div class="nav-dropdown">
+          <a href="./solutions-sports.html" class="nav-dd-item">Sports</a>
+          <a href="./solutions-entertainment.html" class="nav-dd-item">Entertainment</a>
+          <a href="./solutions-brands.html" class="nav-dd-item">Brands</a>
+          <a href="./solutions-live-events.html" class="nav-dd-item">Live Events</a>
+        </div>
+      </div>
+      <a href="./homepage.html#proof" class="nav-link">Stories</a>
+      <a href="./company.html" class="nav-link">Company</a>
+    </div>
+    <a href="#login" class="nav-utility">Login</a>
+    <a href="./get-greenfly.html" class="nav-cta">Get Greenfly</a>
+  </div>
+</nav>
+
+<h1 class="visually-hidden">Greenfly legal &amp; policies</h1>
+
+<!-- ========== LEGAL PAGE (light) ========== -->
+<section class="legal-page section-light">
+  <div class="legal-page-inner">
+
+    <div class="legal-grid">
+
+      <aside class="legal-toc" aria-label="Documents">
+        <div class="legal-toc-label">Documents</div>
+        <ol>
+          <li><a href="#terms">Terms of Service</a></li>
+          <li><a href="#privacy">Privacy Policy</a></li>
+          <li><a href="#data-protection">Data Protection</a></li>
+          <li><a href="#biometric">Biometric Policy</a></li>
+        </ol>
+      </aside>
+
+      <div class="legal-docs">
+
+        <!-- ===================== 01 · TERMS OF SERVICE ===================== -->
+        <article class="legal-doc" id="terms">
+          <header class="legal-doc-head">
+            <div class="legal-doc-num">
+              <svg viewBox="0 0 56 64" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+                <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" />
+              </svg>
+              <span>01</span>
+            </div>
+            <span class="mono">Document 01</span>
+            <h2>Terms of <em>Service.</em></h2>
+            <div class="legal-doc-meta">
+              <span>Updated <b>Jun 19, 2018</b></span>
+            </div>
+          </header>
+
+          <div class="legal-doc-body">
+            <h3 id="terms-acceptance"><span class="num">01</span>Your acceptance</h3>
+            <p>By using or visiting the website of Greenfly, Inc. (collectively, "Greenfly" or "we" or "us" or "our") or any Greenfly products, software, data feeds, documentation, and services provided to you on, from, or through the Greenfly mobile applications (the "Apps") or the Greenfly website (collectively the "Service"), you signify your agreement to these terms and conditions (the "Terms of Service" or "Terms"), incorporated herein by reference. We advise you to store and/or print a copy of these Terms and keep them for your reference. <strong>If you do not agree to any of these terms, please do not use the Service.</strong></p>
+            <p>The Apps and all other Greenfly-branded software and applications and associated documentation, including any improvements, modifications, enhancements, fixes, updates, upgrades and future versions thereto ("Updates") and whether made available for free or for a fee (collectively the "Software"), are licensed (not sold) to you by Greenfly, Inc. You do not acquire any ownership interest in the Services under these Terms, or any other rights thereto other than to use the Services in accordance with the license granted, and subject to all terms, conditions and restrictions herein.</p>
+            <p>Subject to your compliance with these Terms, you are granted a limited, non-exclusive, non-sublicensable, non-assignable, free of charge license to download and install the Software on a personal computer, mobile phone or other device; and to use the Software through your individual Greenfly user account ("User Account"), and to use the rest of the Services for your personal use through your individual Greenfly user account. Greenfly reserves all rights not expressly granted to you under these Terms.</p>
+            <p>You may not and you agree not to:</p>
+            <ol type="a">
+              <li>sub-license, sell, assign, rent, lease, export, import, distribute or transfer or otherwise grant rights to any third party in the Services;</li>
+              <li>undertake, cause, permit or authorize the modification, creation of derivative works or improvements, translation, reverse engineering, decompiling, disassembling, decryption, emulation, hacking, discovery or attempted discovery of the source code or protocols of the Services or any part or features thereof (except to the extent permitted by law);</li>
+              <li>remove, obscure or alter any copyright notices or other proprietary notices included in the Services;</li>
+              <li>use the Services or cause the Services (or any part of it) to be used within or to provide commercial products or services to third parties without Greenfly's prior written consent;</li>
+              <li>other than for the purposes of download and installation, use the Services except through your User Account.</li>
+            </ol>
+            <p>Although we will notify you when major changes are made to these Terms of Service, you should periodically review the most up-to-date version at <a href="https://www.greenfly.com/termsofservice">https://www.greenfly.com/termsofservice</a>.</p>
+
+            <h3><span class="num">02</span>Service</h3>
+            <p>These Terms of Service apply to all users of the Service, including users who are also contributors of User Content on the Service. For purposes of these Terms of Service: (a) "Content" means the text, software, scripts, graphics, photos, sounds, music, videos, audiovisual combinations, interactive features, works of authorship of any kind, and information or other materials that are posted, generated, provided, or otherwise made available through the Services; and (b) "User Content" means any Content that Account holders (including you) provide to be made available through the Services.</p>
+            <p>Subject to your compliance with these Terms of Service, Greenfly grants you a personal, noncommercial, nonexclusive, nontransferable, non-sublicensable, revocable license to download, view, display, and use the Content solely in connection with your permitted use of the Services. If you breach any of the terms of these Terms of Services, all licenses granted by Greenfly, including permission to use the Services, will terminate automatically.</p>
+            <p>The Service may contain links to third party websites that are not owned or controlled by Greenfly. Greenfly has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third-party websites. By using the Service, you expressly relieve Greenfly from any and all liability arising from your use of any third-party website.</p>
+
+            <h3><span class="num">03</span>User accounts</h3>
+            <p>In order to access the Service, you will have to create a User Account. You may never use another's account without permission. When creating your account, you must provide accurate and complete information. <strong>You are solely responsible for the activity that occurs on your account</strong>, and you must keep your account password secure. You must notify Greenfly immediately of any breach of security or unauthorized use of your account.</p>
+            <p>Although Greenfly will not be liable for your losses caused by any unauthorized use of your account, you may be liable for the losses of Greenfly or others due to such unauthorized use.</p>
+
+            <h3><span class="num">04</span>General use of the Service — permissions and restrictions</h3>
+            <p>Greenfly hereby grants you permission to access and use the Service as set forth in these Terms of Service, provided that:</p>
+            <ol>
+              <li>You agree not to distribute in any medium any part of the Service or the Content without Greenfly's prior written authorization, unless Greenfly makes available the means for such distribution.</li>
+              <li>You agree not to alter or modify any part of the Service.</li>
+              <li>You agree not to use the Service for any of the following commercial uses unless you obtain Greenfly's prior written approval:
+                <ul>
+                  <li>the sale of access to the Service;</li>
+                  <li>the sale of advertising, sponsorships, or promotions placed on or within the Service or Content; or</li>
+                  <li>the sale of advertising, sponsorships, or promotions on any page of an ad-enabled blog or website containing Content delivered via the Service, unless other material not obtained from Greenfly appears on the same page and is of sufficient value to be the basis for such sales.</li>
+                </ul>
+              </li>
+              <li>Prohibited commercial uses do not include uploading an original video to Greenfly, or any use that Greenfly expressly authorizes in writing.</li>
+              <li>If you use the Service, you agree that it may automatically download and install updates from time to time from Greenfly. You agree to receive such updates as part of your use of the Service.</li>
+              <li>In your use of the Service, you will comply with all applicable laws.</li>
+              <li>Greenfly reserves the right to discontinue any aspect of the Service at any time and for any reason.</li>
+            </ol>
+
+            <h3><span class="num">05</span>Your use of content</h3>
+            <p>In addition to the general restrictions above, the following restrictions and conditions apply specifically to your use of Content.</p>
+            <ol>
+              <li>The Content on the Service, and the trademarks, service marks and logos ("Marks") on the Service, are owned by or licensed to Greenfly or its licensors, and are subject to copyright and other intellectual property rights under the law.</li>
+              <li>Content is provided to you AS IS. You may access Content for your information and personal use solely as intended through the provided functionality of the Service. You shall not download any Content unless you see a "download" or similar link displayed by Greenfly on the Service for that Content. You shall not copy, reproduce, distribute, transmit, broadcast, display, sell, license, or otherwise exploit any Content for any other purposes without the prior written consent of Greenfly.</li>
+              <li>You agree not to circumvent, disable or otherwise interfere with security-related features of the Service or features that prevent or restrict use or copying of any Content.</li>
+              <li>You understand that you may be exposed to Content that is inaccurate, offensive, indecent, or objectionable, and you agree to waive any legal or equitable rights or remedies you have or may have against Greenfly with respect thereto.</li>
+            </ol>
+
+            <h3><span class="num">06</span>Your content and conduct</h3>
+            <p>As a Greenfly account holder you may submit User Content to the Service, including images and videos. You understand that Greenfly does not guarantee any confidentiality with respect to any User Content you submit.</p>
+            <p>You shall be solely responsible for your own User Content and the consequences of submitting and publishing your Content on the Service. You affirm, represent, and warrant that you own or have the necessary licenses, rights, consents, and permissions to publish User Content you submit. By making any User Content available through Services, you grant to Greenfly a nonexclusive, perpetual, irrevocable, transferable, fully sublicensable through multiple tiers, worldwide, royalty-free license to use, copy, modify, create derivative works based upon, publicly display, publicly perform, and distribute your User Content in connection with operating and providing the Services.</p>
+            <p>You will not submit any Content to the Service that is (i) false, inaccurate, misleading, defamatory, or libelous; (ii) obscene, hateful, threatening, pornographic, or that contains nudity or graphic or gratuitous violence; (iii) that will infringe, misappropriate, or violate a third party's intellectual property rights, or rights of publicity or privacy; or (iv) that contains images of any other person unless you have their consent.</p>
+            <p>By submitting User Content to a company (the "Principal") through Greenfly, you hereby permit that User Content submitted to the Principal to be distributed directly to the public by the Principal and by their partners through any channel for the distribution of media content, including, but not limited to, broadcast television, cable television, Internet web sites, social media platforms, and mobile applications. By submitting User Content to Greenfly, you hereby waive all right to share in any proceeds from its subsequent usage or distribution by the Principal or any of their partners.</p>
+            <p>Greenfly does not monitor any User Content you upload to the Service and does not endorse any User Content submitted to the Service by any user, and Greenfly expressly disclaims any and all liability in connection with User Content.</p>
+            <h4>DMCA notices</h4>
+            <p>Greenfly will respond expeditiously to claims of infringement from intellectual property owners. If you believe in good faith that User Content available via the Service infringes your copyright, you may send us a notice requesting that we remove the User Content. The notice must include: (i) signature of the owner; (ii) a description of the copyrighted work; (iii) information sufficient to identify the infringing material; (iv) your contact information; (v) a good-faith belief statement; and (vi) a statement made under penalty of perjury. Notices must be sent to:</p>
+            <span class="addr">Copyright Agent
+c/o Greenfly, Inc.
+100 Wilshire Blvd. Suite 700
+Santa Monica, CA 90401, USA
+phone: (310) 828-1444
+email: copyright@greenfly.com</span>
+            <p>Greenfly reserves the right to remove any and all Content, including User Content, for any reason and without prior notice.</p>
+
+            <h3><span class="num">07</span>Account termination policy</h3>
+            <p>It is Greenfly's policy, in appropriate circumstances and at its discretion, to disable and/or terminate the accounts of users who repeatedly infringe or are repeatedly charged with infringing the copyrights or other intellectual property rights of others. Greenfly reserves the right to decide whether User Content violates these Terms of Service for reasons other than copyright infringement, such as pornography, obscenity, or excessive length, and may at any time, without prior notice and in its sole discretion, remove such User Content and/or terminate a user's account.</p>
+
+            <h3><span class="num">08</span>Warranty disclaimer</h3>
+            <div class="legalese">
+              <p>YOU AGREE THAT YOUR USE OF THE SERVICE AND THE SOFTWARE SHALL BE AT YOUR SOLE RISK. THE SERVICE AND THE SOFTWARE ARE PROVIDED "AS IS" WITH ALL FAULTS AND DEFECTS WITHOUT WARRANTY OF ANY KIND.</p>
+              <p>TO THE FULLEST EXTENT PERMITTED BY LAW, GREENFLY, ITS OFFICERS, DIRECTORS, EMPLOYEES, AND AGENTS DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, IN CONNECTION WITH THE SERVICES AND YOUR USE THEREOF. GREENFLY MAKES NO WARRANTIES OR REPRESENTATIONS ABOUT THE ACCURACY OR COMPLETENESS OF THE SERVICES CONTENT OR THE CONTENT OF ANY SITES LINKED TO FROM THE SERVICES.</p>
+              <p>GREENFLY DOES NOT WARRANT, ENDORSE, GUARANTEE, OR ASSUME RESPONSIBILITY FOR ANY PRODUCT OR SERVICE ADVERTISED OR OFFERED BY A THIRD PARTY THROUGH THE SERVICES OR ANY HYPERLINKED SERVICES OR FEATURED IN ANY BANNER OR OTHER ADVERTISING.</p>
+            </div>
+
+            <h3><span class="num">09</span>Limitation of liability</h3>
+            <div class="legalese">
+              <p>TO THE FULLEST EXTENT PERMITTED BY LAW IN THE APPLICABLE JURISDICTION, IN NO EVENT SHALL GREENFLY, ITS OFFICERS, DIRECTORS, EMPLOYEES, OR AGENTS, BE LIABLE TO YOU FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES WHATSOEVER RESULTING FROM YOUR USE OF THE SERVICE (INCLUDING THE SOFTWARE AND CONTENT), INCLUDING WITHOUT LIMITATION ANY:</p>
+              <ol>
+                <li>ERRORS, MISTAKES, OR INACCURACIES IN THE SERVICES OR CONTENT;</li>
+                <li>PERSONAL INJURY OR PROPERTY DAMAGE RESULTING FROM YOUR ACCESS TO AND USE OF OUR SERVICES;</li>
+                <li>ANY UNAUTHORIZED ACCESS TO OR USE OF OUR SECURE SERVERS AND/OR ANY PERSONAL OR FINANCIAL INFORMATION STORED THEREIN;</li>
+                <li>YOUR COMMUNICATIONS WITH OTHER USERS OF THE SERVICES;</li>
+                <li>ANY INTERRUPTION OR CESSATION OF TRANSMISSION TO OR FROM OUR SERVICES;</li>
+                <li>ANY BUGS, VIRUSES, TROJAN HORSES, OR THE LIKE TRANSMITTED BY ANY THIRD PARTY; AND/OR</li>
+                <li>ANY ERRORS OR OMISSIONS IN ANY CONTENT.</li>
+              </ol>
+              <p>TO THE FULLEST EXTENT PERMITTED BY LAW, IN NO EVENT WILL THE TOTAL LIABILITY OF GREENFLY ARISING OUT OF OR IN CONNECTION WITH THESE TERMS OF SERVICE OR FROM THE USE OF OR INABILITY TO USE THE SERVICES OR CONTENT EXCEED ONE HUNDRED U.S. DOLLARS (US$100).</p>
+            </div>
+            <p>The Service is controlled and offered by Greenfly from its or its service provider's facilities in the United States of America. Greenfly makes no representations that the Service is appropriate or available for use in other locations.</p>
+
+            <h3><span class="num">10</span>Indemnity</h3>
+            <p>To the extent permitted by applicable law, you agree to defend, indemnify and hold harmless Greenfly, its parent corporation, officers, directors, employees and agents, from and against any and all claims, damages, obligations, losses, liabilities, costs or debt, and expenses (including but not limited to attorney's fees) arising from: (i) your use of and access to the Service; (ii) your violation of any term of these Terms of Service; (iii) your violation of any third party right, including without limitation any copyright, property, or privacy right; or (iv) any claim that your User Content caused damage to a third party.</p>
+
+            <h3><span class="num">11</span>Ability to accept Terms of Service</h3>
+            <p>You affirm that you are either more than 18 years of age, or an emancipated minor, or possess legal parental or guardian consent, and are fully able and competent to enter into the terms set forth in these Terms of Service. In any case, you affirm that you are over the age of 13, as the Service is not intended for children under 13. <strong>If you are under 13 years of age, then please do not use the Service.</strong></p>
+
+            <h3><span class="num">12</span>Assignment</h3>
+            <p>These Terms of Service, and any rights and licenses granted hereunder, may not be transferred or assigned by you (including by change of control or operation of law), but may be assigned by Greenfly without restriction.</p>
+
+            <h3><span class="num">13</span>Additional terms for app stores</h3>
+            <p>The following terms and conditions apply to you only if you are using the App from any app store or distribution platform (like Apple's App Store, Google Play, or Amazon Appstore) (each, an "App Store Provider"). To the extent the other terms and conditions of the Terms of Service are less restrictive than, or otherwise conflict with, the terms and conditions of this paragraph, the more restrictive or conflicting terms and conditions in this paragraph apply, but solely with respect to App from the App Store Provider's app store.</p>
+            <p>You acknowledge that these Terms are solely between you and Greenfly, not App Store Provider, and that App Store Provider has no responsibility for the App or content thereof. App Store Provider has no obligation whatsoever to furnish maintenance and support services with respect to the App. App Store Provider is not responsible for addressing any claims relating to the App, including: (i) product liability claims; (ii) any claim that the App fails to conform to any applicable legal or regulatory requirement; and (iii) claims arising under consumer protection or similar legislation.</p>
+            <p>In the event of any third party intellectual property claim, Greenfly, not App Store Provider, will be solely responsible for the investigation, defense, settlement and discharge. App Store Providers are third party beneficiaries of these Terms of Service as they relate to your license of the App.</p>
+
+            <h3><span class="num">14</span>General</h3>
+            <p>You agree that: (i) the Service shall be deemed solely based in California; and (ii) the Service shall be deemed a passive website that does not give rise to personal jurisdiction over Greenfly, either specific or general, in jurisdictions other than California. These Terms of Service shall be governed by the internal substantive laws of the State of California. <strong>Any claim or dispute between you and Greenfly that arises in whole or in part from the Service shall be decided exclusively by a court of competent jurisdiction located in Los Angeles, California.</strong></p>
+            <p>Greenfly reserves the right to amend these Terms of Service at any time and without notice. If we make any material changes, we'll notify you by posting them on the Services or by sending you an email or other notification, and we'll update the "Last Updated" date above. If any provision is deemed invalid by a court of competent jurisdiction, the invalidity of such provision shall not affect the validity of the remaining provisions, which shall remain in full force and effect.</p>
+            <p>Under California Civil Code Section 1789.3, California users of the Service receive the following specific consumer rights notice: The Complaint Assistance Unit of the Division of Consumer Services of the California Department of Consumer Affairs may be contacted in writing at 1625 North Market Blvd., Suite N 112 Sacramento, CA 95834, or by telephone at (800) 952-5210.</p>
+            <div class="legalese">
+              <p>YOU AND GREENFLY AGREE THAT ANY CAUSE OF ACTION ARISING OUT OF OR RELATED TO THE SERVICES MUST COMMENCE WITHIN ONE (1) YEAR AFTER THE CAUSE OF ACTION ACCRUES. OTHERWISE, SUCH CAUSE OF ACTION IS PERMANENTLY BARRED.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===================== 02 · PRIVACY POLICY ===================== -->
+        <article class="legal-doc" id="privacy">
+          <header class="legal-doc-head">
+            <div class="legal-doc-num">
+              <svg viewBox="0 0 56 64" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+                <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" />
+              </svg>
+              <span>02</span>
+            </div>
+            <span class="mono">Document 02</span>
+            <h2>Privacy <em>Policy.</em></h2>
+            <div class="legal-doc-meta">
+              <span>Updated <b>Jul 21, 2022</b></span>
+            </div>
+          </header>
+
+          <div class="legal-doc-body">
+            <div class="doc-intro">
+              <p>Greenfly, Inc. respects your privacy and is committed to protecting it through compliance with this Privacy Policy. This Privacy Policy describes how we collect, use and share information about you as well as your rights and choices about such collection, use and sharing, and applies to this website as well as the services offered by Greenfly, whether via any other website controlled by Greenfly ("+Engage") or Greenfly's mobile application (the "Application") (collectively, the "Services").</p>
+              <p>Please read this Privacy Policy carefully to understand our policies and practices regarding your information and how we will treat it. If you do not agree with our policies and practices, your choice is not to use the Services. By accessing or using the Services, you agree to this Privacy Policy.</p>
+            </div>
+
+            <h3><span class="num">01</span>What information do we collect and how do we use it?</h3>
+            <h4>1.1 User-provided information</h4>
+            <p>We collect certain information you provide when you download, register and/or use the Services. A Greenfly customer (the "Principal") that has established an account with Greenfly may invite you to use the Services to create and share requested content ("Content"). To register to use the Application, you generally provide: your name, email address, and password, along with an invitation code sent to you by the Principal. At your option, you may edit your Greenfly profile to add a profile photo, a brief biography and/or social media usernames.</p>
+            <p>The Principal may use your personal information to: (a) contact you from time to time; (b) manage your use of the Services; (c) attribute Content to you; and (d) provide you with important information and required notices. <strong>You make your personal information available to the Principal at your own risk.</strong></p>
+            <h4>1.2 Automatically collected information</h4>
+            <p>The Application may collect certain information automatically, including the type of mobile device you use, your mobile device's unique device ID, the IP address of your mobile device, cookies, your mobile operating system, the type of mobile Internet browsers you use, and information about the way you use the Services. The Services may also use cookies to provide additional functionality to the web-based portal and help us analyze website usage more accurately.</p>
+
+            <h3><span class="num">02</span>Does the Application collect precise real-time location?</h3>
+            <p>The Application does not collect precise information about the location of your mobile device.</p>
+
+            <h3><span class="num">03</span>Does the Principal see and/or have access to information?</h3>
+            <p>The Principal will see and have access to the Content. The Principal may also make the Content available to certain third parties, including its distributors of Content, such as cable broadcasters, websites, radio stations, broadcast television stations, mobile app providers, and other Content distribution partners and platforms.</p>
+            <p>The Principal also has access to the names, email addresses and optional personal profile information of individuals using the Services on the Principal's behalf. The Principal will not have access to non-public contact information beyond information on how to contact individuals through the Application; for example, the Principal will not have access to mobile phone numbers.</p>
+
+            <h3><span class="num">04</span>How is your information shared?</h3>
+            <p>Greenfly may disclose your personal information as follows:</p>
+            <h4>To the government or law enforcement</h4>
+            <p>We may share your personal information to comply with requests by law enforcement or governmental authorities or where Greenfly is subject to any other legal obligation to disclose the information sought.</p>
+            <h4>To agents, partners or contractors</h4>
+            <p>We may share your personal information with our agents, contractors or partners in connection with services that these individuals or entities perform for us. These agents, contractors or partners are restricted from using your personal information in any way other than to provide services to us.</p>
+            <h4>To a purchaser, assignee or transferee of our business</h4>
+            <p>We may provide your personal information to a third party in connection with, or during negotiations of, any proposed or actual merger, purchase, sale or any other type of acquisition or business combination of all or any portion of our assets, or transfer of all or a portion of our business to another business.</p>
+            <h4>To the general public</h4>
+            <p>Content is created with the understanding that it will be shared by the Principal with the public via television or cable broadcast, posting on another Internet website, or via any other means. The user who generated the Content may be identifiable and often identified when the Content is distributed.</p>
+
+            <h3><span class="num">05</span>What are my opt-out and other rights?</h3>
+            <p>You can stop all collection of information by the Services easily by uninstalling the Application. You can also request to opt-out via email at <a href="mailto:privacy@greenfly.com">privacy@greenfly.com</a>.</p>
+            <p>If you use the Services in the European Economic Area ("EEA"), you may have additional rights. You have the right to access, correct or delete information we hold about you. Should you wish to access the information held about you on the Services, please contact Greenfly at:</p>
+            <span class="addr">Greenfly Privacy Compliance
+100 Wilshire Blvd. Suite 700
+Santa Monica, CA 90401, USA
+privacy@greenfly.com</span>
+            <p>You have the following rights in relation to the personal data we hold about you:</p>
+            <ul>
+              <li><strong>Access.</strong> Ask us to access the personal data we hold about you and be provided with information about how we use it.</li>
+              <li><strong>Correction.</strong> Ask us to correct your personal data where it is inaccurate or incomplete.</li>
+              <li><strong>Portability.</strong> Where you have provided your personal data to us under contract, ask us to share (port) this data to another data controller.</li>
+              <li><strong>Erasure.</strong> In certain circumstances, ask us to delete the personal data we hold about you.</li>
+              <li><strong>Restriction.</strong> In certain circumstances, ask us to restrict (stop any active) processing of your personal data, save for storage.</li>
+              <li><strong>Objection.</strong> In certain circumstances, restrict or object to our processing of your personal information.</li>
+            </ul>
+            <p>You also have the right to lodge a complaint with the Information Commissioner's Office or other applicable data protection supervisory authority.</p>
+
+            <h3><span class="num">06</span>Links to other sites</h3>
+            <p>The Greenfly website may contain links to and from the websites of our partner networks, advertisers and affiliates. These websites have their own privacy policies and we do not accept any responsibility or liability for these policies.</p>
+
+            <h3><span class="num">07</span>Data retention policy</h3>
+            <p>We will retain your personal information on the Services for as long as you use the Services and for a reasonable time thereafter. When the Principal's account with Greenfly is terminated or cancelled, we will retain automatically collected information on the Services for up to six (6) months and thereafter may store it in an aggregated and anonymized format.</p>
+
+            <h3><span class="num">08</span>Children</h3>
+            <p>The Services are not directed at children under the age of 13, and Greenfly does not solicit data from or market to children under the age of 13. If you use the Services in the EEA and you are between 13 and 16 years old, you may have to get your parents' or guardian's consent.</p>
+
+            <h3><span class="num">09</span>Security</h3>
+            <p>Greenfly is concerned about safeguarding the confidentiality of your information provided or obtained via the Services. The Services are designed with physical, electronic, and procedural safeguards to protect information which is processed and maintained by us. Please be aware that, while we endeavor to provide reasonable security, no security system can prevent all potential security breaches.</p>
+
+            <h3><span class="num">10</span>Changes to this Privacy Policy</h3>
+            <p>This Privacy Policy may be updated from time to time. We will notify you of any material changes by posting the new Privacy Policy at <a href="https://www.greenfly.com/privacypolicy">https://www.greenfly.com/privacypolicy</a> and informing you via email or text message, and updating the "Last Updated" date above.</p>
+
+            <h3><span class="num">11</span>Where we store your information</h3>
+            <p>Greenfly is a U.S. company. The information that the Services collect from you will be transferred to, and stored at, and processed in the United States, where the laws regarding processing of personal information may be less stringent than the laws in your country. By providing your information, you consent to such transfer and processing.</p>
+
+            <h3><span class="num">12</span>Contact us</h3>
+            <p>If you have any questions or comments regarding this Privacy Policy or our privacy practices, please contact us via email at <a href="mailto:privacy@greenfly.com">privacy@greenfly.com</a>.</p>
+          </div>
+        </article>
+
+        <!-- ===================== 03 · DATA PROTECTION ===================== -->
+        <article class="legal-doc" id="data-protection">
+          <header class="legal-doc-head">
+            <div class="legal-doc-num">
+              <svg viewBox="0 0 56 64" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+                <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" />
+              </svg>
+              <span>03</span>
+            </div>
+            <span class="mono">Document 03</span>
+            <h2>Data <em>Protection.</em></h2>
+          </header>
+
+          <div class="legal-doc-body">
+            <h3><span class="num">01</span>Overview</h3>
+            <p>Greenfly is committed to ensuring the confidentiality and integrity of all information it holds and Processes while operating its business in compliance with the requirements of relevant Data Protection Laws and Regulations.</p>
+            <p>This Data Protection Policy ("Policy") sets out the principles which we apply to our Processing of Customer Data and use of Confidential Information. It describes Greenfly's approach to ensuring the privacy and security of Customer Data, including technical and organizational measures implemented by Greenfly applicable to the Service. Any questions about this Policy should be raised with the Data Protection Officer at <a href="mailto:dpo@greenfly.com">dpo@greenfly.com</a>.</p>
+
+            <h3><span class="num">02</span>Terms and definitions</h3>
+            <ul>
+              <li><strong>Confidential Information.</strong> All confidential information disclosed by customers to Greenfly that is designated as confidential or should reasonably be understood to be confidential, including Personally Identifiable Information (PII).</li>
+              <li><strong>Customer Data.</strong> Data or information submitted by or on behalf of customers including data submitted through an API and any "Content" created by customers through use of the Greenfly Service.</li>
+              <li><strong>Data Controller.</strong> Entity that determines the purposes and means of the Processing of Personal Data.</li>
+              <li><strong>Data Processor.</strong> Entity that Processes Personal Data on behalf of the Data Controller.</li>
+              <li><strong>Data Protection Laws and Regulations.</strong> All laws and regulations, including those of the United States, the European Union, the European Economic Area and their member states and the United Kingdom, applicable to the Processing of Personal Data.</li>
+              <li><strong>Data Subject.</strong> An identified or identifiable person from whom Personal Data is collected.</li>
+              <li><strong>GDPR.</strong> Regulation (EU) 2016/679 (General Data Protection Regulation).</li>
+              <li><strong>Personal Data.</strong> Any information relating to an identified or identifiable person where such data is Customer Data.</li>
+              <li><strong>Processing.</strong> Any operation or set of operations performed upon Personal Data, including collection, storage, retrieval, use, disclosure, and destruction.</li>
+              <li><strong>Service.</strong> The Greenfly solutions provided via authenticated login to either the Greenfly iOS/Android App or web portal.</li>
+            </ul>
+
+            <h3><span class="num">03</span>Data protection</h3>
+            <p>Under the Data Protection Laws and Regulations, Personal Data must be Processed in accordance with data protection principles, under which said Personal Data must:</p>
+            <ol>
+              <li>be Processed fairly and lawfully and in a transparent manner;</li>
+              <li>be obtained and Processed only for one or more specified, explicit, and lawful purposes;</li>
+              <li>be adequate, relevant and not excessive in relation to the purpose;</li>
+              <li>be accurate and, where necessary, kept up to date;</li>
+              <li>be kept for no longer than is necessary for the purpose;</li>
+              <li>be Processed in accordance with the rights of Data Subjects and in a manner that ensures appropriate security, integrity and confidentiality of the Personal Data.</li>
+            </ol>
+            <p>Greenfly ensures it applies appropriate technical and organizational measures to assist its customers with adhering to these principles.</p>
+
+            <h4><span class="num">3.1</span>Nature and purpose of processing</h4>
+            <p>Greenfly will process Personal Data as necessary to perform the Service and as further instructed by customers, as a Data Processor. Examples include the encoding of high-, medium-, and low-resolution copies for image and/or video content submitted by Data Subjects, as well as the potential application of watermarks or pre- and post-roll content as specified by customers.</p>
+
+            <h4><span class="num">3.2</span>Categories of data subjects</h4>
+            <p>Customer users may submit Personal Data to the Greenfly platform, the extent of which is determined and controlled by the customer in its sole discretion, and which may include:</p>
+            <ul>
+              <li>Prospects, customers, business partners and vendors of a customer</li>
+              <li>Employees, agents, advisors, or freelancers of a customer</li>
+              <li>Customer's users authorized by a customer to use the platform</li>
+            </ul>
+
+            <h4><span class="num">3.3</span>Types of personal data</h4>
+            <ul>
+              <li><strong>Identifying.</strong> First and last names</li>
+              <li><strong>Authenticating.</strong> Email address and password credentials; authorized social network OAuth tokens</li>
+              <li><strong>Social network.</strong> Profile handles; post IDs</li>
+              <li><strong>Tracking.</strong> Connection data (IP address, mobile carrier); device data (device make &amp; model, operating system type &amp; version)</li>
+            </ul>
+
+            <h4><span class="num">3.4</span>User authentication</h4>
+            <p>User access to the Greenfly platform requires a valid user email and password combination, which are encrypted via TLS while in transmission, as well as machine specific information for identity validation. Following a successful authentication, a random session ID (or token) is generated and stored in the user's device to maintain identity state.</p>
+
+            <h4><span class="num">3.5</span>Data encryption</h4>
+            <p>The Service uses industry-standard encryption products to protect Customer Data and communications during transmissions between a customer's network and the Service, including <strong>256-bit TLS Certificates, AES-256 encryption for data storage, and one-way salted hashing of customer user credentials.</strong></p>
+
+            <h4><span class="num">3.6</span>Data segregation</h4>
+            <p>The Service is operated in a multi-tenant architecture that is designed to segregate and restrict Customer Data storage and access based on business needs. The architecture provides effective logical data separation for different customers via customer-specific unique IDs and allows the use of customer and user role based access privileges. Additional segregation is ensured by providing separate environments for testing and production.</p>
+
+            <h4><span class="num">3.7</span>Security controls</h4>
+            <p>Greenfly has implemented procedures designed to ensure that Customer Data is Processed only as instructed by customers. The Service undergoes security assessments by internal personnel and third parties, which include infrastructure vulnerability assessments and application security assessments. Greenfly implements a number of security controls, including:</p>
+            <ul>
+              <li>Unique user identifiers; controls to ensure initial passwords must be reset on first use; password length and complexity requirements.</li>
+              <li>Greenfly personnel do not have access to nor are able to set defined passwords for customer users.</li>
+              <li>Customers manage their application users, define roles, and apply permissions and rights within their company channels.</li>
+              <li>User passwords are stored using a salted hash format and transmitted in encrypted form.</li>
+              <li>User access logs containing date, time, User ID, URL/identity ID, and operation performed are maintained in a secure centralized host for a minimum of 90 days.</li>
+              <li>If there is suspicion of inappropriate access, Greenfly can provide customer log entry records to assist in forensic analysis on a time and materials basis.</li>
+            </ul>
+
+            <h4><span class="num">3.8</span>Intrusion detection</h4>
+            <p>Greenfly monitors the Service for unauthorized intrusions using network-based intrusion detection mechanisms.</p>
+
+            <h4><span class="num">3.9</span>Virus protection</h4>
+            <p>Greenfly systems have controls in place that are designed to prevent and detect the introduction of viruses to the respective platform services.</p>
+
+            <h4><span class="num">3.10</span>Security logs</h4>
+            <p>All Greenfly systems used in the provision of the platform — including routers, load balancers, network switches and operating systems — log information to their respective log facility or a centralized syslog server, then aggregated to facilitate security reviews and root cause analysis.</p>
+
+            <h4><span class="num">3.11</span>Incident management</h4>
+            <p>Greenfly maintains security incident management policies and procedures and will notify customers without delay of any unauthorized disclosure of their respective Customer Data by Greenfly or its agents of which Greenfly becomes aware to the extent required by Data Protection Laws and Regulations.</p>
+
+            <h4><span class="num">3.12</span>Physical security</h4>
+            <p>Production data centers used to provide the Greenfly Service have access control systems that permit only authorized personnel to access secure areas. Facilities are secured by around-the-clock guards, two-factor access screening (including biometrics), and escort-controlled access, and are also supported by on-site back-up generators.</p>
+
+            <h4><span class="num">3.13</span>Reliability and data backup</h4>
+            <p>All platform infrastructure is configured in a high availability mode or in a redundant fashion. All Customer Data submitted to the Greenfly Service is stored on infrastructure that supports high availability and is backed up on a regular basis in encrypted form to an off-site facility. <strong>All backup data is retained for at least 90 days.</strong></p>
+
+            <h4><span class="num">3.14</span>Disaster recovery</h4>
+            <p>Production systems are protected by disaster recovery plans which provide for backup of critical data and services. <strong>Our disaster recovery plans currently guarantee restoration of the Service (RTO) within 24 hours after Greenfly's declaration of a disaster.</strong></p>
+
+            <h4><span class="num">3.15</span>Analytics</h4>
+            <p>Greenfly may track and analyze the usage of the platform for purposes of security and helping Greenfly improve the user experience of the Service. Greenfly may share usage data with third party service providers for the purpose of analysis and improvements, and may share anonymous usage data on an aggregate basis. <strong>No Customer Data consisting of personally identifiable information shall be contained in the anonymized data, nor any data that would identify customers, their users, or any individual, company or organization.</strong></p>
+
+            <h4><span class="num">3.16</span>Sub-processors</h4>
+            <p>Greenfly utilizes certain sub-processors to assist it in providing to its customers the Service described in the <a href="#terms">Terms of Service</a>. A sub-processor is a third party data processor engaged by Greenfly, who has or potentially will process Customer Data (which may contain Personal Data).</p>
+
+            <span class="table-label">Infrastructure</span>
+            <p>We use the following sub-processors to provide our cloud infrastructure environment and storage of Customer Data:</p>
+            <table>
+              <thead>
+                <tr><th>Sub-processor</th><th>Country of processing</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Amazon Web Services, Inc.</strong></td><td>USA</td></tr>
+                <tr><td><strong>Google Inc.</strong></td><td>USA</td></tr>
+              </tbody>
+            </table>
+
+            <span class="table-label">Processing of customer data</span>
+            <p>We work with the following sub-processors that monitor, maintain and otherwise support the Service. These sub-processors may, but not necessarily will, have access to Customer Data:</p>
+            <table>
+              <thead>
+                <tr><th>Sub-processor</th><th>Country</th><th>Purpose</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>MailChimp</strong></td><td>USA</td><td>Delivery of mail notifications</td></tr>
+                <tr><td><strong>Mixpanel, Inc.</strong></td><td>USA</td><td>Service usage metrics</td></tr>
+                <tr><td><strong>Slack, Inc.</strong></td><td>USA</td><td>Customer support</td></tr>
+                <tr><td><strong>Zendesk, Inc.</strong></td><td>USA</td><td>Customer account administration and support</td></tr>
+              </tbody>
+            </table>
+
+            <h3><span class="num">04</span>Confidentiality</h3>
+            <p>Greenfly will keep Confidential Information, which extends beyond Personal Data, in accordance with the relevant agreement between the customer and Greenfly and, except with prior written consent of the customer or as permitted in the relevant agreement, will:</p>
+            <ul>
+              <li>Not use or exploit Confidential Information in any way except for the purposes for which it has been disclosed;</li>
+              <li>Not disclose or make available Confidential Information in whole or in part to any third party; and</li>
+              <li>Apply the technical and organizational measures detailed in this Policy to Confidential Information.</li>
+            </ul>
+
+            <h3><span class="num">05</span>Roles and responsibilities</h3>
+            <p>Greenfly has appointed "Data Owners" who are locally responsible for ensuring employees within their department or area receive appropriate training and are working in compliance with this Policy. Greenfly has also designated an overall Data Protection Officer who is responsible for:</p>
+            <ul>
+              <li>Acting as a key point of contact for data protection inquiries and the reporting of breaches;</li>
+              <li>Monitoring and ensuring compliance with this Policy across the whole of the Greenfly organization;</li>
+              <li>Conducting reviews of internal procedures to ensure they continue to provide adequate protection of Customer Data and Confidential Information;</li>
+              <li>Liaising with data owners to deliver training, improve security awareness and communicate information relating to this Policy to employees;</li>
+              <li>Updating this Policy to reflect any changes in Data Protection Laws and Regulations;</li>
+              <li>Registering with government agencies.</li>
+            </ul>
+            <p>If you have any questions regarding this Policy, please contact our Data Protection Officer by email at <a href="mailto:dpo@greenfly.com">dpo@greenfly.com</a>.</p>
+          </div>
+        </article>
+
+        <!-- ===================== 04 · BIOMETRIC POLICY ===================== -->
+        <article class="legal-doc" id="biometric">
+          <header class="legal-doc-head">
+            <div class="legal-doc-num">
+              <svg viewBox="0 0 56 64" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+                <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" />
+              </svg>
+              <span>04</span>
+            </div>
+            <span class="mono">Document 04</span>
+            <h2>Biometric <em>Policy.</em></h2>
+            <div class="legal-doc-meta">
+              <span>Updated <b>Sep 20, 2024</b></span>
+            </div>
+          </header>
+
+          <div class="legal-doc-body">
+            <h3><span class="num">01</span>Purpose</h3>
+            <p>Greenfly, Inc. ("we," "us," or "our") is committed to protecting the confidentiality and integrity of individual biometric data collected from or on behalf of our customers. <strong>This Biometric Data Policy and Notice ("Policy") describes our practices regarding the collection, use, storage, and destruction of biometric identifiers and information</strong>, in accordance with applicable laws, including the Illinois Biometric Information Privacy Act and other state biometric laws.</p>
+
+            <h3><span class="num">02</span>Definitions</h3>
+            <p>Biometric data, as the term is used in this Policy, refers to both a "biometric identifier" (a retina or iris scan, fingerprint, voiceprint, or scan of hand or face geometry) and "biometric information" (any information based on an individual's biometric identifier used to identify an individual).</p>
+
+            <h3><span class="num">03</span>Collection and use of biometric data</h3>
+            <p>We may collect, use, and store scans of face geometry, or "faceprints," and associated biometric identifiers and information via our mobile app and websites in providing our services to customers <strong>for the purpose of identifying individuals in certain images and videos.</strong></p>
+
+            <h3><span class="num">04</span>Storage and protection of biometric data</h3>
+            <p>We store biometric data securely using industry-standard security measures, including but not limited to encryption, access controls, and secure storage. <strong>Biometric data will not be sold, leased, traded, or otherwise disclosed to third parties</strong>, except in cases where:</p>
+            <ol type="i">
+              <li>disclosure is required by law or legal process; or</li>
+              <li>disclosure is consented to by the individual whose data is collected.</li>
+            </ol>
+
+            <h3><span class="num">05</span>Retention and destruction of biometric data</h3>
+            <p>Biometric data will be retained only for as long as necessary to fulfill the purpose for which it was collected, or as required by law. <strong>Biometric data will be permanently destroyed when the initial purpose for collecting or obtaining such data has been satisfied, or within three (3) years of the individual's last interaction with us, whichever occurs first.</strong> Destruction will be carried out in a secure manner, using techniques such as data wiping or shredding.</p>
+
+            <h3><span class="num">06</span>Individual rights</h3>
+            <p>Individuals whose biometric data we collect have the right to:</p>
+            <ol type="i">
+              <li>be informed about the collection and use of their biometric data;</li>
+              <li>request a copy of the specific biometric data we have collected about the individual;</li>
+              <li>request the deletion of their biometric data; and</li>
+              <li>withdraw their consent to the collection, use, or storage of their biometric data at any time, subject to applicable legal requirements.</li>
+            </ol>
+
+            <h3><span class="num">07</span>Consent</h3>
+            <p>We will obtain written consent of the individual, or require our customer to obtain such consent, as appropriate, before collecting, using, or storing biometric data.</p>
+
+            <h3><span class="num">08</span>Changes to this policy</h3>
+            <p>We may update this Policy from time to time. Any changes will be posted on our website and will become effective upon posting. Continued use of our services following any changes indicates acceptance of the new Policy.</p>
+
+            <h3><span class="num">09</span>Contact information</h3>
+            <p>If you have any questions or concerns about this Policy or wish to exercise your individual rights under this Policy, please contact us at <a href="mailto:privacy@greenfly.com">privacy@greenfly.com</a>.</p>
+          </div>
+        </article>
+
+      </div><!-- /.legal-docs -->
+    </div><!-- /.legal-grid -->
+  </div><!-- /.legal-page-inner -->
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer" id="footer">
+  <div class="footer-stage">
+    <div class="footer-wordmark">
+      <img src="./images/brand/Greenfly (1).svg" alt="Greenfly">
+    </div>
+  </div>
+
+  <div class="footer-inner">
+    <div>
+      <h5>Platform</h5>
+      <ul>
+        <li><a href="./platform.html">Capture</a></li>
+        <li><a href="./platform.html">Identify</a></li>
+        <li><a href="./platform.html">Distribute</a></li>
+        <li><a href="./platform.html">Measure</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="./company.html">About</a></li>
+        <li><a href="./company.html">Customers</a></li>
+        <li><a href="./company.html">Careers</a></li>
+        <li><a href="./get-greenfly.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Resources</h5>
+      <ul>
+        <li><a href="#">Editorial</a></li>
+        <li><a href="#">Playbooks</a></li>
+        <li><a href="#">Webinars</a></li>
+        <li><a href="#">Support</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-legal">
+    <span>© 2026 Greenfly Inc.</span>
+    <span class="footer-status">
+      <span class="footer-status-dot"></span>
+      System · Nominal · <b>99.97%</b>
+    </span>
+    <span><a href="./legal.html">Legal &amp; policies &rarr;</a></span>
+  </div>
+</footer>
+
+<script>
+/* Nav: hide on scroll-down, reveal on scroll-up; densify past hero. */
+(() => {
+  const nav = document.getElementById('siteNav');
+  if (!nav) return;
+  const HIDE_AFTER = 80;
+  const DELTA = 6;
+  let lastY = window.scrollY || 0;
+  let ticking = false;
+  const update = () => {
+    const y = window.scrollY || 0;
+    const dy = y - lastY;
+    nav.classList.toggle('is-scrolled', y > 24);
+    if (Math.abs(dy) > DELTA) {
+      if (dy > 0 && y > HIDE_AFTER) nav.classList.add('nav-hidden');
+      else if (dy < 0)              nav.classList.remove('nav-hidden');
+      lastY = y;
+    }
+    ticking = false;
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+  nav.addEventListener('focusin', () => nav.classList.remove('nav-hidden'));
+})();
+
+/* Adaptive nav theme: when a .section-light is at the top of the viewport,
+   flip the nav glyphs to dark. */
+(() => {
+  const nav = document.getElementById('siteNav');
+  if (!nav) return;
+  const lights = document.querySelectorAll('.section-light');
+  if (!lights.length) return;
+  const NAV_H = 60;
+  const margin = () => `0px 0px -${Math.max(0, window.innerHeight - NAV_H)}px 0px`;
+  const active = new Set();
+  let io;
+  const wire = () => {
+    if (io) io.disconnect();
+    active.clear();
+    io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) active.add(e.target);
+        else active.delete(e.target);
+      });
+      nav.classList.toggle('nav-on-light', active.size > 0);
+    }, { rootMargin: margin(), threshold: 0 });
+    lights.forEach(el => io.observe(el));
+  };
+  wire();
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(wire, 200); });
+})();
+
+/* Active TOC item: track which doc article is currently in view. */
+(() => {
+  const tocLinks = Array.from(document.querySelectorAll('.legal-toc a[href^="#"]'));
+  if (!tocLinks.length) return;
+  const targets = tocLinks
+    .map(a => document.getElementById(a.getAttribute('href').slice(1)))
+    .filter(Boolean);
+  if (!targets.length) return;
+  const linkFor = (id) => tocLinks.find(a => a.getAttribute('href') === '#' + id);
+  let activeId = null;
+  const setActive = (id) => {
+    if (id === activeId) return;
+    activeId = id;
+    tocLinks.forEach(a => a.classList.remove('is-active'));
+    const link = linkFor(id);
+    if (link) link.classList.add('is-active');
+  };
+  const io = new IntersectionObserver((entries) => {
+    const visible = entries
+      .filter(e => e.isIntersecting)
+      .sort((a, b) => a.target.getBoundingClientRect().top - b.target.getBoundingClientRect().top);
+    if (visible.length) setActive(visible[0].target.id);
+  }, { rootMargin: '-12% 0px -75% 0px', threshold: 0 });
+  targets.forEach(t => io.observe(t));
+  setActive(targets[0].id);
+})();
+</script>
+
+</body>
+</html>

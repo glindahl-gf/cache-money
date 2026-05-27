@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# Local Claude Code preview tooling (launch.json, serve.js)
+.claude/
+
+# Large archive bundles (handoff zips, etc.)
+*.zip

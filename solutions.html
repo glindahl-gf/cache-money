@@ -1,0 +1,1280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Greenfly · Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #050607;
+    --bg-2: #0b0d0f;
+    --bg-3: #101214;
+    --accent: #B6F500;
+    --accent-dim: #8bc000;
+    --text: #f4f5f6;
+    --dim: rgba(255,255,255,.64);
+    --dim-2: rgba(255,255,255,.40);
+    --hair: rgba(255,255,255,.10);
+    --hair-strong: rgba(255,255,255,.20);
+    --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --ease: cubic-bezier(.22,.61,.36,1);
+    --ease-out: cubic-bezier(.16,1,.3,1);
+    --max: 1440px;
+
+    /* Per-vertical hint tints (kept low opacity so brand stays cohesive) */
+    --tint-sports:   rgba(120, 160, 200, .08);
+    --tint-ent:      rgba(220, 120, 200, .08);
+    --tint-brands:   rgba( 80, 180, 180, .09);
+    --tint-events:   rgba(245, 165,  60, .09);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow Condensed', system-ui, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body { overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+  /* Tokens ------------------------------------------------------------ */
+  .mono {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+  }
+  .label-lime { color: var(--accent); }
+  .label-dim  { color: var(--dim); }
+  .display {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: -0.012em;
+    line-height: .98;
+  }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 5vw; }
+
+  /* Nav --------------------------------------------------------------- */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    background-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 1px solid transparent;
+    transform: translateY(0);
+    transition: transform .38s var(--ease), background-color .35s var(--ease), backdrop-filter .35s var(--ease), -webkit-backdrop-filter .35s var(--ease), border-color .35s var(--ease);
+    will-change: transform;
+  }
+  .nav.nav-hidden { transform: translateY(-110%); }
+  .nav.is-scrolled {
+    background-color: rgba(10,11,13,.62);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-bottom-color: rgba(255,255,255,.06);
+  }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .nav.is-scrolled { background-color: rgba(5,6,7,.92); }
+  }
+  /* Adaptive theme: invert to dark glyphs when a .section-light crosses
+     the top of the viewport (toggled by IntersectionObserver below). */
+  .nav.nav-on-light .nav-link    { color: rgba(15,15,15,.72); }
+  .nav.nav-on-light .nav-utility { color: rgba(15,15,15,.55); border-left-color: rgba(15,15,15,.18); }
+  .nav.nav-on-light .nav-cta     { color: #0F0F0F; border-color: rgba(15,15,15,.28); }
+  .nav.nav-on-light .nav-link:hover,
+  .nav.nav-on-light .nav-utility:hover { color: #0F0F0F; }
+  .nav.nav-on-light .nav-cta:hover     { background: var(--accent); color: #000; border-color: var(--accent); }
+  /* Logo recolor on light bg: hide the lime original and paint a
+     field-green wordmark on the parent anchor via background-image. */
+  .nav.nav-on-light .nav-logo {
+    background-image: url('./images/brand/Greenfly-fieldgreen.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left center;
+  }
+  .nav.nav-on-light .nav-logo img { visibility: hidden; }
+  .nav.nav-on-light.is-scrolled {
+    background-color: rgba(238,238,232,.62);
+    border-bottom-color: rgba(15,15,15,.10);
+  }
+  .nav-left, .nav-right { display: flex; align-items: center; gap: 28px; }
+  .nav-right { gap: 24px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-utility {
+    display: inline-flex; align-items: center;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--dim-2);
+    padding-left: 22px; margin-left: -2px;
+    border-left: 1px solid var(--hair);
+    transition: color .2s var(--ease);
+  }
+  .nav-utility:hover { color: var(--text); }
+  .nav-logo { display: inline-flex; align-items: center; line-height: 1; }
+  .nav-logo img { height: 22px; width: auto; display: block; }
+  .nav-link {
+    font-size: 13px; color: var(--dim);
+    transition: color .2s var(--ease);
+  }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--text); }
+  .nav-cta {
+    padding: 9px 16px;
+    border: 1px solid var(--hair-strong);
+    border-radius: 8px;
+    font-size: 13px; font-weight: 500;
+    transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .nav-cta:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+
+  /* Solutions dropdown — minimal list */
+  .nav-link-wrap { position: relative; }
+  .nav-link-wrap .nav-link { display: inline-flex; align-items: center; gap: 7px; }
+  .nav-link-wrap .nav-link::after {
+    content: ""; display: inline-block;
+    width: 5px; height: 5px;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    transform: rotate(45deg) translateY(-1px);
+    opacity: .55;
+    transition: transform .25s var(--ease), opacity .2s var(--ease);
+  }
+  .nav-link-wrap:hover .nav-link::after,
+  .nav-link-wrap:focus-within .nav-link::after {
+    opacity: 1;
+    transform: rotate(225deg) translateY(1px);
+  }
+  .nav-dropdown {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    min-width: 200px;
+    background: #0b0d0f;
+    border: 1px solid rgba(255,255,255,.10);
+    padding: 8px 0;
+    opacity: 0; visibility: hidden;
+    transition: opacity .18s var(--ease), transform .18s var(--ease), visibility 0s .18s;
+    z-index: 110;
+  }
+  .nav-dropdown::before {
+    content: ""; position: absolute;
+    top: -14px; left: 0; right: 0; height: 14px;
+  }
+  .nav-link-wrap:hover .nav-dropdown,
+  .nav-link-wrap:focus-within .nav-dropdown {
+    opacity: 1; visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    transition: opacity .18s var(--ease), transform .18s var(--ease);
+  }
+  .nav-dd-item {
+    display: block;
+    padding: 9px 22px;
+    font-size: 13px;
+    color: rgba(255,255,255,.64);
+    white-space: nowrap;
+    transition: color .15s var(--ease);
+  }
+  .nav-dd-item:hover { color: #B6F500; }
+  .nav-dd-item.active { color: #B6F500; }
+  @media (max-width: 720px) { .nav-link-wrap { display: none; } }
+
+  /* =====================================================================
+     SOLUTIONS HUB — split layout
+     LEFT: page-level hero (eyebrow, big headline, sub, CTAs, trust).
+     RIGHT: vertical accordion stack of 4 industry cards.
+     Industry names get full horizontal width on the right so they
+     never truncate; only one card is open at a time so the page
+     never feels crowded.
+     ===================================================================== */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(182,245,0,.6); }
+    50%      { opacity: .7; box-shadow: 0 0 0 6px rgba(182,245,0,0); }
+  }
+
+  .solutions-hub {
+    min-height: 100vh;
+    padding: 110px 5vw 88px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--hair);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  /* Subtle dot grid wash, biased to the left under the hero copy */
+  .solutions-hub::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size: 30px 30px;
+    mask-image: radial-gradient(ellipse 55% 70% at 28% 50%, black 0%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 55% 70% at 28% 50%, black 0%, transparent 75%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .hub-grid {
+    max-width: var(--max);
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 96px;
+    align-items: center;
+  }
+
+  /* ----- LEFT: hero --------------------------------------------------- */
+  .hub-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .hub-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hub-eyebrow .dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2.6s ease-in-out infinite;
+  }
+  .hub-hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: clamp(54px, 5.6vw, 96px);
+    line-height: .96;
+    letter-spacing: -0.018em;
+    text-transform: uppercase;
+    color: var(--text);
+    max-width: 14ch;
+  }
+  .hub-hero h1 .line-2 {
+    display: block;
+    color: var(--dim);
+  }
+  .hub-sub {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 400;
+    font-size: clamp(16px, 1.25vw, 19px);
+    line-height: 1.55;
+    color: var(--dim);
+    max-width: 50ch;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .hub-sub b {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .hub-ctas {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .hub-trust {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .hub-trust .mono { color: var(--dim-2); white-space: nowrap; }
+  .hub-trust-logos {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .hub-trust-logos .logo-mark {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text);
+    opacity: .55;
+    transition: opacity .2s var(--ease), color .2s var(--ease);
+  }
+  .hub-trust-logos .logo-mark:hover { opacity: 1; color: var(--accent); }
+
+  /* ----- RIGHT: accordion -------------------------------------------- */
+  /* Resting state: all four cards are visually identical — same dark
+     surface, same hairline border, square corners. The lime accent
+     activates only on the currently-open card so selection is the
+     only thing that distinguishes a vertical from its siblings. */
+  .hub-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .hub-card {
+    position: relative;
+    background: var(--bg-2);
+    border: 1px solid var(--hair);
+    color: var(--text);
+    transition:
+      background   .3s var(--ease),
+      border-color .3s var(--ease);
+  }
+  .hub-card:hover {
+    background: var(--bg-3);
+    border-color: var(--hair-strong);
+  }
+  .hub-card.is-open {
+    background: var(--bg-3);
+    border-color: var(--accent);
+  }
+
+  /* Card head — clickable strip */
+  .card-head {
+    width: 100%;
+    padding: 24px 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    cursor: pointer;
+    user-select: none;
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+  }
+  .card-head h3 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: clamp(24px, 2.3vw, 32px);
+    line-height: 1;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
+    color: var(--text);
+    transition: color .25s var(--ease);
+  }
+  .hub-card.is-open .card-head h3 { color: var(--accent); }
+
+  /* +/- icon — neutral hairline circle, accent when open */
+  .card-icon {
+    width: 36px; height: 36px;
+    border: 1px solid var(--hair-strong);
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+    color: var(--dim);
+    transition: color .25s var(--ease), border-color .25s var(--ease);
+  }
+  .card-icon::before,
+  .card-icon::after {
+    content: "";
+    position: absolute;
+    left: 50%; top: 50%;
+    background: currentColor;
+  }
+  .card-icon::before {
+    width: 12px; height: 1.5px;
+    transform: translate(-50%, -50%);
+  }
+  .card-icon::after {
+    width: 1.5px; height: 12px;
+    transform: translate(-50%, -50%);
+    transition: transform .3s var(--ease);
+  }
+  .hub-card:hover .card-icon { color: var(--text); }
+  .hub-card.is-open .card-icon {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .hub-card.is-open .card-icon::after {
+    transform: translate(-50%, -50%) scaleY(0);
+  }
+
+  /* Card body — fixed open height so the accordion's total size never
+     changes between hover targets. This keeps the left column visually
+     anchored during the expand/collapse animation. */
+  .card-body {
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: height .28s var(--ease), opacity .22s var(--ease);
+  }
+  .hub-card.is-open .card-body {
+    height: 240px;
+    opacity: 1;
+  }
+  .card-body-inner {
+    padding: 4px 26px 26px;
+  }
+
+  .card-tagline {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.45;
+    color: var(--dim);
+    margin-bottom: 18px;
+    max-width: 44ch;
+  }
+  .card-audience {
+    list-style: none;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+  .card-audience li {
+    padding: 6px 10px;
+    border: 1px solid var(--hair);
+    color: var(--dim);
+    background: rgba(0,0,0,.2);
+  }
+
+
+  /* =====================================================================
+     COMMON-PIPELINE BAND (light/cream)
+     The point: four worlds, one underlying pipeline. Reuses the
+     editorial cream theme established on the homepage.
+     ===================================================================== */
+  .common {
+    padding: 120px 5vw;
+    position: relative;
+  }
+  .common-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .common-left .mono { display: block; margin-bottom: 28px; }
+  .common-left h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: clamp(36px, 4vw, 56px);
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    color: var(--text);
+    max-width: 16ch;
+  }
+  .common-left h2 em {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .common-left p {
+    margin-top: 24px;
+    color: var(--dim);
+    font-size: 17px;
+    line-height: 1.55;
+    max-width: 38ch;
+  }
+  .common-left .btn-ghost {
+    margin-top: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    border: 1px solid rgba(15,15,15,.24);
+    font-size: 14px; font-weight: 500;
+    color: var(--text);
+    transition: border-color .2s var(--ease), color .2s var(--ease);
+  }
+  .common-left .btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .common-pillars {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .pillar-cell {
+    border: 1px solid var(--hair);
+    padding: 28px 24px 24px;
+    background: var(--bg-2);
+    transition: border-color .2s var(--ease), background .2s var(--ease);
+  }
+  .pillar-cell:hover {
+    border-color: var(--accent);
+    background: var(--bg-3);
+  }
+  .pillar-cell .pillar-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .22em;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .pillar-cell h4 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .pillar-cell p {
+    color: var(--dim);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .pillar-cell .pillar-tags {
+    margin-top: 18px;
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .pillar-cell .pillar-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    padding: 5px 8px;
+    border: 1px solid var(--hair);
+    color: var(--dim);
+  }
+
+  /* =====================================================================
+     CUSTOMER LOGOS (light theme, vertical-grouped)
+     Reuses the marquee pattern from homepage-v2 but the rows are
+     intentionally grouped — Sport+Live Events on row 1, Entertainment+
+     Brands on row 2 — so visitors recognize their world.
+     ===================================================================== */
+  .logos {
+    padding: 24px 0 110px;
+    overflow: hidden;
+    position: relative;
+  }
+  .logos-head {
+    max-width: var(--max);
+    margin: 0 auto 40px;
+    padding: 0 5vw;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .logos-head .mono { color: var(--dim); }
+  .logos-head h3 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: clamp(20px, 2.2vw, 28px);
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    max-width: 32ch;
+  }
+  .logos-head h3 em {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .logos-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+  }
+  .logos-rows::before,
+  .logos-rows::after {
+    content: "";
+    position: absolute; top: 0; bottom: 0;
+    width: 14vw;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .logos-rows::before { left: 0;  background: linear-gradient(to right, var(--bg), transparent); }
+  .logos-rows::after  { right: 0; background: linear-gradient(to left,  var(--bg), transparent); }
+
+  .logo-row {
+    display: flex;
+    gap: 0;
+    width: max-content;
+  }
+  .logo-row.row-1 { animation: marquee-left  56s linear infinite; }
+  .logo-row.row-2 { animation: marquee-right 64s linear infinite; }
+  .logo-row:hover { animation-play-state: paused; }
+  @keyframes marquee-left  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
+  @keyframes marquee-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+  .logo {
+    position: relative;
+    flex: 0 0 auto;
+    padding: 32px 52px 26px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    font-size: 22px;
+    color: var(--text);
+    opacity: .55;
+    white-space: nowrap;
+    transition: opacity .2s var(--ease), color .2s var(--ease);
+  }
+  .logo:hover { opacity: 1; color: var(--accent); }
+  .logo-type {
+    margin-left: 14px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .22em;
+    color: var(--dim-2);
+    vertical-align: middle;
+  }
+
+  /* =====================================================================
+     CLOSE
+     ===================================================================== */
+  .close {
+    padding: 140px 5vw 120px;
+    position: relative;
+    border-top: 1px solid var(--hair);
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 100%, rgba(182,245,0,.06), transparent 70%),
+      var(--bg);
+  }
+  .close-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .close .mono { margin-bottom: 28px; }
+  .close-stack {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: clamp(40px, 5.5vw, 88px);
+    line-height: 1.0;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .close-stack .final {
+    color: var(--text);
+    margin-top: 8px;
+  }
+  .close-stack .final .accent { color: var(--accent); }
+
+  .close-ctas {
+    margin-top: 44px;
+    display: flex; gap: 12px; flex-wrap: wrap;
+    justify-content: center;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px; border-radius: 8px;
+    font-size: 14px; font-weight: 500;
+    letter-spacing: .01em;
+    transition: transform .2s var(--ease), background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { transform: translateY(-1px); background: #c8ff1a; }
+  .btn-ghost {
+    border: 1px solid var(--hair-strong);
+    color: var(--text);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn .arrow { transition: transform .2s var(--ease); }
+  .btn:hover .arrow { transform: translateX(3px); }
+
+  /* =====================================================================
+     FOOTER (matches homepage-v2)
+     ===================================================================== */
+  .footer {
+    background: var(--bg-2);
+    border-top: 1px solid var(--hair);
+    padding: 80px 5vw 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .footer-stage {
+    max-width: var(--max);
+    margin: 0 auto 60px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .footer-wordmark {
+    padding: 32px 0;
+  }
+  .footer-wordmark img {
+    width: 64%;
+    max-width: 880px;
+    display: block;
+    margin: 0 auto;
+    opacity: .85;
+  }
+
+  .footer-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    padding: 40px 0;
+    border-top: 1px solid var(--hair);
+  }
+  .footer-inner h5 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+    font-weight: 400;
+  }
+  .footer-inner ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-inner a {
+    font-size: 14px;
+    color: var(--dim);
+    transition: color .2s var(--ease);
+  }
+  .footer-inner a:hover { color: var(--accent); }
+
+  .footer-legal {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding-top: 28px;
+    border-top: 1px solid var(--hair);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--dim-2);
+  }
+  .footer-legal a { color: var(--dim-2); transition: color .2s var(--ease); }
+  .footer-legal a:hover { color: var(--text); }
+  .footer-status {
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .footer-status-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(182,245,0,.5);
+    animation: pulse 2.6s ease-in-out infinite;
+  }
+
+  /* =====================================================================
+     SECTION-LIGHT (cream + olive accent — used by .common band)
+     ===================================================================== */
+  .section-light {
+    --bg:           #EEEEE8;
+    --bg-2:         #E6E6DE;
+    --bg-3:         #D9D9CE;
+    --text:         #0F0F0F;
+    --dim:          rgba(15,15,15,.62);
+    --dim-2:        rgba(15,15,15,.42);
+    --hair:         rgba(15,15,15,.14);
+    --hair-strong:  rgba(15,15,15,.26);
+    --accent:       #79982D;
+    --accent-dim:   #62801f;
+
+    background: var(--bg);
+    color: var(--text);
+  }
+  .section-light.common {
+    background:
+      radial-gradient(ellipse at 70% 20%, rgba(121,152,45,.06), transparent 60%),
+      var(--bg);
+  }
+
+  /* =====================================================================
+     RESPONSIVE
+     ===================================================================== */
+  @media (max-width: 1080px) {
+    .solutions-hub { min-height: auto; padding: 120px 5vw 88px; }
+    .hub-grid { grid-template-columns: 1fr; gap: 64px; }
+    .hub-hero h1 { max-width: none; }
+    .common-inner { grid-template-columns: 1fr; gap: 56px; }
+    .footer-inner { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+  }
+  @media (max-width: 720px) {
+    .nav-link, .nav-utility { display: none; }
+    .solutions-hub { padding: 110px 6vw 64px; }
+    .hub-hero h1 { font-size: clamp(40px, 11vw, 64px); }
+    .hub-trust { flex-direction: column; align-items: flex-start; gap: 14px; }
+    .card-head { padding: 20px 22px; }
+    .card-body-inner { padding: 4px 22px 22px; }
+    .common { padding: 80px 5vw; }
+    .common-pillars { grid-template-columns: 1fr; }
+    .logos-head { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+    .footer-legal { flex-direction: column; gap: 14px; text-align: center; }
+    .close-stack { font-size: clamp(36px, 9vw, 56px); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav class="nav" id="siteNav">
+  <div class="nav-left">
+    <a href="./homepage.html" class="nav-logo" aria-label="Greenfly">
+      <img src="./images/brand/Greenfly (1).svg" alt="Greenfly">
+    </a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="./platform.html"   class="nav-link">Platform</a>
+      <div class="nav-link-wrap">
+        <a href="./solutions.html" class="nav-link active">Solutions</a>
+        <div class="nav-dropdown">
+          <a href="./solutions-sports.html" class="nav-dd-item">Sports</a>
+          <a href="./solutions-entertainment.html" class="nav-dd-item">Entertainment</a>
+          <a href="./solutions-brands.html" class="nav-dd-item">Brands</a>
+          <a href="./solutions-live-events.html" class="nav-dd-item">Live Events</a>
+        </div>
+      </div>
+      <a href="./homepage.html#proof"  class="nav-link">Stories</a>
+      <a href="./company.html" class="nav-link">Company</a>
+    </div>
+    <a href="#login" class="nav-utility">Login</a>
+    <a href="./get-greenfly.html"  class="nav-cta">Get Greenfly</a>
+  </div>
+</nav>
+
+<!-- ========== SOLUTIONS HUB — split: hero (left) + accordion (right) ========== -->
+<section class="solutions-hub" id="solutions-hub">
+  <div class="hub-grid">
+
+    <!-- LEFT: hero -->
+    <div class="hub-hero">
+      <div class="hub-eyebrow">
+        <span class="dot"></span>
+        <span class="mono label-lime">Solutions · v2026</span>
+      </div>
+
+      <h1>
+        Pick your floor.
+        <span class="line-2">Same pipeline underneath.</span>
+      </h1>
+
+      <p class="hub-sub">
+        Sport, entertainment, brands, live events. <b>The operating system underneath is one.</b> The way it speaks to each is not.
+      </p>
+
+      <div class="hub-ctas">
+        <a href="./get-greenfly.html"          class="btn btn-primary">Get Greenfly <span class="arrow">→</span></a>
+        <a href="./platform.html" class="btn btn-ghost">See the platform</a>
+      </div>
+
+      <div class="hub-trust">
+        <span class="mono label-dim">Trusted across all four</span>
+        <div class="hub-trust-logos">
+          <span class="logo-mark">NBA</span>
+          <span class="logo-mark">ESPN</span>
+          <span class="logo-mark">Nike</span>
+          <span class="logo-mark">Wimbledon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: accordion -->
+    <div class="hub-accordion" id="hubAccordion">
+
+      <article class="hub-card is-open" id="sports">
+        <button class="card-head" type="button" aria-expanded="true">
+          <h3>Sports</h3>
+          <span class="card-icon" aria-hidden="true"></span>
+        </button>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p class="card-tagline">For the leagues, teams, federations, and collegiate programs that live in the press box.</p>
+            <ul class="card-audience">
+              <li>Leagues</li>
+              <li>Teams</li>
+              <li>Federations</li>
+              <li>Collegiate</li>
+            </ul>
+            <a href="./solutions-sports.html" class="btn btn-primary">Enter Sports <span class="arrow">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="hub-card" id="entertainment">
+        <button class="card-head" type="button" aria-expanded="false">
+          <h3>Entertainment</h3>
+          <span class="card-icon" aria-hidden="true"></span>
+        </button>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p class="card-tagline">For the networks, studios, streamers, and live productions where talent already lives in your roster.</p>
+            <ul class="card-audience">
+              <li>Networks</li>
+              <li>Studios</li>
+              <li>Streaming</li>
+              <li>Live Productions</li>
+            </ul>
+            <a href="./solutions-entertainment.html" class="btn btn-primary">Enter Entertainment <span class="arrow">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="hub-card" id="brands">
+        <button class="card-head" type="button" aria-expanded="false">
+          <h3>Brands</h3>
+          <span class="card-icon" aria-hidden="true"></span>
+        </button>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p class="card-tagline">For the ambassador programs, global activations, and non-sport content operations that need content as a line of revenue.</p>
+            <ul class="card-audience">
+              <li>Ambassador Programs</li>
+              <li>Global Activations</li>
+              <li>Non-sport Content</li>
+              <li>CMO &amp; SVP Marketing</li>
+            </ul>
+            <a href="./solutions-brands.html" class="btn btn-primary">Enter Brands <span class="arrow">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="hub-card" id="live-events">
+        <button class="card-head" type="button" aria-expanded="false">
+          <h3>Live Events</h3>
+          <span class="card-icon" aria-hidden="true"></span>
+        </button>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p class="card-tagline">For the conferences, festivals, and brand activations where Live Event Capture and Fan Activation hit the same pipeline.</p>
+            <ul class="card-audience">
+              <li>Conferences</li>
+              <li>Festivals</li>
+              <li>Brand Activations</li>
+              <li>Productions</li>
+            </ul>
+            <a href="./solutions-live-events.html" class="btn btn-primary">Enter Live Events <span class="arrow">→</span></a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========== COMMON PIPELINE BAND ========== -->
+<section class="common section-light" id="common">
+  <div class="common-inner">
+    <div class="common-left">
+      <span class="mono label-lime">The Common Pipeline · 05</span>
+      <h2>
+        Four conversations.<br/>
+        One operating system.
+      </h2>
+      <p>
+        The voice changes between a federation and a CMO. The content does not. Every asset — wherever it's captured, whoever it's for — moves through the same four-stage pipeline.
+      </p>
+      <a href="./platform.html" class="btn-ghost">See the platform <span class="arrow">→</span></a>
+    </div>
+
+    <div class="common-pillars">
+      <div class="pillar-cell">
+        <div class="pillar-num">01 · Capture</div>
+        <h4>Speed</h4>
+        <p>Sideline. Studio. Talent's phone. Festival floor. Every source, one pipeline.</p>
+        <div class="pillar-tags">
+          <span class="pillar-tag">Sports</span>
+          <span class="pillar-tag">Ent.</span>
+          <span class="pillar-tag">Brands</span>
+          <span class="pillar-tag">Live</span>
+        </div>
+      </div>
+      <div class="pillar-cell">
+        <div class="pillar-num">02 · Identify</div>
+        <h4>Scale</h4>
+        <p>Players, talent, sponsors, ambassadors — recognized, tagged, rights-cleared on landing.</p>
+        <div class="pillar-tags">
+          <span class="pillar-tag">Sports</span>
+          <span class="pillar-tag">Ent.</span>
+          <span class="pillar-tag">Brands</span>
+          <span class="pillar-tag">Live</span>
+        </div>
+      </div>
+      <div class="pillar-cell">
+        <div class="pillar-num">03 · Distribute</div>
+        <h4>Reach</h4>
+        <p>The right cut, to the right phone, in the right format. Approved once, routed everywhere.</p>
+        <div class="pillar-tags">
+          <span class="pillar-tag">Sports</span>
+          <span class="pillar-tag">Ent.</span>
+          <span class="pillar-tag">Brands</span>
+          <span class="pillar-tag">Live</span>
+        </div>
+      </div>
+      <div class="pillar-cell">
+        <div class="pillar-num">04 · Measure</div>
+        <h4>Impact</h4>
+        <p>Earned media attributed to the frame. Every share back to the asset, the partner, the dollar.</p>
+        <div class="pillar-tags">
+          <span class="pillar-tag">Sports</span>
+          <span class="pillar-tag">Ent.</span>
+          <span class="pillar-tag">Brands</span>
+          <span class="pillar-tag">Live</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CUSTOMER LOGOS ========== -->
+<section class="logos" id="customers">
+  <div class="logos-head">
+    <span class="mono label-lime">Trusted across all four · 06</span>
+    <h3>
+      The biggest names in sport, entertainment, brands &amp; live events run on Greenfly.
+    </h3>
+  </div>
+  <div class="logos-rows">
+
+    <!-- Row 1 — Leagues, federations, events (all from existing homepage list) -->
+    <div class="logo-row row-1">
+      <div class="logo">NBA<span class="logo-type">League</span></div>
+      <div class="logo">NFL<span class="logo-type">League</span></div>
+      <div class="logo">MLB<span class="logo-type">League</span></div>
+      <div class="logo">NHL<span class="logo-type">League</span></div>
+      <div class="logo">PGA Tour<span class="logo-type">League</span></div>
+      <div class="logo">LaLiga<span class="logo-type">League</span></div>
+      <div class="logo">Premier League<span class="logo-type">League</span></div>
+      <div class="logo">FIFA<span class="logo-type">Federation</span></div>
+      <div class="logo">UFC<span class="logo-type">League</span></div>
+      <div class="logo">Formula 1<span class="logo-type">League</span></div>
+      <div class="logo">WNBA<span class="logo-type">League</span></div>
+      <div class="logo">MLS<span class="logo-type">League</span></div>
+      <div class="logo">NCAA<span class="logo-type">League</span></div>
+      <div class="logo">Ryder Cup<span class="logo-type">Event</span></div>
+      <div class="logo">Wimbledon<span class="logo-type">Event</span></div>
+      <!-- duplicate -->
+      <div class="logo">NBA<span class="logo-type">League</span></div>
+      <div class="logo">NFL<span class="logo-type">League</span></div>
+      <div class="logo">MLB<span class="logo-type">League</span></div>
+      <div class="logo">NHL<span class="logo-type">League</span></div>
+      <div class="logo">PGA Tour<span class="logo-type">League</span></div>
+      <div class="logo">LaLiga<span class="logo-type">League</span></div>
+      <div class="logo">Premier League<span class="logo-type">League</span></div>
+      <div class="logo">FIFA<span class="logo-type">Federation</span></div>
+      <div class="logo">UFC<span class="logo-type">League</span></div>
+      <div class="logo">Formula 1<span class="logo-type">League</span></div>
+      <div class="logo">WNBA<span class="logo-type">League</span></div>
+      <div class="logo">MLS<span class="logo-type">League</span></div>
+      <div class="logo">NCAA<span class="logo-type">League</span></div>
+      <div class="logo">Ryder Cup<span class="logo-type">Event</span></div>
+      <div class="logo">Wimbledon<span class="logo-type">Event</span></div>
+    </div>
+
+    <!-- Row 2 — Studios, brands, partners (all from existing homepage list) -->
+    <div class="logo-row row-2">
+      <div class="logo">ESPN<span class="logo-type">Studio</span></div>
+      <div class="logo">Nike<span class="logo-type">Brand</span></div>
+      <div class="logo">Adidas<span class="logo-type">Brand</span></div>
+      <div class="logo">Red Bull<span class="logo-type">Brand</span></div>
+      <div class="logo">Under Armour<span class="logo-type">Brand</span></div>
+      <div class="logo">Gatorade<span class="logo-type">Brand</span></div>
+      <div class="logo">New Balance<span class="logo-type">Brand</span></div>
+      <div class="logo">AT&amp;T<span class="logo-type">Partner</span></div>
+      <div class="logo">Verizon<span class="logo-type">Partner</span></div>
+      <!-- duplicate -->
+      <div class="logo">ESPN<span class="logo-type">Studio</span></div>
+      <div class="logo">Nike<span class="logo-type">Brand</span></div>
+      <div class="logo">Adidas<span class="logo-type">Brand</span></div>
+      <div class="logo">Red Bull<span class="logo-type">Brand</span></div>
+      <div class="logo">Under Armour<span class="logo-type">Brand</span></div>
+      <div class="logo">Gatorade<span class="logo-type">Brand</span></div>
+      <div class="logo">New Balance<span class="logo-type">Brand</span></div>
+      <div class="logo">AT&amp;T<span class="logo-type">Partner</span></div>
+      <div class="logo">Verizon<span class="logo-type">Partner</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CLOSE ========== -->
+<section class="close" id="demo">
+  <div class="close-inner">
+    <span class="mono label-lime">The Close</span>
+    <div class="close-stack">
+      <div>Find your floor.</div>
+      <div class="final">Get <span class="accent">Greenfly.</span></div>
+    </div>
+    <div class="close-ctas">
+      <a href="./get-greenfly.html" class="btn btn-primary">Book a demo <span class="arrow">→</span></a>
+      <a href="./get-greenfly.html" class="btn btn-ghost">Talk to sales <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer" id="footer">
+  <div class="footer-stage">
+    <div class="footer-wordmark">
+      <img src="./images/brand/Greenfly (1).svg" alt="Greenfly">
+    </div>
+  </div>
+
+  <div class="footer-inner">
+    <div>
+      <h5>Solutions</h5>
+      <ul>
+        <li><a href="./solutions-sports.html">Sports</a></li>
+        <li><a href="./solutions-entertainment.html">Entertainment</a></li>
+        <li><a href="./solutions-brands.html">Brands</a></li>
+        <li><a href="./solutions-live-events.html">Live Events</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Platform</h5>
+      <ul>
+        <li><a href="./platform.html">Capture</a></li>
+        <li><a href="./platform.html">Identify</a></li>
+        <li><a href="./platform.html">Distribute</a></li>
+        <li><a href="./platform.html">Measure</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Customers</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="./get-greenfly.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Resources</h5>
+      <ul>
+        <li><a href="#">Editorial</a></li>
+        <li><a href="#">Playbooks</a></li>
+        <li><a href="#">Webinars</a></li>
+        <li><a href="#">Support</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-legal">
+    <span>© 2026 Greenfly Inc.</span>
+    <span class="footer-status">
+      <span class="footer-status-dot"></span>
+      System · Nominal · <b>99.97%</b>
+    </span>
+    <span><a href="./legal.html">Legal &amp; policies &rarr;</a></span>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   SOLUTIONS HUB — interactions
+   1. Nav hide/show on scroll (matches homepage-v2)
+   2. Accordion: click a card head to open it, others collapse.
+      Sports starts open. Clicking the open card does nothing
+      (we don't allow zero-open state — keeps the layout balanced).
+   ============================================================ */
+
+const qs  = (s, el = document) => el.querySelector(s);
+const qsa = (s, el = document) => Array.from(el.querySelectorAll(s));
+
+/* Nav hide/show */
+(() => {
+  const nav = qs('#siteNav');
+  if (!nav) return;
+  const HIDE_AFTER = 80;
+  const DELTA = 6;
+  let lastY = window.scrollY || 0;
+  let ticking = false;
+  const update = () => {
+    const y = window.scrollY || 0;
+    const dy = y - lastY;
+    nav.classList.toggle('is-scrolled', y > 24);
+    if (Math.abs(dy) > DELTA) {
+      if (dy > 0 && y > HIDE_AFTER) nav.classList.add('nav-hidden');
+      else if (dy < 0)              nav.classList.remove('nav-hidden');
+      lastY = y;
+    }
+    ticking = false;
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+  nav.addEventListener('focusin', () => nav.classList.remove('nav-hidden'));
+})();
+
+/* Adaptive nav theme: flip to dark glyphs when a `.section-light` is
+   currently crossing the top band of the viewport. */
+(() => {
+  const nav = document.getElementById('siteNav');
+  if (!nav) return;
+  const lights = document.querySelectorAll('.section-light');
+  if (!lights.length) return;
+  const NAV_H = 60;
+  const margin = () => `0px 0px -${Math.max(0, window.innerHeight - NAV_H)}px 0px`;
+  const active = new Set();
+  let io;
+  const wire = () => {
+    if (io) io.disconnect();
+    active.clear();
+    io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) active.add(e.target);
+        else active.delete(e.target);
+      });
+      nav.classList.toggle('nav-on-light', active.size > 0);
+    }, { rootMargin: margin(), threshold: 0 });
+    lights.forEach(el => io.observe(el));
+  };
+  wire();
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(wire, 200); });
+})();
+
+/* Accordion — open on hover (mouseenter). Click + focus also open the
+   card so touch and keyboard users still work. The currently-open
+   card remains open until the user hovers another. */
+(() => {
+  const cards = qsa('.hub-card');
+  if (!cards.length) return;
+
+  const openCard = (card) => {
+    if (card.classList.contains('is-open')) return;
+    cards.forEach((c) => {
+      c.classList.remove('is-open');
+      const h = qs('.card-head', c);
+      if (h) h.setAttribute('aria-expanded', 'false');
+    });
+    card.classList.add('is-open');
+    const head = qs('.card-head', card);
+    if (head) head.setAttribute('aria-expanded', 'true');
+  };
+
+  cards.forEach((card) => {
+    card.addEventListener('mouseenter', () => openCard(card));
+    const head = qs('.card-head', card);
+    if (head) {
+      head.addEventListener('focus', () => openCard(card));
+      head.addEventListener('click', () => openCard(card));
+    }
+  });
+})();
+</script>
+</body>
+</html>

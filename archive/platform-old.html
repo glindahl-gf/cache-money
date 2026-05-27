@@ -1,0 +1,2135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Greenfly · The Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #050607;
+    --bg-2: #0b0d0f;
+    --bg-3: #101214;
+    --accent: #B6F500;
+    --accent-dim: #8bc000;
+    --text: #f4f5f6;
+    --dim: rgba(255,255,255,.64);
+    --dim-2: rgba(255,255,255,.40);
+    --hair: rgba(255,255,255,.10);
+    --hair-strong: rgba(255,255,255,.20);
+    --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --ease: cubic-bezier(.22,.61,.36,1);
+    --ease-out: cubic-bezier(.16,1,.3,1);
+    --max: 1440px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow Condensed', system-ui, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body { overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+  /* Tokens ------------------------------------------------------------- */
+  .mono {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+  }
+  .label-lime { color: var(--accent); }
+  .label-dim  { color: var(--dim); }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 5vw; }
+  .display {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: -0.012em;
+    line-height: .98;
+  }
+
+  /* Nav ---------------------------------------------------------------- */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    background-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 1px solid transparent;
+    transform: translateY(0);
+    transition: transform .38s var(--ease), background-color .35s var(--ease), backdrop-filter .35s var(--ease), -webkit-backdrop-filter .35s var(--ease), border-color .35s var(--ease);
+    will-change: transform;
+  }
+  .nav.nav-hidden { transform: translateY(-110%); }
+  .nav.is-scrolled {
+    background-color: rgba(10,11,13,.62);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-bottom-color: rgba(255,255,255,.06);
+  }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .nav.is-scrolled { background-color: rgba(5,6,7,.92); }
+  }
+  /* Adaptive theme: invert to dark glyphs when a .section-light crosses
+     the top of the viewport (toggled by IntersectionObserver below). */
+  .nav.nav-on-light .nav-link    { color: rgba(15,15,15,.72); }
+  .nav.nav-on-light .nav-utility { color: rgba(15,15,15,.55); border-left-color: rgba(15,15,15,.18); }
+  .nav.nav-on-light .nav-cta     { color: #0F0F0F; border-color: rgba(15,15,15,.28); }
+  .nav.nav-on-light .nav-link:hover,
+  .nav.nav-on-light .nav-utility:hover { color: #0F0F0F; }
+  .nav.nav-on-light .nav-cta:hover     { background: var(--accent); color: #000; border-color: var(--accent); }
+  /* Logo recolor on light bg: hide the lime original and paint a
+     field-green wordmark on the parent anchor via background-image. */
+  .nav.nav-on-light .nav-logo {
+    background-image: url('./images/brand/Greenfly-fieldgreen.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left center;
+  }
+  .nav.nav-on-light .nav-logo img { visibility: hidden; }
+  .nav.nav-on-light.is-scrolled {
+    background-color: rgba(238,238,232,.62);
+    border-bottom-color: rgba(15,15,15,.10);
+  }
+  .nav-left, .nav-right { display: flex; align-items: center; gap: 28px; }
+  .nav-right { gap: 24px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-utility {
+    display: inline-flex; align-items: center;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--dim-2);
+    padding-left: 22px; margin-left: -2px;
+    border-left: 1px solid var(--hair);
+    transition: color .2s var(--ease);
+  }
+  .nav-utility:hover { color: var(--text); }
+  .nav-logo { display: inline-flex; align-items: center; line-height: 1; }
+  .nav-logo img { height: 22px; width: auto; display: block; }
+  .nav-link { font-size: 13px; color: var(--dim); transition: color .2s var(--ease); }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--text); }
+  .nav-cta {
+    padding: 9px 16px; border: 1px solid var(--hair-strong);
+    border-radius: 8px;
+    font-size: 13px; font-weight: 500;
+    transition: background .2s var(--ease), color .2s var(--ease);
+  }
+  .nav-cta:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+
+  /* Solutions dropdown — minimal list */
+  .nav-link-wrap { position: relative; }
+  .nav-link-wrap .nav-link { display: inline-flex; align-items: center; gap: 7px; }
+  .nav-link-wrap .nav-link::after {
+    content: ""; display: inline-block;
+    width: 5px; height: 5px;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    transform: rotate(45deg) translateY(-1px);
+    opacity: .55;
+    transition: transform .25s var(--ease), opacity .2s var(--ease);
+  }
+  .nav-link-wrap:hover .nav-link::after,
+  .nav-link-wrap:focus-within .nav-link::after {
+    opacity: 1;
+    transform: rotate(225deg) translateY(1px);
+  }
+  .nav-dropdown {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    min-width: 200px;
+    background: #0b0d0f;
+    border: 1px solid rgba(255,255,255,.10);
+    padding: 8px 0;
+    opacity: 0; visibility: hidden;
+    transition: opacity .18s var(--ease), transform .18s var(--ease), visibility 0s .18s;
+    z-index: 110;
+  }
+  .nav-dropdown::before {
+    content: ""; position: absolute;
+    top: -14px; left: 0; right: 0; height: 14px;
+  }
+  .nav-link-wrap:hover .nav-dropdown,
+  .nav-link-wrap:focus-within .nav-dropdown {
+    opacity: 1; visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    transition: opacity .18s var(--ease), transform .18s var(--ease);
+  }
+  .nav-dd-item {
+    display: block;
+    padding: 9px 22px;
+    font-size: 13px;
+    color: rgba(255,255,255,.64);
+    white-space: nowrap;
+    transition: color .15s var(--ease);
+  }
+  .nav-dd-item:hover { color: #B6F500; }
+  .nav-dd-item.active { color: #B6F500; }
+  @media (max-width: 720px) { .nav-link-wrap { display: none; } }
+
+  /* CTAs --------------------------------------------------------------- */
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px;
+    border-radius: 8px;
+    font-size: 14px; font-weight: 500; letter-spacing: .01em;
+    transition: transform .2s var(--ease), background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { transform: translateY(-1px); background: #c8ff1a; }
+  .btn-ghost { border: 1px solid var(--hair-strong); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn .arrow { transition: transform .2s var(--ease); }
+  .btn:hover .arrow { transform: translateX(3px); }
+
+  /* =====================================================================
+     HERO — humans create. robots automate.
+     Editorial light treatment: warm cream ground with an olive accent,
+     mirroring .section-light from the homepage. Brand-strict typography
+     (Oswald + Barlow Condensed); weight contrast carries the emphasis
+     on the verbs, with a thin olive underline beneath "automate." Two
+     SVG hands float counter-phase behind the title.
+     ===================================================================== */
+  .hero {
+    /* Editorial light theme — overrides the dark theme tokens locally */
+    --bg:           #EEEEE8;
+    --bg-2:         #E6E6DE;
+    --bg-3:         #D9D9CE;
+    --text:         #0F0F0F;
+    --dim:          rgba(15,15,15,.62);
+    --dim-2:        rgba(15,15,15,.42);
+    --hair:         rgba(15,15,15,.14);
+    --hair-strong:  rgba(15,15,15,.26);
+    --accent:       #79982D;
+    --accent-dim:   #62801F;
+
+    position: relative;
+    min-height: 100vh;
+    padding: 18vh 5vw 12vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    overflow: hidden;
+    border-bottom: 1px solid var(--hair);
+    background: var(--bg);
+    color: var(--text);
+    isolation: isolate;
+  }
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(15,15,15,.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(15,15,15,.05) 1px, transparent 1px);
+    background-size: 96px 96px;
+    mask-image: radial-gradient(ellipse at 50% 50%, black 10%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 10%, transparent 78%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 65% 55% at 50% 52%, rgba(121,152,45,.10), transparent 72%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero-inner {
+    position: relative; z-index: 2;
+    max-width: var(--max); width: 100%;
+    margin: 0 auto;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-bottom: 44px;
+  }
+  .hero-eyebrow .dot {
+    width: 6px; height: 6px;
+    background: var(--accent); border-radius: 50%;
+    animation: pulse-olive 2.6s ease-in-out infinite;
+  }
+  @keyframes pulse-olive {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(121,152,45,.55); }
+    50%      { opacity: .7; box-shadow: 0 0 0 6px rgba(121,152,45,0); }
+  }
+
+  .hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: -0.018em;
+    font-size: clamp(48px, 7.2vw, 124px);
+    line-height: .94;
+    max-width: 18ch;
+  }
+  .hero h1 .l1 { display: block; color: var(--text); }
+  .hero h1 .l2 { display: block; color: var(--text); }
+  /* Verb emphasis: lighter weight + olive tint, brand-strict (no font swap).
+     Symmetric across both lines — no underline; the type does the work. */
+  .hero h1 em {
+    font-style: normal;
+    font-weight: 300;
+    color: var(--accent);
+    letter-spacing: -0.012em;
+  }
+
+  /* Page-load rise: each hero element fades up in sequence */
+  @keyframes hero-rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-eyebrow,
+  .hero h1 .l1,
+  .hero h1 .l2,
+  .hero-sub,
+  .hero-ctas {
+    opacity: 0;
+    animation: hero-rise .85s var(--ease-out) forwards;
+  }
+  .hero-eyebrow { animation-delay: .08s; }
+  .hero h1 .l1  { animation-delay: .22s; }
+  .hero h1 .l2  { animation-delay: .38s; }
+  .hero-sub     { animation-delay: .58s; }
+  .hero-ctas    { animation-delay: .74s; }
+
+  /* Hands ease in slightly later, after the type lands */
+  .hero-hand { opacity: 0; }
+  @keyframes hand-fade-human { to { opacity: .22; } }
+  @keyframes hand-fade-robot { to { opacity: .72; } }
+
+  .hero-sub {
+    margin-top: 32px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: clamp(16px, 1.35vw, 22px);
+    letter-spacing: .01em;
+    color: var(--dim);
+    max-width: 42ch;
+    line-height: 1.22;
+  }
+  .hero-ctas {
+    margin-top: 44px;
+    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+  }
+
+  /* Hero side rails — operational HUD ticks anchoring the corners */
+  .hero-tick {
+    position: absolute;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--dim-2);
+    z-index: 2;
+  }
+  .hero-tick.tl { top: 16vh; left: 5vw; }
+  .hero-tick.tr { top: 16vh; right: 5vw; text-align: right; }
+  .hero-tick.bl { bottom: 4vh; left: 5vw; }
+  .hero-tick.br { bottom: 4vh; right: 5vw; text-align: right; }
+  .hero-tick b { color: var(--accent); font-weight: 500; }
+  .hero-tick em { font-style: normal; color: var(--text); }
+
+  /* Hero hands — Creation-of-Adam composition. Human reaches from the
+     bottom-left, robot from the bottom-right; fingertips meet near the
+     center, behind the title. SVG paths already extend past the canvas
+     edge on the elbow side, so the arms naturally bleed off-screen.
+     Fills are baked into the SVGs (charcoal / olive on cream); CSS only
+     handles opacity and the counter-phase float. */
+  .hero-hand {
+    position: absolute;
+    bottom: -2vh;
+    pointer-events: none;
+    user-select: none;
+    z-index: 1;
+    width: clamp(300px, 32vw, 540px);
+    height: auto;
+    display: block;
+    will-change: transform;
+  }
+  .hero-hand.hand-human {
+    left: -1vw;
+    animation:
+      hand-float 7.5s ease-in-out infinite,
+      hand-fade-human .9s var(--ease-out) .55s forwards;
+  }
+  .hero-hand.hand-robot {
+    right: -1vw;
+    animation:
+      hand-float 7.5s ease-in-out -3.75s infinite,
+      hand-fade-robot .9s var(--ease-out) .7s forwards;
+  }
+  @keyframes hand-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-14px); }
+  }
+
+  /* Cream-theme button hover overrides (the base styles hardcode lime) */
+  .hero .btn-primary { color: #fff; }
+  .hero .btn-primary:hover { background: var(--accent-dim); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-hand.hand-human { animation: none; opacity: .22; }
+    .hero-hand.hand-robot { animation: none; opacity: .72; }
+    .hero-eyebrow,
+    .hero h1 .l1,
+    .hero h1 .l2,
+    .hero-sub,
+    .hero-ctas { animation: none; opacity: 1; }
+  }
+
+  /* =====================================================================
+     SEQUENCE — the seven steps
+     A continuous progress rail runs down the left edge of the entire
+     sequence, threading through every step band AND through both
+     callouts (AI Suite, Approval). Each step band carries its own hex
+     node, absolutely pinned to the rail's x-coordinate. Content is
+     indented far enough to clear the rail.
+     ===================================================================== */
+  :root {
+    --rail-x: clamp(40px, 5vw, 80px);
+    --content-pad-left: clamp(140px, 14vw, 220px);
+  }
+
+  .seq-band {
+    position: relative;
+    padding: 16vh 5vw 16vh var(--content-pad-left);
+  }
+  .seq-band-inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 4vw;
+    align-items: center;
+  }
+  .seq-band .seq-copy { order: 1; }
+  .seq-band .seq-viz  { order: 2; }
+  .seq-band.flip .seq-copy { order: 2; }
+  .seq-band.flip .seq-viz  { order: 1; }
+
+  .seq-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .26em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+  }
+  .seq-copy h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: -0.015em;
+    font-size: clamp(36px, 4.6vw, 64px);
+    line-height: .98;
+    margin-bottom: 22px;
+    max-width: 16ch;
+  }
+  .seq-copy h2 .accent { color: var(--accent); }
+  .seq-copy p {
+    color: var(--dim);
+    font-size: 17px;
+    line-height: 1.55;
+    max-width: 46ch;
+  }
+  .seq-copy p strong { color: var(--text); font-weight: 500; }
+
+  /* Visual frames — schematic, not animation-heavy. Each viz fills its grid
+     cell with an aspect-ratio frame, a thin border, and an SVG diagram. */
+  .seq-viz {
+    position: relative;
+    aspect-ratio: 1.2 / 1;
+    background: var(--bg-2);
+    border: 1px solid var(--hair);
+    overflow: hidden;
+  }
+  .seq-viz::before {
+    content: attr(data-id);
+    position: absolute; top: 16px; left: 18px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--dim);
+    z-index: 3;
+  }
+  .seq-viz::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to right, rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+  }
+  .seq-viz svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    display: block;
+  }
+
+  /* Robot half: subtle tonal shift to separate from human half */
+  .seq-band.robot {
+    background:
+      radial-gradient(ellipse at 80% 0%, rgba(182,245,0,.04), transparent 60%),
+      var(--bg);
+  }
+  .seq-band.robot .seq-num { color: var(--text); }
+  .seq-band.robot .seq-num .seq-suffix { color: var(--accent); }
+
+  /* =====================================================================
+     CALLOUT — full-bleed inset block (AI Suite, Approval Layer)
+     Visually distinct from the seq bands: tighter padding, bordered card
+     spanning the full max-width, slightly lifted background.
+     ===================================================================== */
+  .callout {
+    position: relative;
+    padding: 12vh 5vw;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(182,245,0,.05), transparent 65%),
+      var(--bg-2);
+  }
+  /* Callouts inside the sequence wrap clear the rail by indenting their
+     left edge to the same content gutter as the step bands. */
+  .sequence-wrap > .callout {
+    padding-left: var(--content-pad-left);
+  }
+  .callout-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+  }
+  .callout-head {
+    display: block;
+    margin-bottom: 48px;
+  }
+  .callout-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .26em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .callout-head .callout-eyebrow {
+    display: block;
+    margin-bottom: 14px;
+  }
+  .callout-head h3 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: -0.012em;
+    font-size: clamp(26px, 3vw, 40px);
+    line-height: 1.06;
+    max-width: 26ch;
+  }
+  .callout-head h3 .accent { color: var(--accent); }
+
+  /* AI Suite four-up grid */
+  .ai-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hair);
+    border: 1px solid var(--hair);
+  }
+  .ai-card {
+    background: var(--bg-2);
+    padding: 36px 28px 32px;
+    display: flex; flex-direction: column;
+    min-height: 280px;
+    transition: background .25s var(--ease);
+  }
+  .ai-card:hover { background: var(--bg-3); }
+  .ai-card .ai-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: clamp(24px, 2vw, 30px);
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    margin-bottom: 8px;
+  }
+  .ai-card .ai-name .iq { color: var(--accent); }
+  .ai-card .ai-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .24em;
+    color: var(--dim-2);
+    margin-bottom: 28px;
+  }
+  .ai-card .ai-desc {
+    color: var(--dim);
+    font-size: 14px;
+    line-height: 1.55;
+    margin-top: auto;
+  }
+  .ai-card .ai-tick {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    color: var(--accent);
+    margin-bottom: 22px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ai-card .ai-tick::before {
+    content: ""; width: 6px; height: 6px;
+    background: var(--accent);
+    display: inline-block;
+  }
+
+  /* Approval callout — single-column body with a stage strip */
+  .approval-stage {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--hair);
+    border: 1px solid var(--hair);
+    margin-top: 12px;
+  }
+  .approval-step {
+    background: var(--bg-2);
+    padding: 28px 24px;
+    position: relative;
+  }
+  .approval-step .as-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .24em;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .approval-step .as-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+  .approval-step .as-role {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+  .approval-step + .approval-step::before {
+    content: "→";
+    position: absolute;
+    left: -10px; top: 32px;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 14px;
+    z-index: 2;
+    background: var(--bg);
+    padding: 0 4px;
+  }
+
+  /* =====================================================================
+     CONNECT — integration layer with logo wall
+     ===================================================================== */
+  .connect {
+    padding: 16vh 5vw;
+    border-bottom: 1px solid var(--hair);
+  }
+  .connect-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+  }
+  .connect-head {
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.2fr);
+    gap: 6vw;
+    align-items: end;
+    margin-bottom: 72px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .connect-head h3 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: -0.012em;
+    font-size: clamp(36px, 4.6vw, 60px);
+    line-height: 1.02;
+    max-width: 18ch;
+  }
+  .connect-head h3 .accent { color: var(--accent); }
+  .connect-head p {
+    color: var(--dim);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 48ch;
+  }
+  .integration-wall {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1px;
+    background: var(--hair);
+    border: 1px solid var(--hair);
+  }
+  .int-cell {
+    background: var(--bg);
+    padding: 32px 22px;
+    min-height: 110px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative;
+    transition: background .25s var(--ease), color .25s var(--ease);
+  }
+  .int-cell:hover { background: var(--bg-2); }
+  .int-cell .int-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: .01em;
+    color: var(--text);
+    opacity: .82;
+    transition: opacity .25s var(--ease), color .25s var(--ease);
+  }
+  .int-cell:hover .int-name { color: var(--accent); opacity: 1; }
+  .int-cell .int-kind {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .2em;
+    color: var(--dim-2);
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .int-cell.verify::after {
+    content: "VERIFY";
+    position: absolute; top: 8px; right: 8px;
+    font-family: var(--mono); font-size: 8px;
+    letter-spacing: .2em; color: var(--dim-2);
+    border: 1px solid var(--hair); padding: 2px 5px;
+  }
+
+  /* =====================================================================
+     PARALLEL COLLECTION — two-up cards
+     ===================================================================== */
+  .parallel {
+    padding: 16vh 5vw;
+    border-bottom: 1px solid var(--hair);
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(182,245,0,.04), transparent 55%),
+      var(--bg);
+  }
+  .parallel-inner { max-width: var(--max); margin: 0 auto; }
+  .parallel-head {
+    text-align: center;
+    margin-bottom: 72px;
+  }
+  .parallel-head .mono {
+    display: inline-block;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+  .parallel-head h3 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: -0.012em;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1;
+    max-width: 18ch;
+    margin: 0 auto;
+  }
+  .parallel-head h3 .accent { color: var(--accent); }
+  .parallel-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+  .par-card {
+    background: var(--bg-2);
+    border: 1px solid var(--hair);
+    padding: 44px 36px 40px;
+    display: flex; flex-direction: column;
+    min-height: 360px;
+    transition: border-color .25s var(--ease), background .25s var(--ease);
+  }
+  .par-card:hover {
+    border-color: var(--hair-strong);
+    background: var(--bg-3);
+  }
+  .par-card .par-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .26em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .par-card .par-eyebrow::before {
+    content: ""; width: 22px; height: 1px;
+    background: var(--accent);
+  }
+  .par-card h4 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    font-size: clamp(28px, 2.6vw, 38px);
+    line-height: 1.04;
+    margin-bottom: 22px;
+    max-width: 14ch;
+  }
+  .par-card p {
+    color: var(--dim);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 38ch;
+  }
+  .par-meta {
+    margin-top: auto;
+    padding-top: 32px;
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .par-meta .pm {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--dim);
+    padding: 7px 11px;
+    border: 1px solid var(--hair);
+  }
+  .par-meta .pm b { color: var(--accent); font-weight: 500; }
+
+  /* =====================================================================
+     CONFIGURATIONS — three tier cards (no pricing, no comparison)
+     ===================================================================== */
+  .tiers {
+    padding: 16vh 5vw;
+    border-bottom: 1px solid var(--hair);
+  }
+  .tiers-inner { max-width: var(--max); margin: 0 auto; }
+  .tiers-head {
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.2fr);
+    gap: 6vw;
+    align-items: end;
+    margin-bottom: 64px;
+  }
+  .tiers-head .mono {
+    color: var(--accent);
+    margin-bottom: 18px;
+    display: block;
+  }
+  .tiers-head h3 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: -0.012em;
+    font-size: clamp(36px, 4.8vw, 60px);
+    line-height: 1;
+    max-width: 16ch;
+  }
+  .tiers-head h3 .accent { color: var(--accent); }
+  .tiers-head p {
+    color: var(--dim);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 44ch;
+  }
+  .tier-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .tier {
+    position: relative;
+    background: var(--bg-2);
+    border: 1px solid var(--hair);
+    padding: 40px 32px 36px;
+    display: flex; flex-direction: column;
+    min-height: 380px;
+    transition: border-color .3s var(--ease), background .3s var(--ease);
+  }
+  .tier:hover {
+    border-color: var(--hair-strong);
+    background: var(--bg-3);
+  }
+  .tier-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .24em;
+    color: var(--dim-2);
+    margin-bottom: 8px;
+  }
+  .tier-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: -0.012em;
+    font-size: clamp(36px, 3.2vw, 48px);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .tier-name .accent { color: var(--accent); }
+  .tier-kind {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .22em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .tier p {
+    color: var(--dim);
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 38ch;
+  }
+  .tier-foot {
+    margin-top: auto;
+    padding-top: 32px;
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .tier-foot::before {
+    content: ""; width: 22px; height: 1px;
+    background: var(--accent);
+  }
+  .tiers-cta {
+    margin-top: 56px;
+    text-align: center;
+    display: flex; align-items: center; justify-content: center;
+    gap: 18px; flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .tiers-cta::before {
+    content: ""; width: 40px; height: 1px;
+    background: var(--hair-strong);
+  }
+  .tiers-cta::after {
+    content: ""; width: 40px; height: 1px;
+    background: var(--hair-strong);
+  }
+
+  /* =====================================================================
+     CLOSING — full-bleed centered statement
+     ===================================================================== */
+  .close {
+    padding: 22vh 5vw 20vh;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .close::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(182,245,0,.06), transparent 60%);
+    pointer-events: none;
+  }
+  .close-inner {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .close-eyebrow {
+    color: var(--accent);
+    margin-bottom: 36px;
+    display: inline-block;
+  }
+  .close h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: -0.015em;
+    font-size: clamp(40px, 6.6vw, 104px);
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 28px;
+  }
+  .close h2 .accent { color: var(--accent); }
+  .close p {
+    color: var(--dim);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 48ch;
+    margin: 0 auto 56px;
+  }
+  .close-ctas {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  }
+
+  /* =====================================================================
+     FOOTER — same dispatch pattern as homepage-v2
+     ===================================================================== */
+  .footer {
+    position: relative; overflow: hidden;
+    border-top: 1px solid var(--hair);
+    padding: 56px 5vw 44px;
+    isolation: isolate;
+  }
+  .footer-stage {
+    position: relative; z-index: 2;
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 40px 0 48px;
+    text-align: center;
+  }
+  .footer-wordmark {
+    display: flex; justify-content: center; padding: 40px 0;
+  }
+  .footer-wordmark img {
+    width: min(52%, 460px); height: auto;
+    filter: brightness(0) invert(1);
+  }
+  .footer-inner {
+    position: relative; z-index: 2;
+    margin: 0 auto;
+    padding: 56px 0 52px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(140px, auto));
+    justify-content: center;
+    gap: 80px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .footer h5 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 22px;
+    font-weight: 500;
+  }
+  .footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer li a {
+    color: var(--dim); font-size: 14px;
+    transition: color .2s var(--ease);
+    position: relative; display: inline-block;
+  }
+  .footer li a::after {
+    content: ""; position: absolute;
+    left: 0; right: 100%; bottom: -3px;
+    height: 1px; background: var(--accent);
+    transition: right .35s var(--ease-out);
+  }
+  .footer li a:hover { color: var(--text); }
+  .footer li a:hover::after { right: 0; }
+  .footer-legal {
+    position: relative; z-index: 2;
+    max-width: var(--max);
+    margin: 28px auto 0;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 24px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .footer-legal a { color: var(--dim); transition: color .2s var(--ease); }
+  .footer-legal a:hover { color: var(--accent); }
+  .footer-status {
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .footer-status b { color: var(--text); font-weight: 500; }
+  .footer-status-dot {
+    width: 7px; height: 7px;
+    background: var(--accent); border-radius: 50%;
+    flex-shrink: 0;
+    animation: footer-status-pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes footer-status-pulse {
+    0%, 100% { opacity: 1;  box-shadow: 0 0 0 0 rgba(182,245,0,.5); }
+    50%      { opacity: .55; box-shadow: 0 0 0 6px rgba(182,245,0,0); }
+  }
+
+  /* =====================================================================
+     TIMELINE RAIL — one continuous line down the left edge of the entire
+     sequence wrap, threading through every step band AND through the
+     two callouts. Hex nodes live on each step band, absolutely pinned to
+     the rail's x-coordinate. Callouts have no hex; the line passes
+     through their indented gutter cleanly.
+     ===================================================================== */
+  .sequence-wrap { position: relative; }
+  /* Each section in the wrap (step bands AND callouts) carries its own
+     full-height rail line as a ::before. The line is a two-color
+     gradient: accent above the scroll marker (what the reader has
+     passed), dim below (what's still ahead). The fill stop is driven by
+     --seq-progress (0–100%), set per section by JS based on the
+     viewport-marker's progress through that section. Because the line
+     lives on each section, no other section's background can hide it;
+     adjacent sections' lines stitch into one continuous, fillable rail. */
+  .sequence-wrap > .seq-band::before,
+  .sequence-wrap > .callout::before {
+    content: "";
+    position: absolute;
+    left: var(--rail-x);
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      rgba(182,245,0,.85) 0%,
+      rgba(182,245,0,.85) var(--seq-progress, 0%),
+      rgba(255,255,255,.08) var(--seq-progress, 0%),
+      rgba(255,255,255,.08) 100%
+    );
+    z-index: 0;
+    pointer-events: none;
+  }
+  #step-1::before {
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 100%);
+  }
+  #step-7::before {
+    mask-image: linear-gradient(to bottom, #000 0%, #000 86%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 86%, transparent 100%);
+  }
+
+  /* Per-band hex marker — small, outline-only at rest. Sits on the rail
+     at the band's vertical center. Once a band has been scrolled past
+     (or is centered in the viewport), the stroke and number elevate to
+     accent so the marker mirrors the line's filled portion. No halo, no
+     scale, no fill swap — quiet by design. */
+  .seq-spine {
+    position: absolute;
+    left: var(--rail-x);
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 54px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .seq-hex {
+    position: relative;
+    z-index: 2;
+    width: 48px;
+    height: 54px;
+    overflow: visible;
+  }
+  .seq-hex .hex-poly {
+    fill: var(--bg);
+    stroke: rgba(255,255,255,.18);
+    stroke-width: 1.2;
+    transition: stroke .4s var(--ease);
+  }
+  .seq-hex .hex-num {
+    fill: var(--dim-2);
+    font-weight: 500;
+    transition: fill .4s var(--ease);
+  }
+  .seq-band.in-view .seq-hex .hex-poly,
+  .seq-band.passed .seq-hex .hex-poly {
+    stroke: rgba(182,245,0,.85);
+  }
+  .seq-band.in-view .seq-hex .hex-num,
+  .seq-band.passed .seq-hex .hex-num {
+    fill: var(--accent);
+  }
+
+  /* =====================================================================
+     EDITORIAL LIGHT SECTIONS — applied to .connect, .tiers
+     Mirrors the homepage's editorial light treatment (cream + olive),
+     re-declaring the theme tokens so existing var()-based rules flip
+     automatically. Targeted overrides cover the few hardcoded dark
+     values (button hover lime).
+     ===================================================================== */
+  .section-light {
+    --bg:           #EEEEE8;
+    --bg-2:         #E6E6DE;
+    --bg-3:         #D9D9CE;
+    --text:         #0F0F0F;
+    --dim:          rgba(15,15,15,.62);
+    --dim-2:        rgba(15,15,15,.42);
+    --hair:         rgba(15,15,15,.14);
+    --hair-strong:  rgba(15,15,15,.26);
+    --accent:       #79982D;
+    --accent-dim:   #62801F;
+
+    background: var(--bg);
+    color: var(--text);
+  }
+  .section-light .btn-primary { color: #fff; }
+  .section-light .btn-primary:hover { background: var(--accent-dim); }
+  .section-light .btn-ghost { border-color: rgba(15,15,15,.24); }
+  .section-light .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* =====================================================================
+     RESPONSIVE
+     ===================================================================== */
+  @media (max-width: 1100px) {
+    .ai-grid { grid-template-columns: repeat(2, 1fr); }
+    .integration-wall { grid-template-columns: repeat(4, 1fr); }
+    .tier-grid { grid-template-columns: 1fr; }
+    .tiers-head, .connect-head, .callout-head { grid-template-columns: 1fr; gap: 24px; align-items: start; }
+  }
+  @media (max-width: 900px) {
+    .hero-hand { width: 42vw; }
+    .hero-hand.hand-human { opacity: .18; }
+    .hero-hand.hand-robot { opacity: .55; }
+    .sequence-wrap::before { display: none; }
+    .sequence-wrap > .seq-band,
+    .sequence-wrap > .callout { padding-left: 5vw; }
+    .seq-band-inner { grid-template-columns: 1fr !important; gap: 36px; }
+    .seq-band .seq-spine { display: none; }
+    .seq-band.flip .seq-copy { order: 1; }
+    .seq-band.flip .seq-viz  { order: 2; }
+    .approval-stage { grid-template-columns: 1fr; }
+    .approval-step + .approval-step::before { content: "↓"; left: 24px; top: -10px; }
+    .parallel-grid { grid-template-columns: 1fr; }
+    .integration-wall { grid-template-columns: repeat(3, 1fr); }
+    .footer-inner { grid-template-columns: repeat(3, auto); gap: 40px; }
+    .footer-wordmark img { width: 72%; }
+  }
+  @media (max-width: 720px) {
+    .nav-link, .nav-utility { display: none; }
+    .nav-utility { border-left: 0; padding-left: 0; }
+    .hero-tick { display: none; }
+    .hero-hand { display: none; }
+    .ai-grid { grid-template-columns: 1fr; }
+    .integration-wall { grid-template-columns: repeat(2, 1fr); }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-legal { flex-direction: column; gap: 10px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav class="nav" id="siteNav">
+  <div class="nav-left">
+    <a href="./homepage.html" class="nav-logo" aria-label="Greenfly">
+      <img src="./images/brand/Greenfly (1).svg" alt="Greenfly">
+    </a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="./platform.html"  class="nav-link active">Platform</a>
+      <div class="nav-link-wrap">
+        <a href="./solutions.html" class="nav-link">Solutions</a>
+        <div class="nav-dropdown">
+          <a href="./solutions-sports.html" class="nav-dd-item">Sports</a>
+          <a href="./solutions-entertainment.html" class="nav-dd-item">Entertainment</a>
+          <a href="./solutions-brands.html" class="nav-dd-item">Brands</a>
+          <a href="./solutions-live-events.html" class="nav-dd-item">Live Events</a>
+        </div>
+      </div>
+      <a href="./homepage.html#proof"  class="nav-link">Stories</a>
+      <a href="./company.html" class="nav-link">Company</a>
+    </div>
+    <a href="#login" class="nav-utility">Login</a>
+    <a href="./get-greenfly.html"  class="nav-cta">Get Greenfly</a>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero section-light">
+  <img src="./humanhand.svg" alt="" class="hero-hand hand-human" aria-hidden="true">
+  <img src="./robothand.svg" alt="" class="hero-hand hand-robot" aria-hidden="true">
+
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="dot"></span>
+      <span class="mono label-lime">The Platform</span>
+    </div>
+
+    <h1>
+      <span class="l1">Humans <em>create.</em></span>
+      <span class="l2">Robots <em>automate.</em></span>
+    </h1>
+
+    <p class="hero-sub">
+      Creative instinct at the front. Automation at the back. One pipeline, end to end.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="./get-greenfly.html" class="btn btn-primary">Get Greenfly <span class="arrow">→</span></a>
+      <a href="#step-1" class="btn btn-ghost">See the pipeline <span class="arrow">↓</span></a>
+    </div>
+  </div>
+
+  <span class="hero-tick bl mono"><em>humans</em> · Creative instinct</span>
+  <span class="hero-tick br mono">Automation · <em>robots</em></span>
+</section>
+
+<!-- ========== SEQUENCE WRAP — 7 steps + 2 callouts + midpoint divider ========== -->
+<div class="sequence-wrap">
+
+<!-- ========== STEP 01 — COLLECT ========== -->
+<section class="seq-band" id="step-1">
+  <div class="seq-spine" aria-hidden="true">
+    <svg class="seq-hex" viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg">
+      <polygon class="hex-poly" points="32,2 62,18 62,54 32,70 2,54 2,18"/>
+      <text class="hex-num" x="32" y="46" text-anchor="middle"
+            font-family="'Oswald', sans-serif" font-weight="600" font-size="20" letter-spacing="0.02em">01</text>
+    </svg>
+  </div>
+  <div class="seq-band-inner">
+    <div class="seq-copy">
+      <div class="seq-tag">[ 01 · Collect · Sources ]</div>
+      <h2>Where content starts.</h2>
+      <p>Sidelines, studios, press rooms, red carpets, living rooms. Every source feeds the same pipeline — professional creators uploading from the field, talent filing from their phones, fans capturing from the crowd.</p>
+    </div>
+    <div class="seq-viz" data-id="[ 01 · Collect · Sources ]">
+      <svg viewBox="0 0 520 430" preserveAspectRatio="xMidYMid meet">
+        <!-- 5 source nodes feeding into a single pipeline column on the right -->
+        <g font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="10" letter-spacing="2" fill="#8a8a83" text-transform="uppercase">
+          <text x="40" y="80">Sideline</text>
+          <text x="40" y="150">Studio</text>
+          <text x="40" y="220">Press</text>
+          <text x="40" y="290">Talent · Phone</text>
+          <text x="40" y="360">Fan · Crowd</text>
+        </g>
+        <!-- source dots -->
+        <g fill="#B6F500">
+          <circle cx="160" cy="76" r="4"/>
+          <circle cx="160" cy="146" r="4"/>
+          <circle cx="160" cy="216" r="4"/>
+          <circle cx="160" cy="286" r="4"/>
+          <circle cx="160" cy="356" r="4"/>
+        </g>
+        <!-- merging lines -->
+        <g stroke="#B6F500" stroke-opacity=".5" fill="none" stroke-width="1">
+          <path d="M160 76 Q300 76 360 215"/>
+          <path d="M160 146 Q300 146 360 215"/>
+          <path d="M160 216 L360 215"/>
+          <path d="M160 286 Q300 286 360 215"/>
+          <path d="M160 356 Q300 356 360 215"/>
+        </g>
+        <!-- pipeline column -->
+        <rect x="350" y="60" width="20" height="310" fill="#0b0d0f" stroke="#B6F500" stroke-width="1"/>
+        <!-- moving ticks (CSS animation) -->
+        <g fill="#B6F500">
+          <rect x="354" y="80"  width="12" height="2"><animate attributeName="y" values="60;370;60" dur="3s" repeatCount="indefinite"/></rect>
+          <rect x="354" y="180" width="12" height="2"><animate attributeName="y" values="60;370;60" dur="3s" begin="-1s" repeatCount="indefinite"/></rect>
+          <rect x="354" y="280" width="12" height="2"><animate attributeName="y" values="60;370;60" dur="3s" begin="-2s" repeatCount="indefinite"/></rect>
+        </g>
+        <!-- output -->
+        <text x="396" y="220" font-family="'Oswald', sans-serif" font-weight="600" font-size="20" fill="#f4f5f6">PIPELINE</text>
+        <text x="396" y="240" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="10" letter-spacing="2" fill="#B6F500">SAME · ONE</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STEP 02 — IDENTIFY ========== -->
+<section class="seq-band flip" id="step-2">
+  <div class="seq-spine" aria-hidden="true">
+    <svg class="seq-hex" viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg">
+      <polygon class="hex-poly" points="32,2 62,18 62,54 32,70 2,54 2,18"/>
+      <text class="hex-num" x="32" y="46" text-anchor="middle"
+            font-family="'Oswald', sans-serif" font-weight="600" font-size="20" letter-spacing="0.02em">02</text>
+    </svg>
+  </div>
+  <div class="seq-band-inner">
+    <div class="seq-copy">
+      <div class="seq-tag">[ 02 · Identify · FaceIQ + RosterIQ ]</div>
+      <h2>Who's in the frame.</h2>
+      <p><strong>FaceIQ</strong> and <strong>RosterIQ</strong> match every face and uniform to the right name, team, and moment — before a human touches the asset. No spreadsheets. No guessing.</p>
+    </div>
+    <div class="seq-viz" data-id="[ 02 · Identify · FaceIQ + RosterIQ ]">
+      <svg viewBox="0 0 520 430" preserveAspectRatio="xMidYMid meet">
+        <!-- player silhouette plate -->
+        <rect x="60" y="60" width="220" height="310" fill="#0d0f12" stroke="#1c1f23"/>
+        <!-- silhouette shape -->
+        <ellipse cx="170" cy="155" rx="46" ry="52" fill="#1a1d22"/>
+        <path d="M104 240 Q170 200 236 240 L236 360 L104 360 Z" fill="#1a1d22"/>
+        <!-- bbox face -->
+        <rect x="120" y="106" width="100" height="106" fill="none" stroke="#B6F500" stroke-width="1.5"/>
+        <text x="120" y="100" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#B6F500">FACEIQ · #7 PORTER · 98%</text>
+        <!-- bbox jersey -->
+        <rect x="118" y="234" width="106" height="80" fill="none" stroke="#B6F500" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <text x="118" y="335" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#B6F500">ROSTERIQ · HOME · #7</text>
+
+        <!-- match panel right -->
+        <g font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#8a8a83">
+          <text x="320" y="80">MATCH RESULT</text>
+        </g>
+        <g transform="translate(320 96)">
+          <rect width="160" height="1" fill="#1c1f23"/>
+          <text y="22" font-family="'Oswald', sans-serif" font-weight="500" font-size="20" fill="#f4f5f6">D. PORTER</text>
+          <text y="40" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#8a8a83">FORWARD · #7</text>
+
+          <rect y="60" width="160" height="1" fill="#1c1f23"/>
+          <text y="82" font-family="'Oswald', sans-serif" font-weight="500" font-size="14" fill="#f4f5f6">UNITED FC · HOME</text>
+          <text y="100" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#8a8a83">2025–26 · MATCHDAY 12</text>
+
+          <rect y="120" width="160" height="1" fill="#1c1f23"/>
+          <text y="142" font-family="'Oswald', sans-serif" font-weight="500" font-size="14" fill="#B6F500">CONFIRMED</text>
+          <text y="160" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#8a8a83">2 MODELS · 0 HUMAN</text>
+        </g>
+        <!-- bottom band -->
+        <g transform="translate(60 388)">
+          <rect width="420" height="1" fill="#1c1f23"/>
+          <text y="20" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#8a8a83">FRAMES PROCESSED</text>
+          <text x="420" y="20" text-anchor="end" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#B6F500">1 / 50,000</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ========== AI SUITE CALLOUT (between Identify and Tag) ========== -->
+<section class="callout">
+  <div class="callout-inner">
+    <div class="callout-head">
+      <div class="callout-eyebrow">The AI Suite</div>
+      <h3>Four models. One job: get out of the way.</h3>
+    </div>
+    <div class="ai-grid">
+      <div class="ai-card">
+        <div class="ai-tick">FaceIQ</div>
+        <div class="ai-name">Face<span class="iq">IQ</span></div>
+        <div class="ai-tag">[Product]</div>
+        <div class="ai-desc">Facial recognition across every athlete, talent, and public figure on the platform.</div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-tick">SceneIQ</div>
+        <div class="ai-name">Scene<span class="iq">IQ</span></div>
+        <div class="ai-tag">[Product]</div>
+        <div class="ai-desc">Action and moment recognition. The touchdown. The walk-off. The acceptance speech.</div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-tick">RosterIQ</div>
+        <div class="ai-name">Roster<span class="iq">IQ</span></div>
+        <div class="ai-tag">[Product]</div>
+        <div class="ai-desc">Uniform and jersey recognition across leagues, teams, and seasons.</div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-tick">BrandIQ</div>
+        <div class="ai-name">Brand<span class="iq">IQ</span></div>
+        <div class="ai-tag">[Product]</div>
+        <div class="ai-desc">Logo and sponsor recognition. Auto-tags IP and sponsor assets for compliance and revenue.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STEP 03 — TAG ========== -->
+<section class="seq-band" id="step-3">
+  <div class="seq-spine" aria-hidden="true">
+    <svg class="seq-hex" viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg">
+      <polygon class="hex-poly" points="32,2 62,18 62,54 32,70 2,54 2,18"/>
+      <text class="hex-num" x="32" y="46" text-anchor="middle"
+            font-family="'Oswald', sans-serif" font-weight="600" font-size="20" letter-spacing="0.02em">03</text>
+    </svg>
+  </div>
+  <div class="seq-band-inner">
+    <div class="seq-copy">
+      <div class="seq-tag">[ 03 · Tag · SceneIQ + BrandIQ ]</div>
+      <h2>What matters about it.</h2>
+      <p><strong>SceneIQ</strong> reads the action. <strong>BrandIQ</strong> reads the logos. Every piece of content arrives in the system already knowing what it is, where it belongs, and who needs it.</p>
+    </div>
+    <div class="seq-viz" data-id="[ 03 · Tag · Scene + Brand ]">
+      <svg viewBox="0 0 520 430" preserveAspectRatio="xMidYMid meet">
+        <!-- frame placeholder -->
+        <rect x="40" y="60" width="440" height="240" fill="#0d0f12" stroke="#1c1f23"/>
+        <!-- abstract action lines -->
+        <g stroke="#1c1f23" fill="none">
+          <path d="M40 180 L480 180" stroke-dasharray="2 6"/>
+          <path d="M260 60 L260 300" stroke-dasharray="2 6"/>
+        </g>
+        <ellipse cx="180" cy="180" rx="20" ry="20" fill="#2a2d33"/>
+        <path d="M200 175 Q300 120 400 180" stroke="#B6F500" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>
+        <circle cx="400" cy="180" r="6" fill="#B6F500"/>
+        <!-- top tag chips populating -->
+        <g font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2">
+          <g transform="translate(60 80)">
+            <rect width="140" height="22" fill="#0a0c0e" stroke="#1c1f23"/>
+            <rect width="2" height="22" fill="#B6F500"/>
+            <text x="10" y="15" fill="#f4f5f6">SCENE · GOAL</text>
+          </g>
+          <g transform="translate(60 110)">
+            <rect width="140" height="22" fill="#0a0c0e" stroke="#1c1f23"/>
+            <rect width="2" height="22" fill="#B6F500"/>
+            <text x="10" y="15" fill="#f4f5f6">MOMENT · POST · 79'</text>
+          </g>
+          <g transform="translate(60 140)">
+            <rect width="140" height="22" fill="#0a0c0e" stroke="#1c1f23"/>
+            <rect width="2" height="22" fill="#B6F500"/>
+            <text x="10" y="15" fill="#f4f5f6">EMOTION · CELEB</text>
+          </g>
+        </g>
+        <!-- right brand tag -->
+        <g transform="translate(330 80)" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2">
+          <rect width="140" height="22" fill="#0a0c0e" stroke="#1c1f23"/>
+          <rect width="2" height="22" fill="#B6F500"/>
+          <text x="10" y="15" fill="#f4f5f6">BRAND · NIKE · 04</text>
+        </g>
+        <g transform="translate(330 110)" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2">
+          <rect width="140" height="22" fill="#0a0c0e" stroke="#1c1f23"/>
+          <rect width="2" height="22" fill="#B6F500"/>
+          <text x="10" y="15" fill="#f4f5f6">SPONSOR · A · BOARD</text>
+        </g>
+        <g transform="translate(330 140)" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2">
+          <rect width="140" height="22" fill="#0a0c0e" stroke="#1c1f23"/>
+          <rect width="2" height="22" fill="#B6F500"/>
+          <text x="10" y="15" fill="#f4f5f6">SPONSOR · B · KIT</text>
+        </g>
+        <!-- bottom summary -->
+        <g transform="translate(40 330)">
+          <text font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#8a8a83">TAGS · ASSET</text>
+          <text y="36" font-family="'Oswald', sans-serif" font-weight="600" font-size="38" fill="#B6F500">22</text>
+          <text x="80" y="36" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="10" letter-spacing="2" fill="#8a8a83">AVERAGE PER FRAME</text>
+        </g>
+        <g transform="translate(280 330)">
+          <text font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#8a8a83">HUMAN HANDS</text>
+          <text y="36" font-family="'Oswald', sans-serif" font-weight="600" font-size="38" fill="#f4f5f6">0</text>
+          <text x="40" y="36" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="10" letter-spacing="2" fill="#8a8a83">BEFORE INDEX</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STEP 04 — ORGANIZE ========== -->
+<section class="seq-band flip" id="step-4">
+  <div class="seq-spine" aria-hidden="true">
+    <svg class="seq-hex" viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg">
+      <polygon class="hex-poly" points="32,2 62,18 62,54 32,70 2,54 2,18"/>
+      <text class="hex-num" x="32" y="46" text-anchor="middle"
+            font-family="'Oswald', sans-serif" font-weight="600" font-size="20" letter-spacing="0.02em">04</text>
+    </svg>
+  </div>
+  <div class="seq-band-inner">
+    <div class="seq-copy">
+      <div class="seq-tag">[ 04 · Organize · Galleries ]</div>
+      <h2>Where it lives.</h2>
+      <p>Galleries configured to how your organization actually works — by team, by partner, by moment, by campaign. Built for the way your content is requested, not the way it's stored.</p>
+    </div>
+    <div class="seq-viz" data-id="[ 04 · Organize · Galleries ]">
+      <svg viewBox="0 0 520 430" preserveAspectRatio="xMidYMid meet">
+        <!-- gallery tabs -->
+        <g font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2">
+          <g transform="translate(40 60)">
+            <rect width="100" height="24" fill="#B6F500"/>
+            <text x="10" y="16" fill="#050505">BY TEAM</text>
+          </g>
+          <g transform="translate(150 60)">
+            <rect width="100" height="24" fill="#0d0f12" stroke="#1c1f23"/>
+            <text x="10" y="16" fill="#8a8a83">BY PARTNER</text>
+          </g>
+          <g transform="translate(260 60)">
+            <rect width="100" height="24" fill="#0d0f12" stroke="#1c1f23"/>
+            <text x="10" y="16" fill="#8a8a83">BY MOMENT</text>
+          </g>
+          <g transform="translate(370 60)">
+            <rect width="110" height="24" fill="#0d0f12" stroke="#1c1f23"/>
+            <text x="10" y="16" fill="#8a8a83">BY CAMPAIGN</text>
+          </g>
+        </g>
+        <!-- gallery grid (5x3) -->
+        <g>
+          <!-- row 1 -->
+          <rect x="40"  y="100" width="84" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+          <rect x="130" y="100" width="84" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+          <rect x="220" y="100" width="84" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+          <rect x="310" y="100" width="84" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+          <rect x="400" y="100" width="80" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+          <!-- row 2 -->
+          <rect x="40"  y="190" width="84" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+          <rect x="130" y="190" width="84" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+          <rect x="220" y="190" width="84" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+          <rect x="310" y="190" width="84" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+          <rect x="400" y="190" width="80" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+          <!-- row 3 -->
+          <rect x="40"  y="280" width="84" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+          <rect x="130" y="280" width="84" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+          <rect x="220" y="280" width="84" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+          <rect x="310" y="280" width="84" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+          <rect x="400" y="280" width="80" height="84" fill="#1a1d22" stroke="#1c1f23"/>
+        </g>
+        <!-- highlight a few cells with accent labels -->
+        <g font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="7" letter-spacing="1" fill="#B6F500">
+          <rect x="40"  y="100" width="84" height="84" fill="rgba(182,245,0,.06)" stroke="#B6F500" stroke-width="1"/>
+          <text x="46" y="178">UNITED · 1</text>
+          <rect x="220" y="190" width="84" height="84" fill="rgba(182,245,0,.06)" stroke="#B6F500" stroke-width="1"/>
+          <text x="226" y="268">UNITED · 7</text>
+          <rect x="400" y="280" width="80" height="84" fill="rgba(182,245,0,.06)" stroke="#B6F500" stroke-width="1"/>
+          <text x="406" y="358">UNITED · 12</text>
+        </g>
+        <!-- bottom bar -->
+        <g transform="translate(40 388)">
+          <text font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#8a8a83">VIEW · UNITED FC · MATCHDAY 12</text>
+          <text x="440" text-anchor="end" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#B6F500">1,284 ASSETS</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ========== APPROVAL CALLOUT (between Organize and Distribute) ========== -->
+<section class="callout">
+  <div class="callout-inner">
+    <div class="callout-head">
+      <div class="callout-eyebrow">Approval Layer</div>
+      <h3>Nothing leaves without sign-off.</h3>
+    </div>
+    <p style="color:var(--dim); font-size:17px; line-height:1.55; max-width:64ch; margin-bottom:48px;">
+      Multi-stage review. Role-based gates. Complete audit trail. The control layer legal and brand need — built into the pipeline, not bolted on.
+    </p>
+    <div class="approval-stage">
+      <div class="approval-step">
+        <div class="as-num">Stage 01</div>
+        <div class="as-name">Submitted</div>
+        <div class="as-role">Producer · Source · Auto-routed</div>
+      </div>
+      <div class="approval-step">
+        <div class="as-num">Stage 02</div>
+        <div class="as-name">Review</div>
+        <div class="as-role">Brand · Legal · Rights · Roles</div>
+      </div>
+      <div class="approval-step">
+        <div class="as-num">Stage 03</div>
+        <div class="as-name">Approved</div>
+        <div class="as-role">Audit trail · Signed · Released</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STEP 05 — DISTRIBUTE ========== -->
+<section class="seq-band robot" id="step-5">
+  <div class="seq-spine" aria-hidden="true">
+    <svg class="seq-hex" viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg">
+      <polygon class="hex-poly" points="32,2 62,18 62,54 32,70 2,54 2,18"/>
+      <text class="hex-num" x="32" y="46" text-anchor="middle"
+            font-family="'Oswald', sans-serif" font-weight="600" font-size="20" letter-spacing="0.02em">05</text>
+    </svg>
+  </div>
+  <div class="seq-band-inner">
+    <div class="seq-copy">
+      <div class="seq-tag">[ 05 · Distribute · Routing ]</div>
+      <h2>Where it goes.</h2>
+      <p>Automated routing delivers the right asset to the right recipient in the right format — athletes to their apps, partners to their portals, media to their inboxes. At the speed of the moment.</p>
+    </div>
+    <div class="seq-viz" data-id="[ 05 · Distribute · Routing ]">
+      <svg viewBox="0 0 520 430" preserveAspectRatio="xMidYMid meet">
+        <!-- central hub -->
+        <g transform="translate(260 215)">
+          <polygon points="0,-38 33,-19 33,19 0,38 -33,19 -33,-19" fill="#B6F500"/>
+          <text y="5" text-anchor="middle" font-family="'Oswald', sans-serif" font-weight="600" font-size="14" fill="#050505">ROUTE</text>
+        </g>
+        <!-- destination nodes (8 around) -->
+        <g font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2">
+          <!-- top -->
+          <g>
+            <line x1="260" y1="215" x2="260" y2="80" stroke="#B6F500" stroke-opacity=".5"/>
+            <rect x="208" y="56" width="104" height="34" fill="#0a0c0e" stroke="#1c1f23"/>
+            <text x="218" y="76" fill="#f4f5f6">ATHLETE · APP</text>
+          </g>
+          <!-- right top -->
+          <g>
+            <line x1="260" y1="215" x2="430" y2="120" stroke="#B6F500" stroke-opacity=".5"/>
+            <rect x="380" y="98" width="104" height="34" fill="#0a0c0e" stroke="#1c1f23"/>
+            <text x="390" y="118" fill="#f4f5f6">PARTNER · PORTAL</text>
+          </g>
+          <!-- right -->
+          <g>
+            <line x1="260" y1="215" x2="450" y2="215" stroke="#B6F500" stroke-opacity=".5"/>
+            <rect x="396" y="200" width="104" height="34" fill="#0a0c0e" stroke="#1c1f23"/>
+            <text x="406" y="220" fill="#f4f5f6">SPONSOR · INBOX</text>
+          </g>
+          <!-- right bottom -->
+          <g>
+            <line x1="260" y1="215" x2="430" y2="310" stroke="#B6F500" stroke-opacity=".5"/>
+            <rect x="380" y="294" width="104" height="34" fill="#0a0c0e" stroke="#1c1f23"/>
+            <text x="390" y="314" fill="#f4f5f6">MEDIA · WIRE</text>
+          </g>
+          <!-- bottom -->
+          <g>
+            <line x1="260" y1="215" x2="260" y2="350" stroke="#B6F500" stroke-opacity=".5"/>
+            <rect x="208" y="340" width="104" height="34" fill="#0a0c0e" stroke="#1c1f23"/>
+            <text x="218" y="360" fill="#f4f5f6">DAM · ARCHIVE</text>
+          </g>
+          <!-- left bottom -->
+          <g>
+            <line x1="260" y1="215" x2="90" y2="310" stroke="#B6F500" stroke-opacity=".5"/>
+            <rect x="36" y="294" width="104" height="34" fill="#0a0c0e" stroke="#1c1f23"/>
+            <text x="46" y="314" fill="#f4f5f6">LEAGUE · SOCIAL</text>
+          </g>
+          <!-- left -->
+          <g>
+            <line x1="260" y1="215" x2="90" y2="215" stroke="#B6F500" stroke-opacity=".5"/>
+            <rect x="36" y="200" width="104" height="34" fill="#0a0c0e" stroke="#1c1f23"/>
+            <text x="46" y="220" fill="#f4f5f6">TEAM · CMS</text>
+          </g>
+          <!-- left top -->
+          <g>
+            <line x1="260" y1="215" x2="90" y2="120" stroke="#B6F500" stroke-opacity=".5"/>
+            <rect x="36" y="98" width="104" height="34" fill="#0a0c0e" stroke="#1c1f23"/>
+            <text x="46" y="118" fill="#f4f5f6">BROADCAST</text>
+          </g>
+        </g>
+        <!-- bottom labels -->
+        <g transform="translate(40 405)">
+          <text font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#8a8a83">DELIVERY · MEDIAN</text>
+          <text x="440" text-anchor="end" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#B6F500">2 – 5 MIN · POST WHISTLE</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STEP 06 — MEASURE ========== -->
+<section class="seq-band robot flip" id="step-6">
+  <div class="seq-spine" aria-hidden="true">
+    <svg class="seq-hex" viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg">
+      <polygon class="hex-poly" points="32,2 62,18 62,54 32,70 2,54 2,18"/>
+      <text class="hex-num" x="32" y="46" text-anchor="middle"
+            font-family="'Oswald', sans-serif" font-weight="600" font-size="20" letter-spacing="0.02em">06</text>
+    </svg>
+  </div>
+  <div class="seq-band-inner">
+    <div class="seq-copy">
+      <div class="seq-tag">[ 06 · Measure · Telemetry ]</div>
+      <h2>What it did.</h2>
+      <p>Every asset tracked. Every distribution logged. Every engagement captured. The data you need to prove content operations — and surface the inventory you didn't know you had.</p>
+    </div>
+    <div class="seq-viz" data-id="[ 06 · Measure · Telemetry ]">
+      <svg viewBox="0 0 520 430" preserveAspectRatio="xMidYMid meet">
+        <!-- top KPI strip -->
+        <g font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2" fill="#8a8a83">
+          <g transform="translate(40 60)">
+            <text>ASSETS · TRACKED</text>
+            <text x="0" y="36" font-family="'Oswald', sans-serif" font-weight="600" font-size="32" fill="#f4f5f6">128.4K</text>
+          </g>
+          <g transform="translate(200 60)">
+            <text>REACH · 24H</text>
+            <text x="0" y="36" font-family="'Oswald', sans-serif" font-weight="600" font-size="32" fill="#f4f5f6">42.8M</text>
+          </g>
+          <g transform="translate(360 60)">
+            <text>EMV · TODAY</text>
+            <text x="0" y="36" font-family="'Oswald', sans-serif" font-weight="600" font-size="32" fill="#B6F500">$312K</text>
+          </g>
+        </g>
+        <!-- chart -->
+        <g transform="translate(40 140)">
+          <line x1="0" y1="120" x2="440" y2="120" stroke="#1c1f23"/>
+          <line x1="0" y1="60"  x2="440" y2="60"  stroke="#1c1f23" stroke-dasharray="2 4"/>
+          <line x1="0" y1="0"   x2="440" y2="0"   stroke="#1c1f23" stroke-dasharray="2 4"/>
+          <polyline points="0,90 40,84 80,75 120,68 160,60 200,55 240,46 280,40 320,32 360,28 400,18 440,12"
+                    fill="none" stroke="#B6F500" stroke-width="2"/>
+          <polygon points="0,120 0,90 40,84 80,75 120,68 160,60 200,55 240,46 280,40 320,32 360,28 400,18 440,12 440,120"
+                   fill="rgba(182,245,0,.12)"/>
+        </g>
+        <!-- attribution rows -->
+        <g transform="translate(40 290)" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2">
+          <line x1="0" y1="0" x2="440" y2="0" stroke="#1c1f23"/>
+          <text y="18" fill="#B6F500">ATTRIBUTION · TOP 3</text>
+          <line x1="0" y1="32" x2="440" y2="32" stroke="#1c1f23"/>
+          <g transform="translate(0 50)">
+            <text fill="#f4f5f6">GF-2847 · GOAL · 79'</text>
+            <text x="280" fill="#8a8a83">2.4M REACH</text>
+            <text x="440" text-anchor="end" fill="#B6F500">$2.1M EMV</text>
+          </g>
+          <line x1="0" y1="64" x2="440" y2="64" stroke="#1c1f23"/>
+          <g transform="translate(0 82)">
+            <text fill="#f4f5f6">GF-2851 · CELEB · 80'</text>
+            <text x="280" fill="#8a8a83">1.8M REACH</text>
+            <text x="440" text-anchor="end" fill="#B6F500">$1.4M EMV</text>
+          </g>
+          <line x1="0" y1="96" x2="440" y2="96" stroke="#1c1f23"/>
+          <g transform="translate(0 114)">
+            <text fill="#f4f5f6">GF-2864 · POST · 92'</text>
+            <text x="280" fill="#8a8a83">1.2M REACH</text>
+            <text x="440" text-anchor="end" fill="#B6F500">$0.9M EMV</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STEP 07 — AUTOMATE ========== -->
+<section class="seq-band robot" id="step-7">
+  <div class="seq-spine" aria-hidden="true">
+    <svg class="seq-hex" viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg">
+      <polygon class="hex-poly" points="32,2 62,18 62,54 32,70 2,54 2,18"/>
+      <text class="hex-num" x="32" y="46" text-anchor="middle"
+            font-family="'Oswald', sans-serif" font-weight="600" font-size="20" letter-spacing="0.02em">07</text>
+    </svg>
+  </div>
+  <div class="seq-band-inner">
+    <div class="seq-copy">
+      <div class="seq-tag">[ 07 · Automate · Workflows ]</div>
+      <h2>What happens next.</h2>
+      <p>Workflows that learn your patterns and execute them on repeat. The operation runs whether your team is watching or not.</p>
+    </div>
+    <div class="seq-viz" data-id="[ 07 · Automate · Workflows ]">
+      <svg viewBox="0 0 520 430" preserveAspectRatio="xMidYMid meet">
+        <!-- workflow stages with arrows + a loop returning to start -->
+        <g font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" letter-spacing="2">
+          <!-- stage 1 -->
+          <g transform="translate(40 100)">
+            <rect width="120" height="56" fill="#0a0c0e" stroke="#B6F500"/>
+            <text x="14" y="22" fill="#B6F500">TRIGGER</text>
+            <text x="14" y="42" font-family="'Oswald', sans-serif" font-weight="500" font-size="14" letter-spacing="0" fill="#f4f5f6">MATCH START</text>
+          </g>
+          <!-- arrow -->
+          <path d="M168 128 L196 128" stroke="#B6F500" fill="none"/>
+          <polygon points="196,124 204,128 196,132" fill="#B6F500"/>
+          <!-- stage 2 -->
+          <g transform="translate(208 100)">
+            <rect width="120" height="56" fill="#0a0c0e" stroke="#1c1f23"/>
+            <text x="14" y="22" fill="#8a8a83">RULE</text>
+            <text x="14" y="42" font-family="'Oswald', sans-serif" font-weight="500" font-size="14" letter-spacing="0" fill="#f4f5f6">TAG GOAL</text>
+          </g>
+          <path d="M336 128 L364 128" stroke="#B6F500" fill="none"/>
+          <polygon points="364,124 372,128 364,132" fill="#B6F500"/>
+          <!-- stage 3 -->
+          <g transform="translate(376 100)">
+            <rect width="120" height="56" fill="#0a0c0e" stroke="#1c1f23"/>
+            <text x="14" y="22" fill="#8a8a83">ACTION</text>
+            <text x="14" y="42" font-family="'Oswald', sans-serif" font-weight="500" font-size="14" letter-spacing="0" fill="#f4f5f6">PUSH ATHLETE</text>
+          </g>
+          <!-- branch arrows -->
+          <path d="M436 156 L436 200" stroke="#B6F500" stroke-opacity=".5" fill="none" stroke-dasharray="3 3"/>
+          <path d="M436 156 L260 200" stroke="#B6F500" stroke-opacity=".5" fill="none" stroke-dasharray="3 3"/>
+          <path d="M436 156 L100 200" stroke="#B6F500" stroke-opacity=".5" fill="none" stroke-dasharray="3 3"/>
+          <!-- branch outputs -->
+          <g transform="translate(40 200)">
+            <rect width="120" height="42" fill="#0a0c0e" stroke="#1c1f23"/>
+            <text x="14" y="16" fill="#8a8a83">OUTPUT 01</text>
+            <text x="14" y="32" font-family="'Oswald', sans-serif" font-weight="500" font-size="12" letter-spacing="0" fill="#f4f5f6">SOCIAL · LEAGUE</text>
+          </g>
+          <g transform="translate(208 200)">
+            <rect width="120" height="42" fill="#0a0c0e" stroke="#1c1f23"/>
+            <text x="14" y="16" fill="#8a8a83">OUTPUT 02</text>
+            <text x="14" y="32" font-family="'Oswald', sans-serif" font-weight="500" font-size="12" letter-spacing="0" fill="#f4f5f6">SPONSOR · KIT</text>
+          </g>
+          <g transform="translate(376 200)">
+            <rect width="120" height="42" fill="#0a0c0e" stroke="#1c1f23"/>
+            <text x="14" y="16" fill="#8a8a83">OUTPUT 03</text>
+            <text x="14" y="32" font-family="'Oswald', sans-serif" font-weight="500" font-size="12" letter-spacing="0" fill="#f4f5f6">PARTNER · PDF</text>
+          </g>
+          <!-- loop back arrow -->
+          <path d="M436 242 Q436 320 260 320 Q100 320 100 242" stroke="#B6F500" fill="none" stroke-dasharray="4 4"/>
+          <polygon points="96,244 100,236 104,244" fill="#B6F500"/>
+          <text x="260" y="345" text-anchor="middle" fill="#B6F500">REPEAT · ON NEXT TRIGGER</text>
+          <!-- bottom -->
+          <line x1="40" y1="380" x2="480" y2="380" stroke="#1c1f23"/>
+          <text x="40" y="402" fill="#8a8a83">RUNS · WITHOUT WATCHING</text>
+          <text x="480" y="402" text-anchor="end" fill="#B6F500">24 / 7 · 365</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+</div><!-- /.sequence-wrap -->
+
+<!-- ========== CONNECT ========== -->
+<section class="connect section-light" id="connect">
+  <div class="connect-inner">
+    <div class="connect-head">
+      <div>
+        <div class="callout-eyebrow" style="margin-bottom:18px;">Connect</div>
+        <h3>Meets your stack where it already is.</h3>
+      </div>
+      <p>Greenfly connects to where your content already lives. Dropbox. Box. Getty. PhotoShelter. Your DAM. Your cloud storage. Your broadcast archive. Content flows in; organized output flows out.</p>
+    </div>
+    <div class="integration-wall">
+      <div class="int-cell">
+        <div class="int-name">Dropbox</div>
+        <div class="int-kind">Storage</div>
+      </div>
+      <div class="int-cell">
+        <div class="int-name">Box</div>
+        <div class="int-kind">Storage</div>
+      </div>
+      <div class="int-cell">
+        <div class="int-name">Getty</div>
+        <div class="int-kind">Wire</div>
+      </div>
+      <div class="int-cell">
+        <div class="int-name">PhotoShelter</div>
+        <div class="int-kind">Library</div>
+      </div>
+      <div class="int-cell verify">
+        <div class="int-name">AWS S3</div>
+        <div class="int-kind">Cloud</div>
+      </div>
+      <div class="int-cell verify">
+        <div class="int-name">Azure</div>
+        <div class="int-kind">Cloud</div>
+      </div>
+      <div class="int-cell verify">
+        <div class="int-name">Google Drive</div>
+        <div class="int-kind">Storage</div>
+      </div>
+      <div class="int-cell verify">
+        <div class="int-name">Brightcove</div>
+        <div class="int-kind">Video</div>
+      </div>
+      <div class="int-cell verify">
+        <div class="int-name">Vimeo</div>
+        <div class="int-kind">Video</div>
+      </div>
+      <div class="int-cell verify">
+        <div class="int-name">Adobe CC</div>
+        <div class="int-kind">Creative</div>
+      </div>
+      <div class="int-cell verify">
+        <div class="int-name">Reuters</div>
+        <div class="int-kind">Wire</div>
+      </div>
+      <div class="int-cell verify">
+        <div class="int-name">AP</div>
+        <div class="int-kind">Wire</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PARALLEL COLLECTION ========== -->
+<section class="parallel">
+  <div class="parallel-inner">
+    <div class="parallel-head">
+      <span class="mono">Collection · Extensions</span>
+      <h3>Two ways in. Same pipeline.</h3>
+    </div>
+    <div class="parallel-grid">
+      <div class="par-card">
+        <div class="par-eyebrow">Live Event Capture</div>
+        <h4>Pros in the field. In real time.</h4>
+        <p>Professional creators in the field. Approved. Equipped. Uploading in real time. Content delivered to your pipeline before the event ends.</p>
+        <div class="par-meta">
+          <div class="pm">Vetted creators</div>
+          <div class="pm">Real-time upload</div>
+          <div class="pm">Pre-event setup · <b>72h</b></div>
+        </div>
+      </div>
+      <div class="par-card">
+        <div class="par-eyebrow">Fan Activation</div>
+        <h4>Crowd angles. Pros can't reach.</h4>
+        <p>Fans capture what pros can't reach. Crowd moments. In-seat perspectives. Post-game reactions. Same pipeline. Same speed.</p>
+        <div class="par-meta">
+          <div class="pm">In-seat perspectives</div>
+          <div class="pm">Post-game reactions</div>
+          <div class="pm">Same pipeline · <b>0 forks</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CONFIGURATION TIERS ========== -->
+<section class="tiers section-light" id="tiers">
+  <div class="tiers-inner">
+    <div class="tiers-head">
+      <div>
+        <span class="mono">Configurations</span>
+        <h3>Three ways to run on <span class="accent">Greenfly</span>.</h3>
+      </div>
+      <p>Configurations, not packages. Same platform underneath. Pick the fit that matches the operation, not the price tag — there isn't one on this page.</p>
+    </div>
+
+    <div class="tier-grid">
+      <div class="tier">
+        <div class="tier-tag">[Product]</div>
+        <div class="tier-name">GF1 <span class="accent">Elite</span></div>
+        <div class="tier-kind">Set the standard</div>
+        <p>For organizations that set the standard. Full platform. Full AI Suite. Full service. The configuration behind the operations you see on national broadcasts.</p>
+        <div class="tier-foot">Full Stack · Full Service</div>
+      </div>
+      <div class="tier">
+        <div class="tier-tag">[Product]</div>
+        <div class="tier-name">GF2 <span class="accent">Pro</span></div>
+        <div class="tier-kind">Run year-round</div>
+        <p>For operations that run year-round. The core platform plus the integrations and automations that keep a professional content operation moving.</p>
+        <div class="tier-foot">Core · Integrations · Automation</div>
+      </div>
+      <div class="tier">
+        <div class="tier-tag">[Product]</div>
+        <div class="tier-name">GF3 <span class="accent">Standard</span></div>
+        <div class="tier-kind">Focused operation</div>
+        <p>For teams that need the infrastructure, not the whole stack. The Greenfly foundation — collect, organize, distribute — configured for a focused operation.</p>
+        <div class="tier-foot">Collect · Organize · Distribute</div>
+      </div>
+    </div>
+
+    <div class="tiers-cta">
+      <span>Find your fit</span>
+      <a href="./get-greenfly.html" class="btn btn-primary" style="padding:12px 20px;">Get Greenfly <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CLOSING ========== -->
+<section class="close" id="demo">
+  <div class="close-inner">
+    <div class="mono close-eyebrow">The Standard</div>
+    <h2>This is the standard.</h2>
+    <p>Content is equal parts art and science. Greenfly is the platform that runs both.</p>
+    <div class="close-ctas">
+      <a href="./get-greenfly.html" class="btn btn-primary">Get Greenfly <span class="arrow">→</span></a>
+      <a href="./get-greenfly.html" class="btn btn-ghost">Talk to sales <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer" id="footer">
+  <div class="footer-stage">
+    <div class="footer-wordmark">
+      <img src="./images/brand/Greenfly (1).svg" alt="Greenfly">
+    </div>
+  </div>
+
+  <div class="footer-inner">
+    <div>
+      <h5>Platform</h5>
+      <ul>
+        <li><a href="#step-1">Collect</a></li>
+        <li><a href="#step-2">Identify</a></li>
+        <li><a href="#step-3">Tag</a></li>
+        <li><a href="#step-4">Organize</a></li>
+        <li><a href="#step-5">Distribute</a></li>
+        <li><a href="#step-6">Measure</a></li>
+        <li><a href="#step-7">Automate</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Customers</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="./get-greenfly.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Resources</h5>
+      <ul>
+        <li><a href="#">Editorial</a></li>
+        <li><a href="#">Playbooks</a></li>
+        <li><a href="#">Webinars</a></li>
+        <li><a href="#">Support</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-legal">
+    <span>© 2026 Greenfly Inc.</span>
+    <span class="footer-status">
+      <span class="footer-status-dot"></span>
+      System · Nominal · <b>99.97%</b>
+    </span>
+    <span><a href="./legal.html">Legal &amp; policies &rarr;</a></span>
+  </div>
+</footer>
+
+<script>
+  /* Nav: hide on scroll-down, show on scroll-up. */
+  (() => {
+    const nav = document.getElementById('siteNav');
+    if (!nav) return;
+    const HIDE_AFTER = 80;
+    const DELTA = 6;
+    let lastY = window.scrollY || 0;
+    let ticking = false;
+    const update = () => {
+      const y = window.scrollY || 0;
+      const dy = y - lastY;
+      nav.classList.toggle('is-scrolled', y > 24);
+      if (Math.abs(dy) > DELTA) {
+        if (dy > 0 && y > HIDE_AFTER) nav.classList.add('nav-hidden');
+        else if (dy < 0)              nav.classList.remove('nav-hidden');
+        lastY = y;
+      }
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    nav.addEventListener('focusin', () => nav.classList.remove('nav-hidden'));
+  })();
+
+  /* Adaptive nav theme: flip to dark glyphs when a `.section-light` is
+     crossing the top band of the viewport. */
+  (() => {
+    const nav = document.getElementById('siteNav');
+    if (!nav) return;
+    const lights = document.querySelectorAll('.section-light');
+    if (!lights.length) return;
+    const NAV_H = 60;
+    const margin = () => `0px 0px -${Math.max(0, window.innerHeight - NAV_H)}px 0px`;
+    const active = new Set();
+    let io;
+    const wire = () => {
+      if (io) io.disconnect();
+      active.clear();
+      io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) active.add(e.target);
+          else active.delete(e.target);
+        });
+        nav.classList.toggle('nav-on-light', active.size > 0);
+      }, { rootMargin: margin(), threshold: 0 });
+      lights.forEach(el => io.observe(el));
+    };
+    wire();
+    let rt;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(wire, 200); });
+  })();
+
+  /* Rail progress — for each sequence section (step bands + callouts),
+     compute --seq-progress (0–100%): how far the viewport marker has
+     moved through that section. The CSS uses this to paint accent up
+     to the marker and dim below, giving the rail its read/unread feel.
+     For step bands specifically, also toggle .passed (band center is
+     above the marker) and .in-view (band center is near the marker)
+     so the hex stroke + number can elevate from dim to accent. */
+  (() => {
+    const sections = Array.from(document.querySelectorAll('.sequence-wrap > .seq-band, .sequence-wrap > .callout'));
+    const bands = sections.filter(s => s.classList.contains('seq-band'));
+    if (!sections.length) return;
+    let ticking = false;
+    function update() {
+      const winH = window.innerHeight;
+      const marker = winH * 0.5;
+      sections.forEach((s) => {
+        const r = s.getBoundingClientRect();
+        let p;
+        if (r.bottom < marker) p = 100;
+        else if (r.top > marker) p = 0;
+        else p = ((marker - r.top) / r.height) * 100;
+        s.style.setProperty('--seq-progress', p.toFixed(2) + '%');
+      });
+      bands.forEach((b) => {
+        const r = b.getBoundingClientRect();
+        const center = r.top + r.height / 2;
+        b.classList.toggle('in-view', Math.abs(center - marker) < winH * 0.18);
+        b.classList.toggle('passed', center < marker);
+      });
+      ticking = false;
+    }
+    function schedule() {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    update();
+  })();
+</script>
+</body>
+</html>

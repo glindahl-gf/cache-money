@@ -164,7 +164,8 @@ em.thin, .thin {
     color .35s var(--ease);
   will-change: transform;
 }
-.nav.nav-hidden { transform: translateY(-110%); }
+/* .nav-hidden retired — nav stays sticky on all breakpoints (editorial pattern).
+   Class is left untouched so any leftover page-JS handler adding it is a no-op. */
 .nav.is-scrolled {
   background-color: rgba(10,11,13,.62);
   backdrop-filter: blur(20px) saturate(160%);

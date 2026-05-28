@@ -1941,7 +1941,7 @@
   .close-line.final .accent { color: var(--accent); }
 
   /* Typewriter — single rotating word inside the close line. */
-  .close-typing-line { color: var(--dim); }
+  .close-typing-line { color: var(--text); }
   .typewriter {
     display: inline-block;
     white-space: nowrap;

@@ -219,10 +219,11 @@
   .hero h1 .line-2 { color: var(--text); flex-basis: 100%; }
   .hero h1 .title-fly {
     display: inline-block;
-    height: .9em;
-    width: .9em;
-    margin-left: .28em;
-    vertical-align: -0.12em;
+    /* Matches Oswald's cap-height in FAVORITE PLATFORM (~.78em). */
+    height: .82em;
+    width: .82em;
+    margin-left: .22em;
+    vertical-align: 0;
     border-radius: 50%;
     filter: drop-shadow(0 4px 22px rgba(189,255,0,.35));
   }

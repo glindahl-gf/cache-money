@@ -271,7 +271,7 @@ em.thin, .thin {
 
 .nav.nav-on-light .nav-logo {
   /* base.css lives in /css/ — paths are relative to this file, so prepend ../ */
-  background-image: url('../images/brand/Greenfly-fieldgreen.svg');
+  background-image: url('../images/brand/wordmark/gf-wordmark-field-green.svg');
   background-size: auto 30px;        /* match the dark-mode <img> height exactly */
   background-repeat: no-repeat;
   background-position: left center;

@@ -25,9 +25,7 @@ a { color: inherit; text-decoration: none; }
    Springboard is intentionally minimal: logo only. */
 .nav-links,
 .nav-utility,
-.nav-cta {
-  display: none;
-}
+.nav-cta { display: none !important; }
 
 /* ─────────────────────────────────────────────  HERO  ───── */
 .hero {

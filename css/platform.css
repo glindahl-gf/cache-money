@@ -1104,14 +1104,8 @@
   .iq-specimen { border-right: 0; border-bottom: 1px solid var(--hair); }
   .foundation { padding: 32px; }
   .seq-numeral { font-size: clamp(56px, 12vw, 96px); }
-  .footer-inner { grid-template-columns: repeat(3, auto); gap: 40px; }
-  .footer-wordmark { padding: 28px 0; }
-  .footer-wordmark img { width: 72%; }
 }
 @media (max-width: 720px) {
-  .footer-inner { grid-template-columns: 1fr; }
-  .footer-legal { flex-direction: column; gap: 10px; text-align: center; }
-  .footer-legal span { justify-content: center; }
   .close { padding: 16vh 5vw 14vh; }
 }
 

@@ -22,71 +22,10 @@ const lerp  = (a, b, t) => a + (b - a) * t;
 /* =========================================================================
    0. NAV — hide on scroll-down, reveal on scroll-up; densify past hero
    ========================================================================= */
-(() => {
-  const nav = qs('#siteNav');
-  if (!nav) return;
-  const HIDE_AFTER = 80;     // don't hide until past this scroll distance
-  const DELTA = 6;           // ignore micro scroll jitter
-
-  let lastY = window.scrollY || 0;
-  let ticking = false;
-
-  const update = () => {
-    const y = window.scrollY || 0;
-    const dy = y - lastY;
-
-    nav.classList.toggle('is-scrolled', y > 24);
-
-    if (Math.abs(dy) > DELTA) {
-      if (dy > 0 && y > HIDE_AFTER) {
-        nav.classList.add('nav-hidden');
-      } else if (dy < 0) {
-        nav.classList.remove('nav-hidden');
-      }
-      lastY = y;
-    }
-    ticking = false;
-  };
-
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(update);
-      ticking = true;
-    }
-  }, { passive: true });
-
-  // Reveal nav whenever focus enters it via keyboard.
-  nav.addEventListener('focusin', () => nav.classList.remove('nav-hidden'));
-})();
 
 /* Adaptive nav theme: when a `.section-light` is currently crossing the
    top band of the viewport, mark the nav as `nav-on-light` so its glyphs
    flip to dark. Coexists with `.is-scrolled`. */
-(() => {
-  const nav = document.getElementById('siteNav');
-  if (!nav) return;
-  const lights = document.querySelectorAll('.section-light');
-  if (!lights.length) return;
-  const NAV_H = 60;
-  const margin = () => `0px 0px -${Math.max(0, window.innerHeight - NAV_H)}px 0px`;
-  const active = new Set();
-  let io;
-  const wire = () => {
-    if (io) io.disconnect();
-    active.clear();
-    io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) active.add(e.target);
-        else active.delete(e.target);
-      });
-      nav.classList.toggle('nav-on-light', active.size > 0);
-    }, { rootMargin: margin(), threshold: 0 });
-    lights.forEach(el => io.observe(el));
-  };
-  wire();
-  let rt;
-  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(wire, 200); });
-})();
 
 /* =========================================================================
    1. HERO SUBJECT CYCLER — typewriter effect
@@ -1191,79 +1130,4 @@ startSubjectTyper(qs('#subject'));
    9. FOOTER HEX GRID — generated pointy-top hexagons, hover shows fly
    Rebuilds on resize so the grid stays aligned to the footer's width.
    ========================================================================= */
-(() => {
-  const svg = qs('#footerHexGrid');
-  if (!svg) return;
-  const host = svg.parentElement;
-  const NS = 'http://www.w3.org/2000/svg';
-  const R = 42; // hex radius (center to corner)
 
-  function build() {
-    const rect = host.getBoundingClientRect();
-    const w = Math.ceil(rect.width);
-    const h = Math.ceil(rect.height);
-    if (!w || !h) return;
-
-    const hexW = Math.sqrt(3) * R;  // pointy-top width
-    const vStep = 1.5 * R;           // vertical spacing between row centers
-
-    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
-    svg.setAttribute('width', w);
-    svg.setAttribute('height', h);
-
-    // Clear any existing <g.hex-cell> but preserve <defs>
-    qsa('.hex-cell', svg).forEach((n) => n.remove());
-
-    const pts = [
-      `0,${-R}`,
-      `${hexW/2},${-R/2}`,
-      `${hexW/2},${R/2}`,
-      `0,${R}`,
-      `${-hexW/2},${R/2}`,
-      `${-hexW/2},${-R/2}`
-    ].join(' ');
-    const flySize = R * 1.0;
-    const flyOffset = -flySize / 2;
-
-    const frag = document.createDocumentFragment();
-    const cols = Math.ceil(w / hexW) + 2;
-    const rows = Math.ceil(h / vStep) + 2;
-
-    for (let row = -1; row < rows; row++) {
-      const xOffset = row % 2 ? hexW / 2 : 0;
-      for (let col = -1; col < cols; col++) {
-        const cx = col * hexW + xOffset;
-        const cy = row * vStep;
-
-        const g = document.createElementNS(NS, 'g');
-        g.setAttribute('class', 'hex-cell');
-        g.setAttribute('transform', `translate(${cx}, ${cy})`);
-
-        const poly = document.createElementNS(NS, 'polygon');
-        poly.setAttribute('class', 'hex-cell-shape');
-        poly.setAttribute('points', pts);
-        g.appendChild(poly);
-
-        const use = document.createElementNS(NS, 'use');
-        use.setAttribute('class', 'hex-fly');
-        use.setAttribute('href', '#fly-silhouette');
-        use.setAttribute('x', flyOffset);
-        use.setAttribute('y', flyOffset);
-        use.setAttribute('width', flySize);
-        use.setAttribute('height', flySize);
-        g.appendChild(use);
-
-        frag.appendChild(g);
-      }
-    }
-    svg.appendChild(frag);
-  }
-
-  build();
-
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(build, 140);
-  });
-})();

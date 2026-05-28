@@ -555,51 +555,6 @@
   /* =====================================================================
      FOOTER (same as solutions hub for consistency)
      ===================================================================== */
-  .footer {
-    background: #0b0d0f;
-    border-top: 1px solid rgba(255,255,255,.10);
-    padding: 80px 5vw 36px;
-    position: relative; overflow: hidden;
-    color: #f4f5f6;
-  }
-  .footer-stage {
-    max-width: var(--max); margin: 0 auto 60px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .footer-wordmark { padding: 32px 0; }
-  .footer-wordmark img {
-    width: 64%; max-width: 880px; display: block; margin: 0 auto; opacity: .85;
-  }
-  .footer-inner {
-    max-width: var(--max); margin: 0 auto;
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px;
-    padding: 40px 0;
-    border-top: 1px solid rgba(255,255,255,.10);
-  }
-  .footer-inner h5 {
-    font-family: var(--mono); font-size: 11px; letter-spacing: .22em;
-    text-transform: uppercase; color: #B6F500; margin-bottom: 18px; font-weight: 400;
-  }
-  .footer-inner ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .footer-inner a {
-    font-size: 14px; color: rgba(255,255,255,.64);
-    transition: color .2s var(--ease);
-  }
-  .footer-inner a:hover { color: #B6F500; }
-  .footer-legal {
-    max-width: var(--max); margin: 0 auto;
-    padding-top: 28px; border-top: 1px solid rgba(255,255,255,.10);
-    display: flex; align-items: center; justify-content: space-between;
-    font-family: var(--mono); font-size: 11px; letter-spacing: .18em;
-    text-transform: uppercase; color: rgba(255,255,255,.40);
-  }
-  .footer-legal a { color: rgba(255,255,255,.40); transition: color .2s var(--ease); }
-  .footer-legal a:hover { color: #f4f5f6; }
-  .footer-status { display: inline-flex; align-items: center; gap: 8px; }
-  .footer-status-dot {
-    width: 6px; height: 6px; background: #B6F500; border-radius: 50%;
-    animation: pulse 2.6s ease-in-out infinite;
-  }
 
   /* =====================================================================
      RESPONSIVE
@@ -615,10 +570,8 @@
     .aud-tab { border-bottom: 0; border-right: 1px solid var(--hair); flex: 0 0 auto; min-width: 200px; }
     .quote-inner { grid-template-columns: 1fr; gap: 24px; }
     .quote-mark { font-size: 130px; }
-    .footer-inner { grid-template-columns: repeat(2, 1fr); gap: 32px; }
   }
   @media (max-width: 720px) {
-    .nav-link, .nav-utility { display: none; }
     .hero { padding: 110px 6vw 64px; }
     .hero-headline { font-size: clamp(40px, 11vw, 64px); }
     .stats-grid { grid-template-columns: 1fr; }
@@ -628,7 +581,5 @@
     .timeline-stops { font-size: 10px; }
     .ts-btn .ts-time { font-size: 9px; }
     .aud-panel-wrap { padding: 32px 22px; }
-    .footer-inner { grid-template-columns: 1fr; }
-    .footer-legal { flex-direction: column; gap: 14px; text-align: center; }
     .close-stack { font-size: clamp(36px, 9vw, 56px); }
   }

@@ -133,15 +133,6 @@
   .cover-word.is-current { opacity: 1; transform: translateY(0); }
   .cover-word.is-out     { opacity: 0; transform: translateY(-110%); }
 
-  .cover-content .title-fly {
-    display: inline-block;
-    height: .8em; width: .8em;
-    margin-left: .22em;
-    vertical-align: -0.08em;
-    border-radius: 50%;
-    filter: drop-shadow(0 4px 22px rgba(189,255,0,.45));
-  }
-
   .cover-content .hero-sub {
     margin-top: 28px;
     max-width: 44ch;
@@ -170,7 +161,8 @@
     font-size: 11px;
     letter-spacing: .22em;
     text-transform: uppercase;
-    color: rgba(255,255,255,.55);
+    /* Inactive chapters recede hard so the active one carries the rotation signal. */
+    color: rgba(255,255,255,.32);
     cursor: pointer;
     display: flex;
     align-items: baseline;
@@ -184,12 +176,13 @@
     font-weight: 500;
     font-size: clamp(28px, 3vw, 44px);
     letter-spacing: -0.02em;
-    color: rgba(255,255,255,.85);
+    color: rgba(255,255,255,.42);
     transition: color .25s var(--ease);
   }
-  .cover-index li:hover        { color: rgba(255,255,255,.95); }
-  .cover-index li.is-current   { color: var(--accent); border-top-color: var(--accent); }
-  .cover-index li.is-current b { color: var(--accent); }
+  .cover-index li:hover          { color: rgba(255,255,255,.78); }
+  .cover-index li:hover b        { color: rgba(255,255,255,.85); }
+  .cover-index li.is-current     { color: var(--accent); border-top-color: var(--accent); }
+  .cover-index li.is-current b   { color: var(--accent); }
 
   @media (max-width: 900px) {
     .cover-content { padding: 14vh 5vw 8vh; }
@@ -221,11 +214,6 @@
   </div>
 
   <div class="cover-content">
-    <div class="hero-eyebrow">
-      <span class="dot"></span>
-      <span class="mono label-lime">Greenfly · Content Ops · v2026</span>
-    </div>
-
     <h1>
       <span class="cover-pre">Your Favorite</span>
       <span class="cover-rotator" id="coverRotator">
@@ -233,7 +221,7 @@
         <span class="cover-word"             data-key="leagues">League's</span>
         <span class="cover-word"             data-key="brands">Brand's</span>
       </span>
-      <span class="cover-post">Favorite Platform<img class="title-fly" src="./images/brand/Greenfly icon logo.svg" alt="" aria-hidden="true"/></span>
+      <span class="cover-post">Favorite Platform<img class="title-fly" src="./images/brand/favicon/gf-favicon-electric-green.svg" alt="" aria-hidden="true"/></span>
     </h1>
 
     <div class="hero-sub">High-Performance Content Operations.</div>
@@ -682,7 +670,6 @@
 <!-- ========== CLOSING STACK ========== -->
 <section class="close" id="demo">
   <div class="close-inner">
-    <div class="mono label-lime" style="margin-bottom:40px;">The Close</div>
     <div class="close-stack" id="closeStack">
       <div class="close-line close-typing-line">
         The <span class="typewriter"><span class="typewriter-word" id="typeWord" aria-live="polite"></span><span class="typewriter-caret" aria-hidden="true"></span></span> that get it.

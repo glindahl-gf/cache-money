@@ -417,7 +417,7 @@
   color: var(--text);
 }
 .arc-title .line { display: block; }
-.arc-title .line em { color: var(--dim); }
+.arc-title .line em { color: var(--text); }
 .arc-title .line-wheel {
   display: flex;
   align-items: center;

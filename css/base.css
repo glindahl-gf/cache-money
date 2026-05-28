@@ -42,7 +42,7 @@
    RESET / BASE
    =================================================================== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 96px; /* keep focused/anchored content clear of the 72px sticky nav (WCAG 2.4.11 Focus Not Obscured) */ }
 html, body {
   background: var(--bg);
   color: var(--text);
@@ -137,13 +137,26 @@ em.thin, .thin {
 
 .btn-primary { background: var(--accent); color: #000; }
 .btn-primary:hover { background: var(--accent-dim); }
-.section-light .btn-primary { color: #fff; }
-.section-light .btn-primary:hover { background: var(--accent-dim); }
+/* On .section-light the bg is Field Green (#79982D); near-black text gives 6.5:1 (AA).
+   Previously #fff here was 3.2:1 and failed WCAG 1.4.3. */
+.section-light .btn-primary { color: #0F0F0F; }
+.section-light .btn-primary:hover { background: var(--accent-dim); color: #0F0F0F; }
 
-.btn-ghost { border-color: var(--hair-strong); color: var(--text); }
+/* Ghost borders need 3:1 against bg (WCAG 1.4.11 Non-text Contrast).
+   Hair-strong tokens at .20 / .26 opacity don't reach that, so set explicit
+   border-colors on the ghost button without changing the token (which is also
+   used for hairlines where 3:1 isn't required). */
+.btn-ghost { border-color: rgba(255,255,255,.45); color: var(--text); }
 .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-.section-light .btn-ghost { border-color: rgba(15,15,15,.24); }
+.section-light .btn-ghost { border-color: rgba(15,15,15,.55); }
 .section-light .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Focus ring — WCAG 2.4.7 Focus Visible. --accent auto-flips to field green
+   on .section-light, so the ring follows the surrounding palette. */
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
 
 /* ===================================================================
    NAV
@@ -193,6 +206,11 @@ em.thin, .thin {
   transition: color .25s var(--ease);
 }
 .nav-link:hover, .nav-link.active { color: var(--text); }
+.nav-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
 .nav-link.active::after {
   content: ''; position: absolute; left: 0; right: 0; bottom: 0;
   height: 1px; background: var(--accent);
@@ -206,17 +224,28 @@ em.thin, .thin {
   border-left: 1px solid var(--hair);
 }
 .nav-utility:hover { color: var(--text); }
+.nav-utility:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
 
 .nav-cta {
   display: inline-flex; align-items: center; gap: 8px;
   font-size: 14px; letter-spacing: .04em; text-transform: uppercase;
   padding: 9px 16px;
   color: var(--text);
-  border: 1px solid var(--hair-strong);
+  /* Explicit border-color (not --hair-strong) so we hit 3:1 against bg
+     for WCAG 1.4.11 — token stays available for hairlines elsewhere. */
+  border: 1px solid rgba(255,255,255,.45);
   border-radius: 5px;                /* matches .btn — unified corner language */
   transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
 }
 .nav-cta:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+.nav-cta:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
 
 /* On a light section: swap --accent locally to Field Green so the active
    underline + nav-cta hover both flip to the field-green palette without
@@ -228,8 +257,10 @@ em.thin, .thin {
 .nav.nav-on-light .nav-link.active { color: #0F0F0F; }
 .nav.nav-on-light .nav-utility { color: rgba(15,15,15,.55); border-left-color: rgba(15,15,15,.18); }
 .nav.nav-on-light .nav-utility:hover { color: #0F0F0F; }
-.nav.nav-on-light .nav-cta     { color: #0F0F0F; border-color: rgba(15,15,15,.28); }
-.nav.nav-on-light .nav-cta:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+/* Border .55 on light → ~3.1:1 vs #EEEEE8 (WCAG 1.4.11).
+   Hover: text stays #0F0F0F on field-green for 6.5:1 (WCAG 1.4.3). */
+.nav.nav-on-light .nav-cta     { color: #0F0F0F; border-color: rgba(15,15,15,.55); }
+.nav.nav-on-light .nav-cta:hover { background: var(--accent); color: #0F0F0F; border-color: var(--accent); }
 .nav.nav-on-light.is-scrolled {
   background-color: rgba(238,238,232,.68);
   border-bottom-color: rgba(15,15,15,.10);
@@ -240,7 +271,7 @@ em.thin, .thin {
 
 .nav.nav-on-light .nav-logo {
   /* base.css lives in /css/ — paths are relative to this file, so prepend ../ */
-  background-image: url('../images/brand/Greenfly-fieldgreen.svg');
+  background-image: url('../images/brand/wordmark/gf-wordmark-field-green.svg');
   background-size: auto 30px;        /* match the dark-mode <img> height exactly */
   background-repeat: no-repeat;
   background-position: left center;
@@ -325,6 +356,11 @@ em.thin, .thin {
   border: 0;
   cursor: pointer;
   position: relative;
+}
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 .nav-toggle-bar {
   position: absolute;

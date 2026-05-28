@@ -200,6 +200,11 @@
     padding: 0; cursor: pointer;
     color: var(--dim); transition: color .2s var(--ease);
   }
+  .ts-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
   .ts-btn .ts-dot {
     width: 14px; height: 14px; border-radius: 50%;
     background: var(--bg-2); border: 1px solid var(--hair-strong);

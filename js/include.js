@@ -105,4 +105,82 @@
   }, { passive: true });
   window.addEventListener('resize', update);
   update();
+
+  // ─── 6. Footer hex-cell grid generator. Builds the animated honeycomb
+  // background inside <svg id="footerHexGrid"> after the footer partial is
+  // injected. Reflows on resize. ───
+  const footerSvg = document.querySelector('#footerHexGrid');
+  if (footerSvg) {
+    const host = footerSvg.parentElement;
+    const NS = 'http://www.w3.org/2000/svg';
+    const R = 42;
+
+    function buildHexGrid() {
+      const rect = host.getBoundingClientRect();
+      const w = Math.ceil(rect.width);
+      const h = Math.ceil(rect.height);
+      if (!w || !h) return;
+
+      const hexW = Math.sqrt(3) * R;
+      const vStep = 1.5 * R;
+
+      footerSvg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      footerSvg.setAttribute('width', w);
+      footerSvg.setAttribute('height', h);
+
+      // Clear any existing cells (preserve <defs>)
+      footerSvg.querySelectorAll('.hex-cell').forEach((n) => n.remove());
+
+      const pts = [
+        `0,${-R}`,
+        `${hexW/2},${-R/2}`,
+        `${hexW/2},${R/2}`,
+        `0,${R}`,
+        `${-hexW/2},${R/2}`,
+        `${-hexW/2},${-R/2}`
+      ].join(' ');
+      const flySize = R * 1.0;
+      const flyOffset = -flySize / 2;
+
+      const frag = document.createDocumentFragment();
+      const cols = Math.ceil(w / hexW) + 2;
+      const rows = Math.ceil(h / vStep) + 2;
+
+      for (let row = -1; row < rows; row++) {
+        const xOffset = row % 2 ? hexW / 2 : 0;
+        for (let col = -1; col < cols; col++) {
+          const cx = col * hexW + xOffset;
+          const cy = row * vStep;
+
+          const g = document.createElementNS(NS, 'g');
+          g.setAttribute('class', 'hex-cell');
+          g.setAttribute('transform', `translate(${cx}, ${cy})`);
+
+          const poly = document.createElementNS(NS, 'polygon');
+          poly.setAttribute('class', 'hex-cell-shape');
+          poly.setAttribute('points', pts);
+          g.appendChild(poly);
+
+          const use = document.createElementNS(NS, 'use');
+          use.setAttribute('class', 'hex-fly');
+          use.setAttribute('href', '#fly-silhouette');
+          use.setAttribute('x', flyOffset);
+          use.setAttribute('y', flyOffset);
+          use.setAttribute('width', flySize);
+          use.setAttribute('height', flySize);
+          g.appendChild(use);
+
+          frag.appendChild(g);
+        }
+      }
+      footerSvg.appendChild(frag);
+    }
+
+    buildHexGrid();
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(buildHexGrid, 140);
+    });
+  }
 })();

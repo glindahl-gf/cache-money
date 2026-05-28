@@ -152,6 +152,9 @@ em.thin, .thin {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   padding: 16px 5vw;
   display: flex; align-items: center; justify-content: space-between;
+  /* Pin the nav typography so it stays identical across pages, even if a
+     page sets its own body font (e.g. the springboard uses plain Barlow). */
+  font-family: 'Barlow Condensed', system-ui, sans-serif;
   background-color: transparent;
   border-bottom: 1px solid transparent;
   transform: translateY(0);

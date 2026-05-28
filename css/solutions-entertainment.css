@@ -172,6 +172,11 @@
   .stage-btn:last-child { border-right: 0; }
   .stage-btn:hover { background: var(--bg-3); }
   .stage-btn.active { background: var(--bg-3); }
+  /* Inset ring — tabs sit edge-to-edge, an offset ring would overlap neighbors. */
+  .stage-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -3px;
+  }
   .stage-btn::after {
     content: ""; position: absolute; left: 0; bottom: -1px; right: 0; height: 2px;
     background: transparent;

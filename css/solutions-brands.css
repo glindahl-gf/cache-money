@@ -1,0 +1,516 @@
+/* solutions-brands.css — page-specific styles. Shared base is in css/base.css */
+
+  .hero {
+    position: relative; min-height: 100vh; padding: 130px 5vw 96px;
+    display: flex; align-items: center;
+    border-bottom: 1px solid var(--hair);
+    overflow: hidden; isolation: isolate;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 78% 22%, var(--tint-strong), transparent 60%),
+      radial-gradient(ellipse 80% 70% at 20% 90%, var(--tint), transparent 70%);
+    pointer-events: none; z-index: -1;
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, black 0%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, black 0%, transparent 80%);
+    pointer-events: none; z-index: -1;
+  }
+  .hero-inner { max-width: var(--max); margin: 0 auto; width: 100%; }
+
+  .breadcrumb {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--dim-2);
+    margin-bottom: 36px;
+  }
+  .breadcrumb a { transition: color .2s var(--ease); }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb .crumb-sep { opacity: .5; }
+  .breadcrumb .crumb-current { color: var(--accent); }
+
+  .hero-headline {
+    font-family: 'Oswald', sans-serif; font-weight: 500;
+    font-size: clamp(56px, 7.2vw, 128px); line-height: .94;
+    letter-spacing: -0.02em; text-transform: uppercase;
+    color: var(--text); max-width: 18ch; margin-bottom: 32px;
+  }
+  .hero-headline .accent { color: var(--accent); }
+  .hero-headline .quiet { color: var(--dim); display: block; }
+
+  .hero-sub {
+    font-family: 'Oswald', sans-serif; font-weight: 400;
+    font-size: clamp(17px, 1.4vw, 21px); line-height: 1.55;
+    color: var(--dim); max-width: 62ch; margin-bottom: 36px;
+    text-transform: none; letter-spacing: 0;
+  }
+  .hero-sub b { color: var(--text); font-weight: 500; }
+
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 56px; }
+
+  .hero-trust {
+    display: flex; align-items: center; gap: 32px; flex-wrap: wrap;
+    padding-top: 36px; border-top: 1px solid var(--hair);
+  }
+  .hero-trust .mono { color: var(--dim-2); white-space: nowrap; }
+  .hero-trust-logos { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+  .hero-trust-logos .logo-mark {
+    font-family: 'Oswald', sans-serif; font-weight: 600;
+    font-size: 16px; letter-spacing: .04em; text-transform: uppercase;
+    color: var(--text); opacity: .55;
+    transition: opacity .2s var(--ease), color .2s var(--ease);
+  }
+  .hero-trust-logos .logo-mark:hover { opacity: 1; color: var(--accent); }
+
+  /* =====================================================================
+     CFO STATS — board-deck-credible numbers
+     The four numbers a CFO will want before saying yes. Bigger and
+     more prominent than the other pages — this section IS the pitch.
+     ===================================================================== */
+  .cfo {
+    padding: 96px 5vw;
+    border-bottom: 1px solid var(--hair);
+    background: var(--bg-2);
+  }
+  .cfo-inner { max-width: var(--max); margin: 0 auto; }
+  .cfo-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 24px; margin-bottom: 56px; flex-wrap: wrap;
+  }
+  .cfo-head h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 500;
+    font-size: clamp(28px, 3vw, 44px); line-height: 1;
+    letter-spacing: -0.012em; text-transform: uppercase;
+    color: var(--text); max-width: 24ch;
+  }
+  .cfo-head h2 em { font-style: normal; color: var(--accent); font-weight: 600; }
+
+  .cfo-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    border-top: 1px solid var(--hair); border-left: 1px solid var(--hair);
+  }
+  .cfo-cell {
+    border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair);
+    padding: 40px 32px 36px; min-height: 240px;
+    position: relative; overflow: hidden;
+  }
+  .cfo-num {
+    font-family: 'Oswald', sans-serif; font-weight: 500;
+    font-size: clamp(56px, 6vw, 96px); line-height: 1;
+    letter-spacing: -0.025em; color: var(--text);
+    margin-bottom: 18px;
+    transition: color .25s var(--ease);
+  }
+  .cfo-num .unit {
+    font-size: .42em; color: var(--dim); margin-left: 4px; font-weight: 400;
+    transition: color .25s var(--ease);
+  }
+  .cfo-num .pre {
+    font-size: .42em; color: var(--dim); margin-right: 2px; font-weight: 400;
+    transition: color .25s var(--ease);
+  }
+  .cfo-label {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--dim);
+    margin-bottom: 14px;
+    transition: color .25s var(--ease);
+  }
+  .cfo-detail {
+    font-family: 'Oswald', sans-serif; font-weight: 400;
+    font-size: 14px; line-height: 1.5; color: var(--dim);
+    text-transform: none; letter-spacing: 0;
+    max-width: 36ch;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .25s var(--ease), transform .25s var(--ease);
+  }
+  .cfo-cell:hover .cfo-detail { opacity: 1; transform: translateY(0); }
+  .cfo-cell:hover .cfo-num,
+  .cfo-cell:hover .cfo-num .unit,
+  .cfo-cell:hover .cfo-num .pre,
+  .cfo-cell:hover .cfo-label { color: var(--accent); }
+
+  /* =====================================================================
+     THE REFRAME — three editorial statements
+     Cream theme. Big, slow type. The page's intellectual spine.
+     This is the slide the CMO screenshots and shows the CFO.
+     ===================================================================== */
+  .section-light {
+    --bg: #EEEEE8; --bg-2: #E6E6DE; --bg-3: #D9D9CE;
+    --text: #0F0F0F;
+    --dim: rgba(15,15,15,.62); --dim-2: rgba(15,15,15,.42);
+    --hair: rgba(15,15,15,.14); --hair-strong: rgba(15,15,15,.26);
+    --accent: #79982D; --accent-dim: #62801f;
+    background: var(--bg); color: var(--text);
+  }
+  .reframe {
+    padding: 140px 5vw;
+    background:
+      radial-gradient(ellipse at 70% 20%, rgba(121,152,45,.06), transparent 60%),
+      var(--bg);
+  }
+  .reframe-inner { max-width: 1200px; margin: 0 auto; }
+  .reframe .mono { display: block; margin-bottom: 28px; color: var(--accent); }
+  .reframe-head h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 500;
+    font-size: clamp(36px, 4vw, 56px); line-height: 1;
+    letter-spacing: -0.015em; text-transform: uppercase;
+    color: var(--text); max-width: 22ch; margin-bottom: 80px;
+  }
+  .reframe-head h2 em { font-style: normal; color: var(--accent); font-weight: 600; }
+
+  .reframe-list { display: flex; flex-direction: column; }
+  .reframe-row {
+    display: grid; grid-template-columns: 100px 1fr 2fr; gap: 48px;
+    align-items: start;
+    padding: 56px 0;
+    border-top: 1px solid var(--hair);
+  }
+  .reframe-row:last-child { border-bottom: 1px solid var(--hair); }
+  .reframe-num {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .22em;
+    color: var(--accent);
+  }
+  .reframe-then {
+    font-family: 'Oswald', sans-serif; font-weight: 400;
+    font-size: clamp(20px, 2vw, 26px); line-height: 1.2;
+    text-transform: uppercase; letter-spacing: -0.005em;
+    color: var(--dim);
+  }
+  .reframe-then strong {
+    color: var(--text); font-weight: 500;
+    text-decoration: line-through;
+    text-decoration-color: rgba(15,15,15,.4);
+  }
+  .reframe-now {
+    font-family: 'Oswald', sans-serif; font-weight: 500;
+    font-size: clamp(24px, 2.4vw, 32px); line-height: 1.2;
+    text-transform: uppercase; letter-spacing: -0.012em;
+    color: var(--text); max-width: 36ch;
+  }
+  .reframe-now em { font-style: normal; color: var(--accent); font-weight: 600; }
+
+  /* =====================================================================
+     OPERATING-MODEL SPINE — Ambassador / Global / Always-On
+     The three pillars from the brief. Each is a clickable column;
+     the active one expands to show what's inside (use cases, KPIs,
+     example brands). This IS the structural heart of the page.
+     ===================================================================== */
+  .modules {
+    padding: 130px 5vw;
+    border-bottom: 1px solid var(--hair);
+    position: relative;
+  }
+  .modules-inner { max-width: var(--max); margin: 0 auto; }
+  .modules-head {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    align-items: end; margin-bottom: 64px;
+  }
+  .modules-head .mono { display: block; margin-bottom: 24px; }
+  .modules-head h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 500;
+    font-size: clamp(36px, 4vw, 56px); line-height: 1;
+    letter-spacing: -0.015em; text-transform: uppercase;
+    color: var(--text); max-width: 18ch;
+  }
+  .modules-head h2 em { font-style: normal; color: var(--accent); font-weight: 600; }
+  .modules-head p {
+    color: var(--dim); font-size: 16px; line-height: 1.55; max-width: 42ch;
+  }
+
+  /* The accordion itself — three big columns. Active one has more space. */
+  .modules-rail {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--hair);
+    background: var(--bg-2);
+    transition: grid-template-columns .5s var(--ease);
+    min-height: 540px;
+  }
+  .modules-rail.active-0 { grid-template-columns: 2.4fr 1fr 1fr; }
+  .modules-rail.active-1 { grid-template-columns: 1fr 2.4fr 1fr; }
+  .modules-rail.active-2 { grid-template-columns: 1fr 1fr 2.4fr; }
+
+  .module {
+    border-right: 1px solid var(--hair);
+    padding: 40px 36px 40px;
+    cursor: pointer;
+    position: relative; overflow: hidden;
+    transition: background .3s var(--ease);
+    display: flex; flex-direction: column;
+  }
+  .module:last-child { border-right: 0; }
+  .module:hover { background: var(--bg-3); }
+  .module.active { background: var(--bg-3); }
+  .module::after {
+    content: ""; position: absolute; left: 0; bottom: 0; height: 2px;
+    width: 0; background: var(--accent);
+    transition: width .35s var(--ease);
+  }
+  .module:hover::after,
+  .module.active::after { width: 100%; }
+
+  .module-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 12px; margin-bottom: 28px;
+  }
+  .module-num {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .22em;
+    color: var(--dim);
+    transition: color .25s var(--ease);
+  }
+  .module.active .module-num { color: var(--accent); }
+  .module-arrow {
+    font-family: var(--mono); color: var(--dim-2); opacity: 0;
+    transition: opacity .25s var(--ease);
+  }
+  .module.active .module-arrow { opacity: 1; color: var(--accent); }
+
+  .module-title {
+    font-family: 'Oswald', sans-serif; font-weight: 500;
+    font-size: clamp(26px, 2.6vw, 38px); line-height: 1;
+    letter-spacing: -0.01em; text-transform: uppercase;
+    color: var(--text); margin-bottom: 16px;
+  }
+  .module.active .module-title { color: var(--accent); }
+  .module-tag {
+    font-family: 'Oswald', sans-serif; font-weight: 400;
+    font-size: 15px; line-height: 1.5; color: var(--dim);
+    text-transform: none; letter-spacing: 0;
+    margin-bottom: 28px;
+    max-width: 28ch;
+  }
+
+  /* Module body — only visible when active */
+  .module-body {
+    opacity: 0; max-height: 0;
+    transition: opacity .35s var(--ease), max-height .35s var(--ease);
+    overflow: hidden;
+  }
+  .module.active .module-body {
+    opacity: 1; max-height: 600px;
+  }
+  .module-body p {
+    color: var(--dim); font-size: 15px; line-height: 1.6;
+    margin-bottom: 28px; max-width: 50ch;
+  }
+  .module-body p b { color: var(--text); font-weight: 500; }
+
+  .module-kpis {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    margin-bottom: 28px;
+  }
+  .module-kpi {
+    padding: 18px 18px 16px;
+    border: 1px solid var(--hair);
+    background: rgba(0,0,0,.3);
+  }
+  .module-kpi-num {
+    font-family: 'Oswald', sans-serif; font-weight: 500;
+    font-size: 28px; line-height: 1; color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: -0.012em;
+  }
+  .module-kpi-label {
+    font-family: var(--mono); font-size: 9px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--dim);
+  }
+
+  .module-brands {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding-top: 24px; border-top: 1px dashed var(--hair);
+  }
+  .module-brand {
+    font-family: 'Oswald', sans-serif; font-weight: 500;
+    font-size: 12px; letter-spacing: .04em; text-transform: uppercase;
+    color: var(--text); opacity: .65;
+    padding: 6px 10px; border: 1px solid var(--hair);
+  }
+
+  /* =====================================================================
+     BOARD-DECK PROOF — the EMV bar
+     A simple, powerful visualization: $X spent → $Y earned media.
+     The kind of slide that ends a board meeting argument.
+     ===================================================================== */
+  .proof {
+    padding: 130px 5vw;
+    border-bottom: 1px solid var(--hair);
+    background: var(--bg-2);
+  }
+  .proof-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: center;
+  }
+  .proof-left .mono { display: block; margin-bottom: 24px; }
+  .proof-left h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 500;
+    font-size: clamp(36px, 4vw, 56px); line-height: 1;
+    letter-spacing: -0.015em; text-transform: uppercase;
+    color: var(--text); max-width: 18ch; margin-bottom: 24px;
+  }
+  .proof-left h2 em { font-style: normal; color: var(--accent); font-weight: 600; }
+  .proof-left p {
+    color: var(--dim); font-size: 16px; line-height: 1.6; max-width: 42ch;
+    margin-bottom: 28px;
+  }
+  .proof-left .footnote {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .18em;
+    color: var(--dim-2); text-transform: uppercase;
+  }
+
+  .proof-chart {
+    background: var(--bg-3); border: 1px solid var(--hair);
+    padding: 48px 44px; position: relative;
+  }
+  .proof-bars { display: flex; flex-direction: column; gap: 32px; }
+  .proof-bar-row { display: flex; flex-direction: column; gap: 12px; }
+  .proof-bar-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px;
+  }
+  .proof-bar-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--dim);
+  }
+  .proof-bar-value {
+    font-family: 'Oswald', sans-serif; font-weight: 500;
+    font-size: clamp(24px, 2.4vw, 36px); line-height: 1;
+    color: var(--text); letter-spacing: -0.012em;
+  }
+  .proof-bar-track {
+    height: 14px; background: rgba(255,255,255,.04);
+    border: 1px solid var(--hair);
+    position: relative; overflow: hidden;
+  }
+  .proof-bar-fill {
+    height: 100%; background: var(--accent);
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform 1.4s cubic-bezier(.16,1,.3,1);
+  }
+  .proof-bar-fill.in {
+    background: rgba(255,255,255,.22);
+  }
+  .proof-bar-row.visible .proof-bar-fill { transform: scaleX(1); }
+  .proof-bar-fill[data-pct="21"]  { width: 21%; }
+  .proof-bar-fill[data-pct="100"] { width: 100%; }
+
+  .proof-callout {
+    margin-top: 36px; padding-top: 28px;
+    border-top: 1px dashed var(--hair);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 20px; flex-wrap: wrap;
+  }
+  .proof-callout-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--dim);
+  }
+  .proof-callout-value {
+    font-family: 'Oswald', sans-serif; font-weight: 600;
+    font-size: clamp(28px, 3vw, 44px); line-height: 1;
+    color: var(--accent); letter-spacing: -0.018em;
+  }
+
+  /* =====================================================================
+     QUOTE — CMO voice. Cream theme.
+     ===================================================================== */
+  .quote {
+    padding: 130px 5vw;
+  }
+  .quote-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 2fr; gap: 64px; align-items: start;
+  }
+  .quote-mark {
+    font-family: 'Oswald', sans-serif; font-weight: 500;
+    font-size: 220px; line-height: .7;
+    color: var(--accent); opacity: .55;
+  }
+  .quote-body {
+    font-family: 'Oswald', sans-serif; font-weight: 400;
+    font-size: clamp(24px, 2.6vw, 36px); line-height: 1.25;
+    letter-spacing: -0.005em; text-transform: none;
+    color: var(--text); margin-bottom: 36px;
+  }
+  .quote-body em { font-style: normal; color: var(--accent); font-weight: 500; }
+  .quote-attr {
+    display: flex; align-items: center; gap: 18px;
+    padding-top: 28px; border-top: 1px solid var(--hair);
+  }
+  .quote-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+    display: flex; align-items: center; justify-content: center;
+    color: #0F0F0F;
+    font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 16px;
+  }
+  .quote-attr-text {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--dim);
+  }
+  .quote-attr-text b { color: var(--text); font-weight: 500; }
+
+  /* =====================================================================
+     CLOSE — exec language. "Talk to a strategist."
+     ===================================================================== */
+  .close {
+    padding: 140px 5vw 120px; position: relative;
+    border-top: 1px solid rgba(255,255,255,.10);
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 100%, rgba(182,245,0,.06), transparent 70%),
+      radial-gradient(ellipse 50% 40% at 50% 0%, var(--tint), transparent 70%),
+      #050607;
+    color: #f4f5f6;
+  }
+  .close-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+  }
+  .close .mono { color: var(--accent); margin-bottom: 32px; }
+  .close-stack {
+    font-family: 'Oswald', sans-serif; font-weight: 500;
+    font-size: clamp(40px, 5.5vw, 88px); line-height: 1.0;
+    letter-spacing: -0.015em; text-transform: uppercase;
+    color: rgba(255,255,255,.55);
+  }
+  .close-stack .final { color: #f4f5f6; margin-top: 8px; }
+  .close-stack .final .accent { color: #B6F500; }
+  .close-ctas {
+    margin-top: 48px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+  }
+  .close .btn-ghost { border-color: rgba(255,255,255,.20); }
+  .close .btn-ghost:hover { border-color: #B6F500; color: #B6F500; }
+
+  /* Footer */
+
+  /* Responsive */
+  @media (max-width: 1080px) {
+    .cfo-grid { grid-template-columns: repeat(2, 1fr); }
+    .reframe-row { grid-template-columns: 60px 1fr; gap: 24px; }
+    .reframe-row .reframe-now { grid-column: 2; margin-top: 12px; }
+    .modules-head { grid-template-columns: 1fr; gap: 24px; }
+    .modules-rail { grid-template-columns: 1fr !important; min-height: auto; }
+    .module { border-right: 0; border-bottom: 1px solid var(--hair); }
+    .module:last-child { border-bottom: 0; }
+    .module-body { max-height: 600px; opacity: 1; }
+    .modules-rail.active-0 .module:not(.active) .module-body,
+    .modules-rail.active-1 .module:not(.active) .module-body,
+    .modules-rail.active-2 .module:not(.active) .module-body {
+      max-height: 600px; opacity: 1;
+    }
+    .proof-inner { grid-template-columns: 1fr; gap: 40px; }
+    .quote-inner { grid-template-columns: 1fr; gap: 24px; }
+    .quote-mark { font-size: 130px; }
+  }
+  @media (max-width: 720px) {
+    .hero { padding: 110px 6vw 64px; }
+    .hero-headline { font-size: clamp(40px, 11vw, 64px); }
+    .cfo-grid { grid-template-columns: 1fr; }
+    .cfo-cell { min-height: auto; padding: 28px 22px; }
+    .module-kpis { grid-template-columns: 1fr 1fr; }
+    .close-stack { font-size: clamp(36px, 9vw, 56px); }
+  }

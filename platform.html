@@ -10,27 +10,12 @@
 <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/platform.css">
+  <script src="js/include.js" defer></script>
 </head>
 <body>
 
 <!-- ========== NAV ========== -->
-<nav class="nav" id="siteNav">
-  <div class="nav-left">
-    <a href="./index.html" class="nav-logo" aria-label="Greenfly">
-      <img src="./images/brand/Greenfly (1).svg" alt="Greenfly">
-    </a>
-  </div>
-  <div class="nav-right">
-    <div class="nav-links">
-      <a href="./platform.html" class="nav-link active">Platform</a>
-      <a href="./solutions.html" class="nav-link">Solutions</a>
-      <a href="./index.html#proof" class="nav-link">Stories</a>
-      <a href="./company.html" class="nav-link">Company</a>
-    </div>
-    <a href="#login" class="nav-utility">Login</a>
-    <a href="./get-greenfly.html" class="nav-cta">Get Greenfly →</a>
-  </div>
-</nav>
+<div data-include="partials/nav.html"></div>
 
 <!-- =====================================================================
      HERO

@@ -1104,7 +1104,6 @@
   .iq-specimen { border-right: 0; border-bottom: 1px solid var(--hair); }
   .foundation { padding: 32px; }
   .seq-numeral { font-size: clamp(56px, 12vw, 96px); }
-  .nav-links { display: none; }
   .footer-inner { grid-template-columns: repeat(3, auto); gap: 40px; }
   .footer-wordmark { padding: 28px 0; }
   .footer-wordmark img { width: 72%; }

@@ -364,7 +364,6 @@
   }
 
   @media (max-width: 720px) {
-    .nav-links { display: none; }
     .nav-utility { display: none; }
     .bottom { padding: 18px 5vw 22px; }
   }

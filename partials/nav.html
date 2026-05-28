@@ -1,0 +1,40 @@
+<!-- Single source of truth for the site nav.
+     Injected by js/include.js into <div data-include="partials/nav.html"></div>
+     on every page. data-nav attrs let include.js set the .active class for the
+     current page. Paths use ./ prefix — include.js rewrites to ../ for pages
+     that live in subfolders (legal/*). -->
+<nav class="nav" id="siteNav">
+  <div class="nav-left">
+    <a href="./index.html" class="nav-logo" aria-label="Greenfly">
+      <img src="./images/brand/Greenfly (1).svg" alt="Greenfly">
+    </a>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navRight">
+    <span class="nav-toggle-bar"></span>
+    <span class="nav-toggle-bar"></span>
+    <span class="nav-toggle-bar"></span>
+  </button>
+  <div class="nav-right" id="navRight">
+    <div class="nav-links">
+      <a href="./platform.html" data-nav="platform" class="nav-link">Platform</a>
+      <div class="nav-link-wrap">
+        <a href="./solutions.html" data-nav="solutions" class="nav-link">
+          Solutions
+          <svg class="nav-chevron" viewBox="0 0 12 12" aria-hidden="true">
+            <path d="M3 4.5 L6 7.5 L9 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <div class="nav-dropdown">
+          <a href="./solutions-sports.html" class="nav-dd-item">Sports</a>
+          <a href="./solutions-entertainment.html" class="nav-dd-item">Entertainment</a>
+          <a href="./solutions-brands.html" class="nav-dd-item">Brands</a>
+          <a href="./solutions-live-events.html" class="nav-dd-item">Live Events</a>
+        </div>
+      </div>
+      <a href="./index.html#proof" data-nav="stories" class="nav-link">Stories</a>
+      <a href="./company.html" data-nav="company" class="nav-link">Company</a>
+    </div>
+    <a href="#login" class="nav-utility">Login</a>
+    <a href="./get-greenfly.html" class="nav-cta">Get Greenfly →</a>
+  </div>
+</nav>

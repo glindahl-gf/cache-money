@@ -6,39 +6,7 @@
 const qs  = (s, el = document) => el.querySelector(s);
 const qsa = (s, el = document) => Array.from(el.querySelectorAll(s));
 
-/* NAV ---------------------------------------------------------------- */
-(() => {
-  const nav = qs('#siteNav');
-  if (!nav) return;
-  const lightSections = qsa('.section-light');
-
-  let lastY = window.scrollY || 0;
-  let ticking = false;
-
-  function update() {
-    const y = window.scrollY || 0;
-    nav.classList.toggle('is-scrolled', y > 8);
-
-    if (y > lastY && y > 120) nav.classList.add('nav-hidden');
-    else nav.classList.remove('nav-hidden');
-    lastY = y;
-
-    const probeY = 72;
-    let onLight = false;
-    for (const sec of lightSections) {
-      const r = sec.getBoundingClientRect();
-      if (r.top <= probeY && r.bottom > probeY) { onLight = true; break; }
-    }
-    nav.classList.toggle('nav-on-light', onLight);
-
-    ticking = false;
-  }
-  window.addEventListener('scroll', () => {
-    if (!ticking) { requestAnimationFrame(update); ticking = true; }
-  }, { passive: true });
-  window.addEventListener('resize', update);
-  update();
-})();
+/* NAV scroll behavior is now in js/include.js (single source of truth for the nav) */
 
 /* ARC WHEEL — directional cascade triggered by scroll direction.
    Scroll-down entry: shuffle Collect → … → Automate.

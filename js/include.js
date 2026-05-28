@@ -81,16 +81,14 @@
   const nav = document.querySelector('#siteNav');
   if (!nav) return;
   const lightSections = Array.from(document.querySelectorAll('.section-light'));
-  let lastY = window.scrollY || 0;
   let ticking = false;
 
   function update() {
     const y = window.scrollY || 0;
     nav.classList.toggle('is-scrolled', y > 8);
 
-    if (y > lastY && y > 120) nav.classList.add('nav-hidden');
-    else nav.classList.remove('nav-hidden');
-    lastY = y;
+    // Nav stays sticky at all times — editorial sites (Apple/Stripe/The Atlantic/etc.)
+    // keep the nav visible rather than auto-hiding on down-scroll.
 
     const probeY = 72;
     let onLight = false;

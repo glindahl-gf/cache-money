@@ -38,7 +38,8 @@
     background: var(--bg);
     color: var(--text);
   }
-  .section-light .btn-primary { color: #fff; }
+  /* Btn-primary text intentionally NOT overridden — base.css now sets it
+     to #0F0F0F on .section-light for WCAG 1.4.3 (6.5:1 vs 3.2:1). */
   .section-light .btn-primary:hover { background: var(--accent-dim); }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -119,80 +120,112 @@
     flex-direction: column;
     min-height: 0;
   }
-  .pitch-eyebrow {
-    display: inline-flex; align-items: center; gap: 14px;
-    color: var(--accent);
+  /* Tagline — sits at category-eyebrow scale near the (nav) logo.
+     Quiet, unmodified, no animation, no dot. Just the brand anchor. */
+  .pitch-tagline {
     font-family: var(--mono);
     font-size: 11px;
     letter-spacing: .22em;
     text-transform: uppercase;
+    color: var(--dim-2);
     margin-bottom: 28px;
   }
-  .pitch-eyebrow .dot {
-    width: 7px; height: 7px;
-    background: var(--accent);
-    border-radius: 50%;
-    box-shadow: 0 0 0 4px rgba(182,245,0,.18);
-    animation: pulse 2.6s ease-in-out infinite;
-  }
-  .pitch h1 {
+
+  /* Stacked "get it" hero — mirrors the homepage closing pattern.
+     Right-aligned within the pitch column; both lines share one size so
+     they read as a balanced stack. Color (not scale) gives the payoff
+     line "GET GREENFLY" its dominance. */
+  .get-headline {
     font-family: 'Oswald', sans-serif;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: -0.018em;
-    line-height: .92;
-    /* The page's emotional anchor. Sized to dominate the panel — nothing
-       else on this page should compete for the eye until it lands here
-       and rebounds to the use-case list and the form. */
-    font-size: clamp(44px, 5.4vw, 96px);
-    max-width: 16ch;
-    margin-bottom: 5vh;
-    color: var(--text);
-  }
-  .pitch h1 em {
-    font-style: normal;
-    color: var(--accent);
-    font-weight: 500;
-  }
-  /* Short intro between H1 and the bullet list — sets up "yes, this is
-     for you" before the visitor reads the use cases. Kept to one
-     sentence per the brevity guidance. */
-  .pitch-deck {
-    font-size: clamp(15px, 1.2vw, 18px);
-    line-height: 1.5;
-    color: var(--dim);
-    max-width: 50ch;
-    margin-bottom: 4vh;
-  }
-
-  /* Use-case list — the story beat. Each line is one short clause that
-     lets the visitor say "yes, that's me." The lime hex bullet is the
-     brand motif extended into list markers (per highlights.md guidance
-     on extending the hex motif beyond number badges). */
-  .pitch-uses {
-    list-style: none;
-    margin-bottom: 5vh;
+    line-height: 1;
+    /* Sized so "The studios that get it." stays on one line at every
+       breakpoint AND Get Greenfly stays substantial. */
+    font-size: clamp(28px, 3.4vw, 52px);
+    text-align: right;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-  }
-  .pitch-uses li {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    font-size: clamp(15px, 1.2vw, 18px);
-    line-height: 1.4;
+    gap: .06em;
+    margin-bottom: 5vh;
     color: var(--text);
-    max-width: 56ch;
   }
-  .pitch-uses li::before {
-    content: "";
-    flex-shrink: 0;
-    width: 10px; height: 11px;
-    /* Pointy-top hex via clip-path — no SVG nodes per row. */
-    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  .get-headline-pre {
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .get-headline-final {
+    color: var(--accent);
+  }
+
+  /* Typewriter — single rotating word inside the setup line.
+     Mirrors the homepage closing-stack treatment. */
+  .typewriter {
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .typewriter-word {
+    color: var(--accent);
+    font-variant-ligatures: none;
+  }
+  .typewriter-caret {
+    display: inline-block;
+    width: .06em;
+    height: .82em;
+    margin-left: .06em;
+    vertical-align: -0.06em;
     background: var(--accent);
-    transform: translateY(2px);
+    animation: typewriter-blink 1.05s steps(2, end) infinite;
+  }
+  @keyframes typewriter-blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .typewriter-caret { animation: none; opacity: .6; }
+  }
+
+  /* Four pillars — Speed / Scale / Reach / Impact.
+     Subtle cards in a 2×2 grid; each shows a title + anchor line.
+     No kicker, no lead-in: the pillars present themselves. */
+  .pitch-pillars {
+    list-style: none;
+    margin-bottom: 5vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .pillar {
+    background: var(--bg-2);
+    border: 1px solid var(--hair);
+    border-radius: 5px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color .25s var(--ease), background .25s var(--ease);
+  }
+  .pillar:hover {
+    border-color: var(--hair-strong);
+    background: var(--bg-3);
+  }
+  .pillar-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: -.01em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .pillar-line {
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--text);
+  }
+  @media (max-width: 720px) {
+    .pitch-pillars { grid-template-columns: 1fr; }
   }
 
   /* --- RIGHT: door panel + light card -------------------------------

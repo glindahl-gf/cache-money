@@ -66,7 +66,9 @@ em, i { font-style: normal; }   /* no italics anywhere */
 /* ===================================================================
    PRIMITIVES
    =================================================================== */
-.wrap { max-width: var(--max); margin: 0 auto; padding: 0 5vw; }
+/* Past the --max frame the composition freezes at its 1440-viewport values
+   and centers: vw paddings are capped at what they equal at 1440 (5vw = 72px). */
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 min(5vw, 72px); }
 
 .display {
   font-family: 'Oswald', sans-serif;
@@ -167,7 +169,9 @@ em.thin, .thin {
    =================================================================== */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 16px 5vw;
+  /* Bar background stays full-bleed; contents align to the same --max page
+     frame as .wrap (frame edge + 72px, the 1440-viewport value of 5vw). */
+  padding: 16px max(5vw, calc((100vw - var(--max)) / 2 + 72px));
   display: flex; align-items: center; justify-content: space-between;
   /* Pin the nav typography so it stays identical across pages, even if a
      page sets its own body font (e.g. the springboard uses plain Barlow). */

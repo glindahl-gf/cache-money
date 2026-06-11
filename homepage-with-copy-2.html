@@ -63,7 +63,8 @@
   .cover-masthead {
     position: absolute;
     top: 0; bottom: 0;
-    right: 28px;
+    /* Rail rides the --max page frame, not the glass, on large displays. */
+    right: max(28px, calc((100vw - var(--max)) / 2 + 28px));
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -86,7 +87,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 18vh 7vw 8vh;
+    padding: 18vh min(7vw, 101px) 8vh;
     max-width: var(--max);
     margin: 0 auto;
     pointer-events: none;

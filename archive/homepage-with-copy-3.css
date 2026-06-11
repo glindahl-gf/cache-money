@@ -1,4 +1,4 @@
-/* Extracted from homepage-with-copy.html */
+/* Extracted from homepage-with-copy-3.html */
 
 :root {
     --bg: #050607;
@@ -22,7 +22,7 @@
   html, body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Barlow Condensed', system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -103,11 +103,9 @@
 
   /* Explosion stage — fills the hero. No z-index on the stage itself so
      each card's individual z (declared via class) stacks correctly
-     relative to the headline (.hero-inner is z 5). Both front and back
-     cards now sit BEHIND the text — text always reads on top for a clean
-     foreground / background depth read. The .is-back / .is-front split
-     is still meaningful: it drives size + shadow (parallax-style depth
-     between the two card layers), just not the headline crossover. */
+     relative to the headline (.hero-inner is z 5):
+       .is-back  → z 1   (flies past BEHIND the type)
+       .is-front → z 12  (flies past IN FRONT of the type) */
   .explode-stage {
     position: absolute;
     inset: 0;
@@ -126,7 +124,6 @@
     border: 1px solid rgba(255,255,255,.10);
     will-change: transform, opacity;
     pointer-events: none;
-    filter: grayscale(1) contrast(1.05);   /* B&W treatment for the swarm */
     /* JS writes per frame: translate3d(rx, ry, 0) scale(s) + opacity */
   }
   .expl-card.is-back {
@@ -134,7 +131,7 @@
     box-shadow: 0 14px 38px rgba(0,0,0,.55);
   }
   .expl-card.is-front {
-    z-index: 2;             /* still above .is-back for inter-card layering, but below .hero-inner (z 5) so the headline always sits on top */
+    z-index: 12;            /* above .hero-inner (z 5) */
     box-shadow: 0 24px 60px rgba(0,0,0,.72);
   }
   .expl-card--placeholder {
@@ -208,12 +205,9 @@
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: -0.015em;
-    /* Two-line headline: "Your Favorite [subject]" on row 1, "Favorite
-       Platform" wraps to row 2 via `.line-2`'s `flex-basis: 100%`.
-       Sized larger now that each line has its own row to itself. */
-    font-size: clamp(36px, 4.8vw, 80px);
+    font-size: clamp(40px, 5.5vw, 88px);
     line-height: .96;
-    max-width: min(96vw, 1200px);
+    max-width: 26ch;
     display: inline-flex;
     align-items: baseline;
     flex-wrap: wrap;
@@ -222,31 +216,22 @@
     /* faint glow makes type read against busy cards */
     text-shadow: 0 2px 30px rgba(0,0,0,.65);
   }
-  /* "Favorite Platform" carries the lime/olive accent and wraps to its
-     own line below "Your Favorite [subject]". `flex-basis: 100%` is what
-     forces the wrap — without it, the headline tries to stay on one row. */
-  .hero h1 .line-2 {
-    color: var(--accent);
-    flex-basis: 100%;
-  }
-  .hero .title-fly {
-    /* Standalone icon at the top of the centered hero stack — sits
-       above the eyebrow chip and the headline. */
-    display: block;
-    height: clamp(40px, 3.2vw, 54px);
-    width: clamp(40px, 3.2vw, 54px);
-    margin: 0 auto 18px;
+  .hero h1 .line-2 { color: var(--text); flex-basis: 100%; }
+  .hero h1 .title-fly {
+    display: inline-block;
+    height: .9em;
+    width: .9em;
+    margin-left: .28em;
+    vertical-align: -0.12em;
     border-radius: 50%;
     filter: drop-shadow(0 4px 22px rgba(189,255,0,.35));
   }
 
   .hero-sub {
     margin-top: 28px;
-    /* Switched from Oswald 400 to Barlow Condensed 300 — Oswald isn't
-       imported below weight 400, and Barlow's lighter cut reads better
-       for the now-lowercase running text. */
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 300;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
     font-size: clamp(18px, 2vw, 28px);
     letter-spacing: .005em;
     color: var(--dim);
@@ -257,29 +242,21 @@
   .subject-wrap {
     position: relative;
     display: inline-block;
+    overflow: hidden;
     vertical-align: bottom;
   }
   .subject {
     display: inline-block;
-    color: var(--text);
+    color: var(--accent);
+    transition: transform .55s var(--ease-out), opacity .35s var(--ease);
   }
-  /* Typewriter caret — blinks while the subject types/deletes and during
-     the hold pause between words. Sized in em so it tracks the headline.
-     Uses `--dim-2` (theme-aware muted gray) instead of currentColor so it
-     reads as a subtle guide rather than competing with the headline type. */
-  .subject-wrap::after {
-    content: "";
-    display: inline-block;
-    width: .04em;
-    height: .78em;
-    margin-left: 0.06em;
-    vertical-align: -0.02em;
-    background: var(--dim-2);
-    animation: caret-blink 1.05s steps(1) infinite;
+  .subject.out {
+    transform: translateY(-100%);
+    opacity: 0;
   }
-  @keyframes caret-blink {
-    0%, 49%   { opacity: 1; }
-    50%, 100% { opacity: 0; }
+  .subject.in {
+    transform: translateY(100%);
+    opacity: 0;
   }
 
   .hero-ctas {
@@ -1650,248 +1627,240 @@
   .muscle-panel .rep b { color: var(--text); font-weight: 500; }
 
   /* =====================================================================
-     SECTION 6 — CASE STUDIES  (ported from company.html `.press`/Newsroom)
-     ---------------------------------------------------------------------
-     Same bento layout as the company-page newsroom — class names kept as
-     `.press-*` so the markup ports over verbatim and so a developer
-     searching for those selectors lands in one place. The original
-     "proof / see-it-run" section CSS (video frame + editorial slideshow +
-     benchmarks) was removed since nothing uses those classes anymore.
+     SECTION 6 — PROOF
      ===================================================================== */
-  .press {
-    padding: 14vh 5vw;
+  .proof {
+    padding: 16vh 5vw;
     border-bottom: 1px solid var(--hair);
   }
-  .press-inner { max-width: var(--max); margin: 0 auto; }
-  .press-head {
-    display: grid;
-    grid-template-columns: 1fr auto;
+  .proof-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+  }
+  .proof-head {
+    display: flex;
+    justify-content: space-between;
     align-items: end;
-    gap: 40px;
-    margin-bottom: 48px;
+    gap: 4vw;
+    margin-bottom: 64px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--hair);
   }
-  .press-head .mono { color: var(--accent); margin-bottom: 18px; display: inline-block; }
-  .press-head h2 {
-    font-size: clamp(40px, 5.4vw, 80px);
-    max-width: 24ch;
-  }
-  .press-head p {
-    margin-top: 22px;
-    color: var(--dim);
-    /* Switched from `Source Serif 4` (not loaded on this page — fell
-       back to Georgia) to Barlow Condensed, the homepage body font. */
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 1.55;
-    max-width: 64ch;
-  }
-  .press-head .btn { align-self: end; }
-  /* Bento layout — featured card spans the left + 4 staggered tiles on the
-     right. Right-side column tracks are 2fr · 1fr · 2fr so each row's
-     internal seam falls at a different position: top row splits 2:3
-     (small | large), bottom row splits 3:2 (large | small). */
-  .press-bento {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 2fr) minmax(0, 1fr) minmax(0, 2fr);
-    grid-template-rows: 1fr 1fr;
-    gap: 10px;
-    min-height: 620px;
-  }
-  .press-card {
-    /* Reset to dark-mode tokens inside each card so text reads on the
-       dark gradient overlay regardless of the section theme. */
-    --accent: #B6F500;
-    --accent-dim: #8bc000;
-    --text: #f4f5f6;
-    --dim: rgba(255,255,255,.72);
-    --dim-2: rgba(255,255,255,.55);
-
-    position: relative;
-    display: block;
-    overflow: hidden;
-    text-decoration: none;
-    color: var(--text);
-    min-height: 240px;
-    border-radius: 10px;
-    /* Fallback gradient if the cover image fails to load */
-    background: linear-gradient(135deg, #161a1c 0%, #0a0b0c 100%);
-    isolation: isolate;
-  }
-  /* Top accent rail — slides in from left on hover */
-  .press-card::after {
-    content: "";
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 2px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition: transform .55s var(--ease-out);
-    z-index: 4;
-    pointer-events: none;
-  }
-  .press-card:hover::after { transform: scaleX(1); }
-  .press-card.is-featured {
-    grid-column: 1 / 2;
-    grid-row: 1 / span 2;
-  }
-  /* Top row: small left, large right */
-  .press-card.is-tile-tl { grid-column: 2 / 3; grid-row: 1 / 2; }
-  .press-card.is-tile-tr { grid-column: 3 / 5; grid-row: 1 / 2; }
-  /* Bottom row: opposite — large left, small right */
-  .press-card.is-tile-bl { grid-column: 2 / 4; grid-row: 2 / 3; }
-  .press-card.is-tile-br { grid-column: 4 / 5; grid-row: 2 / 3; }
-
-  /* Full-bleed cover image */
-  .press-cover {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-    filter: saturate(.88) brightness(.86);
-    transition: transform 1.1s var(--ease-out), filter .55s var(--ease-out);
-  }
-  .press-card:hover .press-cover {
-    transform: scale(1.05);
-    filter: saturate(1) brightness(.92);
-  }
-
-  /* Top-left "Latest" badge — glassmorphism on the image */
-  .press-thumb-tag {
-    position: absolute;
-    top: 18px; left: 22px;
-    z-index: 3;
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: .25em;
-    text-transform: uppercase;
-    color: var(--accent);
-    border: 1px solid rgba(182,245,0,.40);
-    padding: 5px 10px;
-    background: rgba(0,0,0,.45);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-  }
-  .press-card.is-featured .press-thumb-tag { top: 28px; left: 36px; }
-
-  /* Body — title-only strip at the very bottom of the card. Meta is
-     hidden so the bottom block is just the title + a tight gradient
-     hugging it. Matches the bento wireframe: title sits at the bottom
-     edge, the dark band only covers the text zone. */
-  .press-body {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    padding: 14px 22px 20px;
-    background: linear-gradient(to top,
-      rgba(0,0,0,.85) 0%,
-      rgba(0,0,0,.40) 80%,
-      rgba(0,0,0,0) 100%
-    );
-  }
-  .press-card.is-featured .press-body {
-    padding: 22px 36px 30px;
-    background: linear-gradient(to top,
-      rgba(0,0,0,.85) 0%,
-      rgba(0,0,0,.40) 82%,
-      rgba(0,0,0,0) 100%
-    );
-  }
-  .press-card .press-meta-row { display: none; }
-  .press-meta-row {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .press-card .press-date {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: .22em;
-    color: var(--dim-2);
-  }
-  .press-card .press-outlet {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-  .press-card .press-title {
+  .proof-head h2 {
     font-family: 'Oswald', sans-serif;
     font-weight: 500;
-    letter-spacing: -0.005em;
-    line-height: 1.22;
-    color: var(--text);
-    font-size: clamp(15px, 1.15vw, 17px);
-    max-width: 28ch;
-    text-shadow: 0 1px 6px rgba(0,0,0,.4);
-    transition: color .35s var(--ease-out);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    font-size: clamp(36px, 5vw, 68px);
+    line-height: 1;
+    max-width: 16ch;
   }
-  .press-card .press-date,
-  .press-card .press-outlet {
-    text-shadow: 0 1px 4px rgba(0,0,0,.45);
-  }
-  .press-card:hover .press-title { color: var(--accent); }
-  .press-card.is-featured .press-title {
-    font-size: clamp(28px, 3vw, 40px);
-    line-height: 1.06;
-    max-width: 22ch;
-  }
-  .press-card .press-title em {
-    font-style: normal;
-    font-weight: 600;
-  }
-  /* Slide-in arrow indicator on hover — appears at bottom-right of the
-     gradient strip on every card. */
-  .press-body::after {
-    content: "→";
-    position: absolute;
-    bottom: 18px; right: 22px;
-    font-family: var(--mono);
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--accent);
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: opacity .35s var(--ease-out), transform .5s var(--ease-out);
-    pointer-events: none;
-    text-shadow: 0 1px 4px rgba(0,0,0,.5);
-  }
-  .press-card.is-featured .press-body::after {
-    bottom: 30px; right: 36px;
-    font-size: 24px;
-  }
-  .press-card:hover .press-body::after {
-    opacity: 1;
-    transform: translateX(0);
+  .proof-head h2 .accent { color: var(--accent); }
+  .proof-head p {
+    color: var(--dim);
+    font-size: 15px;
+    max-width: 40ch;
+    line-height: 1.55;
   }
 
-  @media (max-width: 1100px) {
-    .press-bento {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: none;
-      grid-auto-rows: minmax(280px, auto);
-      min-height: 0;
-    }
-    .press-card.is-featured { grid-column: 1 / -1; grid-row: auto; }
-    .press-card.is-tile-tl,
-    .press-card.is-tile-tr,
-    .press-card.is-tile-bl,
-    .press-card.is-tile-br { grid-column: auto; grid-row: auto; }
-    .press-card.is-featured { min-height: 380px; }
+  .proof-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 24px;
   }
-  @media (max-width: 900px) {
-    .press-head { grid-template-columns: 1fr; }
+  .video-frame {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: var(--bg-2);
+    border: 1px solid var(--hair);
+    overflow: hidden;
   }
-  @media (max-width: 600px) {
-    .press-bento { grid-template-columns: 1fr; }
-    .press-card.is-featured { min-height: 280px; }
+  .video-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(182,245,0,.12), transparent 60%),
+      linear-gradient(180deg, #0d1015, #07080a);
+  }
+  .video-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+  .video-play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+  .play-btn {
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform .25s var(--ease);
+  }
+  .play-btn:hover { transform: scale(1.05); }
+  .play-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+  .play-btn::before {
+    content: "";
+    width: 0; height: 0;
+    border-left: 22px solid #000;
+    border-top: 13px solid transparent;
+    border-bottom: 13px solid transparent;
+    margin-left: 5px;
+  }
+  .play-btn::after {
+    content: "";
+    position: absolute;
+    inset: -14px;
+    border: 1px solid rgba(182,245,0,.4);
+    border-radius: 50%;
+    animation: play-ring 2.4s ease-out infinite;
+  }
+  @keyframes play-ring {
+    0%   { transform: scale(1);   opacity: .7; }
+    100% { transform: scale(1.6); opacity: 0;  }
+  }
+
+  .video-meta {
+    position: absolute;
+    bottom: 18px; left: 18px; right: 18px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 3;
+  }
+  .video-meta .chip {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    background: rgba(0,0,0,.6);
+    border: 1px solid var(--hair);
+  }
+  .video-meta .chip b { color: var(--accent); font-weight: 500; }
+
+  .proof-right {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .editorial {
+    position: relative;
+    border: 1px solid var(--hair);
+    background: var(--bg-2);
+    min-height: 280px;
+    overflow: hidden;
+  }
+  .editorial-panel {
+    position: absolute;
+    inset: 0;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .55s var(--ease), transform .55s var(--ease);
+    pointer-events: none;
+  }
+  .editorial-panel.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .editorial-kind {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .editorial-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: -.005em;
+    font-size: clamp(22px, 2.2vw, 30px);
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .editorial-desc {
+    color: var(--dim);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .editorial-foot {
+    margin-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .editorial-foot .go { color: var(--accent); }
+  .editorial-dots {
+    position: absolute;
+    top: 18px; right: 18px;
+    display: flex; gap: 6px;
+    z-index: 3;
+  }
+  .editorial-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--hair-strong);
+    transition: background .3s var(--ease);
+  }
+  .editorial-dot.active { background: var(--accent); }
+
+  .benchmarks {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--hair);
+    border-left: 1px solid var(--hair);
+  }
+  .bench {
+    padding: 22px 24px;
+    border-right: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+  }
+  .bench-num {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: clamp(26px, 2.6vw, 36px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    margin-bottom: 10px;
+  }
+  .bench-num .unit { color: var(--accent); }
+  .bench-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--dim);
   }
 
   /* =====================================================================
@@ -2169,3 +2138,331 @@
   .section-light .live-dot {
     animation: pulse-olive 1.6s ease-in-out infinite;
   }
+
+  /* ========== PLATFORM & SOLUTIONS SNEAK-PEEK (placeholder) ==========
+     Minimal section layout. Full content pending copy/design approval
+     (issues #29 and #30). Reuses: .section-light, .display, .mono,
+     .label-lime, .btn, .btn-ghost. */
+  .peek {
+    padding: 10vh 5vw;
+  }
+  .peek-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+  }
+  .peek-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px 80px;
+    align-items: end;
+    margin-bottom: 60px;
+  }
+  .peek-head .mono { color: var(--accent); margin-bottom: 18px; display: inline-block; }
+  .peek-head h2 { font-size: clamp(40px, 5.4vw, 80px); margin-bottom: 20px; }
+  .peek-head p { max-width: 52ch; color: var(--dim); font-size: 18px; line-height: 1.55; }
+  .peek-head .btn { align-self: end; white-space: nowrap; }
+  .peek-body {
+    border: 1px dashed var(--hair-strong);
+    border-radius: 8px;
+    min-height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dim-2);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+  }
+  .peek-body::after { content: "[ Content placeholder — to be added ]"; }
+  .peek-body--chips { min-height: auto; border: none; flex-direction: column; gap: 40px; padding: 0; }
+  .peek-body--chips::after { display: none; }
+
+  /* V3 — centered heading */
+  .peek-head--centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0;
+    grid-template-columns: none;
+    margin-bottom: 48px;
+  }
+  .peek-head--centered .mono { margin-bottom: 18px; }
+  .peek-head--centered h2 { max-width: 20ch; }
+  .peek-head--centered p { max-width: 52ch; margin-bottom: 28px; }
+
+  /* V3 — chips row */
+  .peek-chips-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    width: 100%;
+  }
+  .peek-chip {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border: 1px solid var(--hair-strong);
+    border-radius: 4px;
+    color: var(--dim);
+    background: var(--bg-2);
+  }
+  .peek-chip--link {
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color .2s var(--ease), color .2s var(--ease), background .2s var(--ease);
+  }
+  .peek-chip--link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--bg-3);
+  }
+  @media (max-width: 768px) {
+    .peek-head { grid-template-columns: 1fr; }
+  }
+
+
+  /* ===== CASE STUDIES bento — ported from homepage-with-copy ===== */
+  .press {
+    padding: 14vh 5vw;
+    border-bottom: 1px solid var(--hair);
+  }
+  .press-inner { max-width: var(--max); margin: 0 auto; }
+  .press-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 40px;
+    margin-bottom: 48px;
+  }
+  .press-head .mono { color: var(--accent); margin-bottom: 18px; display: inline-block; }
+  .press-head h2 {
+    font-size: clamp(40px, 5.4vw, 80px);
+    max-width: 24ch;
+  }
+  .press-head p {
+    margin-top: 22px;
+    color: var(--dim);
+    /* Switched from `Source Serif 4` (not loaded on this page — fell
+       back to Georgia) to Barlow Condensed, the homepage body font. */
+    font-family: var(--body);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.55;
+    max-width: 64ch;
+  }
+  .press-head .btn { align-self: end; }
+  /* Bento layout — featured card spans the left + 4 staggered tiles on the
+     right. Right-side column tracks are 2fr · 1fr · 2fr so each row's
+     internal seam falls at a different position: top row splits 2:3
+     (small | large), bottom row splits 3:2 (large | small). */
+  .press-bento {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 2fr) minmax(0, 1fr) minmax(0, 2fr);
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+    min-height: 620px;
+  }
+  .press-card {
+    /* Reset to dark-mode tokens inside each card so text reads on the
+       dark gradient overlay regardless of the section theme. */
+    --accent: #B6F500;
+    --accent-dim: #8bc000;
+    --text: #f4f5f6;
+    --dim: rgba(255,255,255,.72);
+    --dim-2: rgba(255,255,255,.55);
+
+    position: relative;
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text);
+    min-height: 240px;
+    border-radius: 10px;
+    /* Fallback gradient if the cover image fails to load */
+    background: linear-gradient(135deg, #161a1c 0%, #0a0b0c 100%);
+    isolation: isolate;
+  }
+  /* Top accent rail — slides in from left on hover */
+  .press-card::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform .55s var(--ease-out);
+    z-index: 4;
+    pointer-events: none;
+  }
+  .press-card:hover::after { transform: scaleX(1); }
+  .press-card.is-featured {
+    grid-column: 1 / 2;
+    grid-row: 1 / span 2;
+  }
+  /* Top row: small left, large right */
+  .press-card.is-tile-tl { grid-column: 2 / 3; grid-row: 1 / 2; }
+  .press-card.is-tile-tr { grid-column: 3 / 5; grid-row: 1 / 2; }
+  /* Bottom row: opposite — large left, small right */
+  .press-card.is-tile-bl { grid-column: 2 / 4; grid-row: 2 / 3; }
+  .press-card.is-tile-br { grid-column: 4 / 5; grid-row: 2 / 3; }
+
+  /* Full-bleed cover image */
+  .press-cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    filter: saturate(.88) brightness(.86);
+    transition: transform 1.1s var(--ease-out), filter .55s var(--ease-out);
+  }
+  .press-card:hover .press-cover {
+    transform: scale(1.05);
+    filter: saturate(1) brightness(.92);
+  }
+
+  /* Top-left "Latest" badge — glassmorphism on the image */
+  .press-thumb-tag {
+    position: absolute;
+    top: 18px; left: 22px;
+    z-index: 3;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(182,245,0,.40);
+    padding: 5px 10px;
+    background: rgba(0,0,0,.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .press-card.is-featured .press-thumb-tag { top: 28px; left: 36px; }
+
+  /* Body — title-only strip at the very bottom of the card. Meta is
+     hidden so the bottom block is just the title + a tight gradient
+     hugging it. Matches the bento wireframe: title sits at the bottom
+     edge, the dark band only covers the text zone. */
+  .press-body {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    padding: 14px 22px 20px;
+    background: linear-gradient(to top,
+      rgba(0,0,0,.85) 0%,
+      rgba(0,0,0,.40) 80%,
+      rgba(0,0,0,0) 100%
+    );
+  }
+  .press-card.is-featured .press-body {
+    padding: 22px 36px 30px;
+    background: linear-gradient(to top,
+      rgba(0,0,0,.85) 0%,
+      rgba(0,0,0,.40) 82%,
+      rgba(0,0,0,0) 100%
+    );
+  }
+  .press-card .press-meta-row { display: none; }
+  .press-meta-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .press-card .press-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .22em;
+    color: var(--dim-2);
+  }
+  .press-card .press-outlet {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .press-card .press-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    line-height: 1.22;
+    color: var(--text);
+    font-size: clamp(15px, 1.15vw, 17px);
+    max-width: 28ch;
+    text-shadow: 0 1px 6px rgba(0,0,0,.4);
+    transition: color .35s var(--ease-out);
+  }
+  .press-card .press-date,
+  .press-card .press-outlet {
+    text-shadow: 0 1px 4px rgba(0,0,0,.45);
+  }
+  .press-card:hover .press-title { color: var(--accent); }
+  .press-card.is-featured .press-title {
+    font-size: clamp(28px, 3vw, 40px);
+    line-height: 1.06;
+    max-width: 22ch;
+  }
+  .press-card .press-title em {
+    font-style: normal;
+    font-weight: 600;
+  }
+  /* Slide-in arrow indicator on hover — appears at bottom-right of the
+     gradient strip on every card. */
+  .press-body::after {
+    content: "→";
+    position: absolute;
+    bottom: 18px; right: 22px;
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--accent);
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: opacity .35s var(--ease-out), transform .5s var(--ease-out);
+    pointer-events: none;
+    text-shadow: 0 1px 4px rgba(0,0,0,.5);
+  }
+  .press-card.is-featured .press-body::after {
+    bottom: 30px; right: 36px;
+    font-size: 24px;
+  }
+  .press-card:hover .press-body::after {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  @media (max-width: 1100px) {
+    .press-bento {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: none;
+      grid-auto-rows: minmax(280px, auto);
+      min-height: 0;
+    }
+    .press-card.is-featured { grid-column: 1 / -1; grid-row: auto; }
+    .press-card.is-tile-tl,
+    .press-card.is-tile-tr,
+    .press-card.is-tile-bl,
+    .press-card.is-tile-br { grid-column: auto; grid-row: auto; }
+    .press-card.is-featured { min-height: 380px; }
+  }
+  @media (max-width: 900px) {
+    .press-head { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .press-bento { grid-template-columns: 1fr; }
+    .press-card.is-featured { min-height: 280px; }
+  }
+
+
+  /* Center the Explore button under the centered title */
+  .peek-head--centered .btn { align-self: center; }

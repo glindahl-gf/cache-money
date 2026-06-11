@@ -21,7 +21,7 @@
   html { scroll-behavior: smooth; }
   html, body {
     background: var(--bg); color: var(--text);
-    font-family: var(--body);
+    font-family: 'Barlow Condensed', system-ui, sans-serif;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;

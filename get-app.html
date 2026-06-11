@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Greenfly · Get Started</title>
+<meta name="description" content="How to get on Greenfly: download the app, enter your invite code, and start receiving and sharing the content that features you." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/get-app.css">
+<script src="js/include.js" defer></script>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<div data-include="partials/nav.html"></div>
+
+<!-- ========== PAGE ==========
+     Onboarding / "how do I create an account" guidance. Built for the
+     common case CS flagged: people invited to Greenfly who aren't sure
+     how to get in. The confident, well-defined path (invite code + app)
+     leads; the messier first-time / no-code case routes to support
+     rather than asserting the (in-flux) web-portal setup steps. -->
+<main class="guide">
+
+  <!-- HERO -->
+  <header class="guide-hero">
+    <p class="guide-eyebrow mono">Get Started</p>
+    <h1 class="guide-title display">Join your team on Greenfly</h1>
+  </header>
+
+  <!-- PATHS — alternating device-framed rows: invite-code phone on the
+       right, email phone on the left. Screens are 375x812 SVGs wrapped in
+       a CSS phone mockup; each row is a card with the phone bleeding off
+       the bottom edge. -->
+  <section class="explore" aria-label="Get started — walkthrough">
+
+    <!-- Row 1 — invite code · phone right (light/cream treatment) -->
+    <div class="explore-row section-light" id="invitecode">
+      <div class="explore-copy">
+        <h2 class="path-head display">Have an invite code?</h2>
+        <ol class="steps">
+          <li class="step">
+            <span class="step-num" aria-hidden="true">1</span>
+            <div class="step-body">
+              <h3 class="step-title">Download the Greenfly app</h3>
+              <p class="step-line">Free on iPhone and Android.</p>
+              <div class="app-badges">
+                <a href="https://apps.apple.com/us/app/greenfly/id819013595" target="_blank" rel="noopener" aria-label="Download Greenfly on the App Store">
+                  <img src="./images/homepage/ios-app-store.png" alt="Download on the App Store" />
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=com.inthub.greenfly" target="_blank" rel="noopener" aria-label="Get Greenfly on Google Play">
+                  <img src="./images/homepage/google-play-store.png" alt="Get it on Google Play" />
+                </a>
+              </div>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true">2</span>
+            <div class="step-body">
+              <h3 class="step-title">Open it and enter your invite code</h3>
+              <p class="step-line">Your code comes from the team or brand that invited you — usually in your invitation email.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true">3</span>
+            <div class="step-body">
+              <h3 class="step-title">You're in</h3>
+              <p class="step-line">Start receiving, creating, and sharing the content that features you.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+      <div class="explore-device">
+        <div class="device">
+          <div class="device-screen">
+            <img src="./images/login/login-value-entered.svg" alt="Greenfly app — invite code entry screen" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2 — invite email · phone left -->
+    <div class="explore-row is-reversed" id="email">
+      <div class="explore-copy">
+        <h2 class="path-head display">Got an email?</h2>
+        <ol class="steps">
+          <li class="step">
+            <span class="step-num" aria-hidden="true">1</span>
+            <div class="step-body">
+              <h3 class="step-title">Open the email and tap Login</h3>
+              <p class="step-line">It opens in your web browser.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true">2</span>
+            <div class="step-body">
+              <h3 class="step-title">Finish setting up</h3>
+              <p class="step-line">Confirm your details and choose a new password.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true">3</span>
+            <div class="step-body">
+              <h3 class="step-title">You're set</h3>
+              <p class="step-line">Sign in anytime — in the app or at portal.greenfly.com.</p>
+            </div>
+          </li>
+        </ol>
+        <p class="help-note">
+          Start from the email link. Opening the app and signing in before you've
+          finished this step returns a login error.
+        </p>
+      </div>
+      <div class="explore-device">
+        <div class="device">
+          <div class="device-screen">
+            <img src="./images/login/email-dark.svg" alt="Greenfly registration email screen" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
+</main>
+
+<!-- ========== FOOTER ========== -->
+<div data-include="partials/footer.html"></div>
+
+</body>
+</html>

@@ -17,6 +17,10 @@
   --accent:       #B6F500;
   --accent-dim:   #8bc000;
   --mono:         ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  /* Type system: Barlow for body copy; Barlow Condensed for numbers,
+     labels, nav, and buttons; Oswald for display headlines. See #35. */
+  --body:         'Barlow', system-ui, sans-serif;
+  --condensed:    'Barlow Condensed', system-ui, sans-serif;
   --ease:         cubic-bezier(.22,.61,.36,1);
   --ease-out:     cubic-bezier(.16,1,.3,1);
   --max:          1440px;
@@ -46,7 +50,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 96px; /* keep focused/anchor
 html, body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-family: var(--body);
   font-weight: 400;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
@@ -122,7 +126,7 @@ em.thin, .thin {
 .btn {
   display: inline-flex; align-items: center; gap: 10px;
   padding: 14px 22px;
-  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-family: var(--condensed);
   font-weight: 500;
   font-size: 14px;
   letter-spacing: .04em;
@@ -167,7 +171,7 @@ em.thin, .thin {
   display: flex; align-items: center; justify-content: space-between;
   /* Pin the nav typography so it stays identical across pages, even if a
      page sets its own body font (e.g. the springboard uses plain Barlow). */
-  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-family: var(--condensed);
   background-color: transparent;
   border-bottom: 1px solid transparent;
   transform: translateY(0);
@@ -552,10 +556,13 @@ em.thin, .thin {
 
 .footer-stage,
 .footer-wordmark,
-.footer-inner,
 .footer-legal {
   pointer-events: none;
 }
+/* The link columns intercept pointer events so the (visually faded-out)
+   interactive hex cells behind them don't flicker / steal the cursor when
+   you move between links. Hex hover stays live up top where it's visible. */
+.footer-inner { pointer-events: auto; }
 .footer-wordmark img,
 .footer-inner a,
 .footer-inner h5,
@@ -589,10 +596,63 @@ em.thin, .thin {
   margin: 0 auto;
   padding: 56px 0 52px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(140px, auto));
+  grid-template-columns: repeat(5, minmax(140px, auto));
   justify-content: center;
-  gap: 80px;
+  gap: 56px;
   border-bottom: 1px solid var(--hair);
+}
+/* Get-the-App column: "Get started" link + stacked store badges */
+.footer-app { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.footer-app a { pointer-events: auto; display: inline-block; opacity: .92; transition: opacity .2s var(--ease); }
+.footer-app a:hover { opacity: 1; }
+.footer-app img { height: 40px; width: auto; display: block; }
+/* Cookie consent banner (Silktide) — brand theming. The library scopes its
+   tokens to #stcm-wrapper and is injected after base.css, so we override at
+   higher specificity (html #stcm-wrapper) to win regardless of load order.
+   See #21. */
+html #stcm-wrapper {
+  --primaryColor: #B6F500;
+  --backgroundColor: #0b0d0f;
+  --textColor: #f4f5f6;
+  --fontFamily: var(--body);
+  --iconBackgroundColor: #B6F500;
+  --iconColor: #0F0F0F;
+}
+/* Hide Silktide's floating cookie icon — we reopen preferences via a discreet
+   "Cookie settings" link in the footer instead (see consent.js + footer.html). #21 */
+#stcm-icon { display: none !important; }
+
+.footer-app-link {
+  display: inline-block;
+  margin-bottom: 16px;
+  color: var(--dim);
+  font-size: 13px;
+  border-bottom: 1px solid var(--hair);
+  transition: color .2s var(--ease), border-color .2s var(--ease);
+}
+.footer-app-link:hover { color: var(--text); border-bottom-color: var(--accent); }
+/* Contact column: social icon badges */
+.footer-social-head { margin-top: 26px; }
+.footer-social { display: flex; flex-wrap: wrap; gap: 10px; }
+.footer-social a {
+  pointer-events: auto;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--hair);
+  color: var(--dim);
+  transition: color .2s var(--ease), background .2s var(--ease), border-color .2s var(--ease);
+}
+.footer-social a:hover { color: #000; background: var(--accent); border-color: var(--accent); }
+.footer-social svg { width: 16px; height: 16px; fill: currentColor; display: block; }
+@media (max-width: 1100px) {
+  .footer-inner { grid-template-columns: repeat(3, minmax(140px, auto)); gap: 48px 56px; }
+}
+@media (max-width: 760px) {
+  .footer-inner { grid-template-columns: repeat(2, minmax(140px, auto)); gap: 40px 48px; }
+}
+@media (max-width: 480px) {
+  .footer-inner { grid-template-columns: 1fr; gap: 36px; }
 }
 .footer h5 {
   font-family: var(--mono);
@@ -631,7 +691,8 @@ em.thin, .thin {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 12px 24px;
   font-family: var(--mono);
   font-size: 10px;
   letter-spacing: .2em;

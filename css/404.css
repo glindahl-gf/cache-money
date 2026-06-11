@@ -21,7 +21,7 @@
   html, body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Barlow Condensed', system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -106,7 +106,7 @@
   }
 
   .message {
-    font-family: 'Barlow Condensed', system-ui, sans-serif;
+    font-family: var(--body);
     font-weight: 400;
     font-size: clamp(16px, 1.4vw, 19px);
     color: var(--dim);

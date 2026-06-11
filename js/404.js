@@ -7,13 +7,13 @@
   const counterEl  = document.getElementById('pitchCount');
 
   const BALLS = [
-    './images/404/baseball-1.svg',
-    './images/404/basketball-1.svg',
-    './images/404/tennis-ball.svg',
-    './images/404/american-football.svg',
-    './images/404/rugby.svg',
-    './images/404/golf.svg',
-    './images/404/punch.svg',
+    '/images/404/baseball-1.svg',
+    '/images/404/basketball-1.svg',
+    '/images/404/tennis-ball.svg',
+    '/images/404/american-football.svg',
+    '/images/404/rugby.svg',
+    '/images/404/golf.svg',
+    '/images/404/punch.svg',
   ];
 
   // Preload so swaps don't flash blank

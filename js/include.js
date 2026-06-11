@@ -8,6 +8,46 @@
  * need their partial paths and the partial's own internal links rewritten
  * from ./foo to ../foo.
  */
+
+/* ─── Figma capture loader (dev-only) ───────────────────────────────────
+ * Loads the Figma html-to-design capture script ONLY on a local dev server
+ * (localhost / 127.0.0.1) or when a `#figmacapture=` hash is present. This
+ * lets us re-capture pages into Figma at any time WITHOUT hardcoding the
+ * script into each page (which would ship it to production). It never
+ * activates on greenfly.com, so it is safe to commit. See issue #17.
+ */
+(() => {
+  const h = location.hostname;
+  const isLocal = h === 'localhost' || h === '127.0.0.1' || h === '0.0.0.0' || h.endsWith('.local');
+  if (isLocal || location.hash.includes('figmacapture')) {
+    const s = document.createElement('script');
+    s.src = 'https://mcp.figma.com/mcp/html-to-design/capture.js';
+    s.async = true;
+    document.head.appendChild(s);
+  }
+})();
+
+/* ─── Cookie consent manager (Silktide, self-hosted, MIT) ────────────────
+ * Mounted site-wide here so every page gets the consent banner without
+ * per-page <head> edits. Loads the vendored library, then our config in
+ * js/consent.js (async=false → ordered execution). See issue #21.
+ */
+(() => {
+  const up = location.pathname.includes('/legal/') ? '../' : './';
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = up + 'css/silktide-consent-manager.css';
+  document.head.appendChild(link);
+  const lib = document.createElement('script');
+  lib.src = up + 'js/silktide-consent-manager.js';
+  lib.async = false;
+  const cfg = document.createElement('script');
+  cfg.src = up + 'js/consent.js';
+  cfg.async = false;
+  document.head.appendChild(lib);
+  document.head.appendChild(cfg);
+})();
+
 (async () => {
   // ─── 1. Detect whether we're in a subfolder (currently only /legal/) ───
   const inSub = location.pathname.includes('/legal/');

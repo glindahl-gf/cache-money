@@ -1,4 +1,4 @@
-/* Homepage (V2 editorial cover) — promoted from homepage-with-copy-2.html */
+/* Extracted from homepage-with-copy-2.html */
 
 /* --- block 1 of 2 --- */
 /* =========================================================================
